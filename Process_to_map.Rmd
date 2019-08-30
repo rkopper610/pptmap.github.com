@@ -1,0 +1,42 @@
+---
+title: "Process to map PPT study areas"
+author: "Ryan and Morgan"
+date: "8/30/2019"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(raster)
+library(dplyr)
+
+#Regions 
+ETH <- getData(name = "GADM", country = "ETH", level = 1)
+KEN <- getData(name = "GADM", country = "KEN", level = 1)
+UGA <- getData(name = "GADM", country = "UGA", level = 1)
+TZA <- getData(name = "GADM", country = "TZA", level = 1)
+
+
+E_Af<- bind(ETH, KEN, UGA, TZA)
+#E_Af <- aggregate(E_Af) #if needed to blend for analysis
+
+plot(E_Af, main = "Countries with PPT study", legend.args = list(text = "meters"))
+
+
+# #Districts
+# ethiopia_dist <- getData(name = "GADM", country = "ETH" , level = 2)
+# plot(ethiopia_dist, main = "Ethiopia", legend.args = list(text = "meters"))
+# 
+# #Woreda
+# ethiopia_woreda <- getData(name = "GADM", country = "ETH" , level = 3)
+# plot(ethiopia_woreda, main = "Ethiopia", legend.args = list(text = "meters"))
+
+
+```
+
+## R Markdown
+
+
