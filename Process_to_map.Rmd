@@ -12,13 +12,19 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(raster)
 library(dplyr)
+library(sf)
+library(tidyr)
 
-#Regions 
-ETH <- getData(name = "GADM", country = "ETH", level = 1)
-KEN <- getData(name = "GADM", country = "KEN", level = 1)
-UGA <- getData(name = "GADM", country = "UGA", level = 1)
-TZA <- getData(name = "GADM", country = "TZA", level = 1)
+#Regions (Run once in order to download)
+# ETH <- getData(name = "GADM", country = "ETH", level = 1)
+# KEN <- getData(name = "GADM", country = "KEN", level = 1)
+# UGA <- getData(name = "GADM", country = "UGA", level = 1)
+# TZA <- getData(name = "GADM", country = "TZA", level = 1)
 
+ETH <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_1_sp.rds")
+KEN <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_KEN_1_sp.rds")
+UGA <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_UGA_1_sp.rds")
+TZA <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_TZA_1_sp.rds")
 
 E_Af<- bind(ETH, KEN, UGA, TZA)
 #E_Af <- aggregate(E_Af) #if needed to blend for analysis
@@ -34,9 +40,46 @@ plot(E_Af, main = "Countries with PPT study", legend.args = list(text = "meters"
 # ethiopia_woreda <- getData(name = "GADM", country = "ETH" , level = 3)
 # plot(ethiopia_woreda, main = "Ethiopia", legend.args = list(text = "meters"))
 
+#Kenya Study sites
+Busia <- KEN$NAME_1 == "Busia"
+Homa_Bay <- KEN$NAME_1 == "Homa Bay"
+Siaya <- KEN$NAME_1 == "Siaya"
 
+#attempting to insert centroid
+
+plot(KEN[ Homa_Bay, ], col = "red", add = TRUE) 
+plot(KEN[ Busia, ], col = "orange", add = TRUE)
+plot(KEN[ Siaya, ], col = "red", add = TRUE)
 ```
 
-## R Markdown
+Inserting points for each study.
+
+```{r}
 
 
+
+pt <- st_point(x = c(0.4368, 34.2060)) 
+plot(pt, add = TRUE)
+#
+# #2
+pts <- st_multipoint(x = cbind(x = c(27.5, 28, 28.5), y = c(-14.5, -15, -15.5)))
+pts
+#
+# #3
+sline <- st_linestring(cbind(x = c(27, 27.5, 28), y = c(-15, -15.5, -16)))
+sline
+#
+# #4
+pol <- st_polygon(list(cbind(x = c(26.5, 27.5, 27, 26, 26.5), 
+                             y = c(-15.5, -16.5, -17, -16, -15.5))))
+pol
+#
+# 5
+par(mar = c(0, 0, 0, 0))
+plot(districts %>% st_geometry(), col = "grey")
+plot(pt, add = TRUE, col = "red", pch = 20)
+plot(pts, add = TRUE, col = "blue", pch = 20)
+plot(sline, add = TRUE, col = "cyan", lwd = 2)
+plot(pol, add = TRUE, col = "orange", lwd = 2)
+
+```
