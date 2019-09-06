@@ -16,70 +16,94 @@ library(sf)
 library(tidyr)
 
 #Regions (Run once in order to download)
-# ETH <- getData(name = "GADM", country = "ETH", level = 1)
-# KEN <- getData(name = "GADM", country = "KEN", level = 1)
+#ETH <- getData(name = "GADM", country = "ETH", level = 2)
+#KEN2 <- getData(name = "GADM", country = "KEN", level = 2)
 # UGA <- getData(name = "GADM", country = "UGA", level = 1)
-# TZA <- getData(name = "GADM", country = "TZA", level = 1)
+#TZA <- getData(name = "GADM", country = "TZA", level = 2)
 
-ETH <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_1_sp.rds")
+ETH <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_2_sp.rds") #ETHIOPIA
 KEN <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_KEN_1_sp.rds")
 UGA <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_UGA_1_sp.rds")
-TZA <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_TZA_1_sp.rds")
+TZA <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_TZA_2_sp.rds")
 
 E_Af<- bind(ETH, KEN, UGA, TZA)
 #E_Af <- aggregate(E_Af) #if needed to blend for analysis
 
-plot(E_Af, main = "Countries with PPT study", legend.args = list(text = "meters"))
-
-
-# #Districts
-# ethiopia_dist <- getData(name = "GADM", country = "ETH" , level = 2)
-# plot(ethiopia_dist, main = "Ethiopia", legend.args = list(text = "meters"))
-# 
-# #Woreda
-# ethiopia_woreda <- getData(name = "GADM", country = "ETH" , level = 3)
-# plot(ethiopia_woreda, main = "Ethiopia", legend.args = list(text = "meters"))
 
 #Kenya Study sites
-Busia <- KEN$NAME_1 == "Busia"
-Homa_Bay <- KEN$NAME_1 == "Homa Bay"
-Siaya <- KEN$NAME_1 == "Siaya"
+KEN_study_sites<-subset(KEN,NAME_1=="Busia" | NAME_1=="Homa Bay" | NAME_1=="Siaya"| NAME_1=="Trans Nzoia" | NAME_1=="Bungoma" | NAME_1=="Vihiga" | NAME_1=="Kisii"| NAME_1=="Migori")
 
-#attempting to insert centroid
+#KEN-Need to add more...
+#Kuria,  B-Mumias, Bondo, Nuani, Oyiengo
+#Kibos, Alupe, Rachuonyo,  Migori, Kisumu, Nyando,  Rongo, Butere 
 
-plot(KEN[ Homa_Bay, ], col = "red", add = TRUE) 
-plot(KEN[ Busia, ], col = "orange", add = TRUE)
-plot(KEN[ Siaya, ], col = "red", add = TRUE)
+#PLUS-------
+#Found in Another level and need to find out how to add
+#Suba BUT Mbita is there too
+study_sites<-subset(KEN2,NAME_2=="Suba" | NAME_2=="Teso North" )
+#------------------------------------------------------------------------------
+
+# Find for Uganda: Bukedea 
+UGA_study_sites<-subset(UGA,NAME_1 =="Tororo" | NAME_1 =="Bugiri"| NAME_1 =="Iganga")
+#revisit to confirm Busia studies in UGA
+
+# Tanzania Tarime 
+TZA_study_sites <- subset(TZA, NAME_2 == "Tarime" )
+
+
+
+#-----------------------------------
+
+#Ethiopia Study sites---> Melkassa, Mieso
+#Hawassa  (Hawassa Zuria, Tula, Wondo Genet
+#Dore Bafano and Jara Gelelcha (four kebeles: Dore Bafano, Jara Gelelcha, Wudo Wotatie, and Lebu Koremo)
+
+#Plot Map of 4 countries
+plot(E_Af, col = "grey") 
+
+#Add points
+points(coordinates(KEN_study_sites),pch = 20, col = "red") 
+points(coordinates(UGA_study_sites),pch = 20, col = "red")
+points(coordinates(TZA_study_sites),pch = 20, col = "red")
+#ADD IN ETHIOPIA
+
 ```
 
-Inserting points for each study.
+Using GADMtools package
 
 ```{r}
+library(GADMTools)
+?GADMTools
+
+map <- gadm_sp_loadCountries(c("ETH","KEN","TZA", "UGA"), level = 2, basefile = "./") 
+
+gadm_plot(map)
+#add in points
+points(coordinates(map),pch = 20)
+
+#--------------------------------------------------------------------------------
+#Centroids
+library(rgeos)
+
+trueCentroids <-  gCentroid(KEN,byid=TRUE)
+plot(KEN)
+points(coordinates(KEN),pch = 20)
+points(trueCentroids, pch = 20, col = "red")
 
 
+plot(ETH)
+points(coordinates(ETH),pch = 20)
 
-pt <- st_point(x = c(0.4368, 34.2060)) 
-plot(pt, add = TRUE)
-#
-# #2
-pts <- st_multipoint(x = cbind(x = c(27.5, 28, 28.5), y = c(-14.5, -15, -15.5)))
-pts
-#
-# #3
-sline <- st_linestring(cbind(x = c(27, 27.5, 28), y = c(-15, -15.5, -16)))
-sline
-#
-# #4
-pol <- st_polygon(list(cbind(x = c(26.5, 27.5, 27, 26, 26.5), 
-                             y = c(-15.5, -16.5, -17, -16, -15.5))))
-pol
-#
-# 5
-par(mar = c(0, 0, 0, 0))
-plot(districts %>% st_geometry(), col = "grey")
-plot(pt, add = TRUE, col = "red", pch = 20)
-plot(pts, add = TRUE, col = "blue", pch = 20)
-plot(sline, add = TRUE, col = "cyan", lwd = 2)
-plot(pol, add = TRUE, col = "orange", lwd = 2)
 
 ```
+
+
+```{r}
+library(mapview)
+mapview(E_Af, color = "yellow") + mapView(KEN_study_sites, color = "red") +
+  mapView(UGA_study_sites, color = "red") + mapView(TZA_study_sites, color = "red")
+
+  
+```
+
+
