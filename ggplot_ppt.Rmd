@@ -6,7 +6,7 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
-
+#NOT RUN
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
@@ -21,5 +21,32 @@ ggplot(data = world) +
     coord_sf(xlim = c(48, 29.12), ylim = c(-11, 14))
 
 ```
+#NOTRUN
+Using GADMtools package
 
+```{r}
+library(GADMTools)
+?GADMTools
+
+map <- gadm_sp_loadCountries(c("ETH","KEN","TZA", "UGA"), level = 2, basefile = "./") 
+
+gadm_plot(map)
+#add in points
+points(coordinates(map),pch = 20)
+
+#--------------------------------------------------------------------------------
+#Centroids
+library(rgeos)
+
+trueCentroids <-  gCentroid(KEN,byid=TRUE)
+plot(KEN)
+points(coordinates(KEN),pch = 20)
+points(trueCentroids, pch = 20, col = "red")
+
+
+plot(ETH)
+points(coordinates(ETH),pch = 20)
+
+
+```
 

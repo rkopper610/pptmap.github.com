@@ -6,29 +6,35 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-
+prerequisites:
+```{r}
 library(raster)
 library(dplyr)
 library(sf)
 library(tidyr)
 
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
 #Regions (Run once in order to download)
 #ETH <- getData(name = "GADM", country = "ETH", level = 2)
+#ETH3 <- getData(name = "GADM", country = "ETH", level = 3)
 #KEN2 <- getData(name = "GADM", country = "KEN", level = 2)
-# UGA <- getData(name = "GADM", country = "UGA", level = 1)
+#UGA <- getData(name = "GADM", country = "UGA", level = 1)
 #TZA <- getData(name = "GADM", country = "TZA", level = 2)
 
-ETH <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_2_sp.rds") #ETHIOPIA
+ETH <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_2_sp.rds") #ETHIOPIA level 2
 KEN <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_KEN_1_sp.rds")
 UGA <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_UGA_1_sp.rds")
 TZA <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_TZA_2_sp.rds")
+ETH3 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_3_sp.rds")
+
 
 E_Af<- bind(ETH, KEN, UGA, TZA)
 #E_Af <- aggregate(E_Af) #if needed to blend for analysis
-
 
 #Kenya Study sites
 KEN_study_sites<-subset(KEN,NAME_1=="Busia" | NAME_1=="Homa Bay" | NAME_1=="Siaya"| NAME_1=="Trans Nzoia" | NAME_1=="Bungoma" | NAME_1=="Vihiga" | NAME_1=="Kisii"| NAME_1=="Migori")
@@ -37,10 +43,12 @@ KEN_study_sites<-subset(KEN,NAME_1=="Busia" | NAME_1=="Homa Bay" | NAME_1=="Siay
 #Kuria,  B-Mumias, Bondo, Nuani, Oyiengo
 #Kibos, Alupe, Rachuonyo,  Migori, Kisumu, Nyando,  Rongo, Butere 
 
-#PLUS-------
+#PLUS-------------------------------------------------------------------------
 #Found in Another level and need to find out how to add
 #Suba BUT Mbita is there too
-study_sites<-subset(KEN2,NAME_2=="Suba" | NAME_2=="Teso North" )
+
+
+#study_sites<-subset(KEN2,NAME_2=="Suba" | NAME_2=="Teso North" )
 #------------------------------------------------------------------------------
 
 # Find for Uganda: Bukedea 
@@ -50,13 +58,23 @@ UGA_study_sites<-subset(UGA,NAME_1 =="Tororo" | NAME_1 =="Bugiri"| NAME_1 =="Iga
 # Tanzania Tarime 
 TZA_study_sites <- subset(TZA, NAME_2 == "Tarime" )
 
-
-
 #-----------------------------------
+#Ethiopia Study sites---> 
+#Level 3
 
-#Ethiopia Study sites---> Melkassa, Mieso
-#Hawassa  (Hawassa Zuria, Tula, Wondo Genet
-#Dore Bafano and Jara Gelelcha (four kebeles: Dore Bafano, Jara Gelelcha, Wudo Wotatie, and Lebu Koremo)
+#yes #Mieso = "Mirab Hararghe"
+#yes #Tula 
+
+#not in level3
+#Melkassa = "Asosa", 
+#Hawassa Zuria = Sidama
+##Wondo Genet (in level 2)
+#Dore Bafano (in Hawassa Zuria)
+#Jara Gelelcha = 
+
+#(four kebeles: Dore Bafano, Jara Gelelcha, Wudo Wotatie, and Lebu Koremo)
+
+
 
 #Plot Map of 4 countries
 plot(E_Af, col = "grey") 
@@ -65,45 +83,16 @@ plot(E_Af, col = "grey")
 points(coordinates(KEN_study_sites),pch = 20, col = "red") 
 points(coordinates(UGA_study_sites),pch = 20, col = "red")
 points(coordinates(TZA_study_sites),pch = 20, col = "red")
-#ADD IN ETHIOPIA
+#points(coordinates(ETH_study_sites),pch = 20, col = "red")
 
 ```
 
-Using GADMtools package
-
+#Interative map with Mapview
 ```{r}
-library(GADMTools)
-?GADMTools
+# library(mapview)
+# mapview(E_Af, color = "yellow") + mapView(KEN_study_sites, color = "red") +
+#   mapView(UGA_study_sites, color = "red") + mapView(TZA_study_sites, color = "red")
 
-map <- gadm_sp_loadCountries(c("ETH","KEN","TZA", "UGA"), level = 2, basefile = "./") 
-
-gadm_plot(map)
-#add in points
-points(coordinates(map),pch = 20)
-
-#--------------------------------------------------------------------------------
-#Centroids
-library(rgeos)
-
-trueCentroids <-  gCentroid(KEN,byid=TRUE)
-plot(KEN)
-points(coordinates(KEN),pch = 20)
-points(trueCentroids, pch = 20, col = "red")
-
-
-plot(ETH)
-points(coordinates(ETH),pch = 20)
-
-
-```
-
-
-```{r}
-library(mapview)
-mapview(E_Af, color = "yellow") + mapView(KEN_study_sites, color = "red") +
-  mapView(UGA_study_sites, color = "red") + mapView(TZA_study_sites, color = "red")
-
-  
 ```
 
 
