@@ -29,6 +29,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ETH <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_2_sp.rds") #ETHIOPIA level 2
 KEN <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_KEN_1_sp.rds")
+KEN2<- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_KEN_2_sp.rds")
 UGA <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_UGA_1_sp.rds")
 TZA <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_TZA_2_sp.rds")
 ETH3 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_3_sp.rds")
@@ -38,29 +39,27 @@ E_Af<- bind(ETH3, KEN, UGA, TZA)
 #E_Af <- aggregate(E_Af) #if needed to blend for analysis
 
 #Kenya Study sites
-KEN_study_sites<-subset(KEN,NAME_1=="Busia" | NAME_1=="Homa Bay" | NAME_1=="Siaya"| NAME_1=="Trans Nzoia" | NAME_1=="Bungoma" | NAME_1=="Vihiga" | NAME_1=="Kisii"| NAME_1=="Migori")
+KEN_study_sites<-subset(KEN,NAME_1=="Busia" | NAME_1=="Homa Bay" | NAME_1=="Siaya"| NAME_1=="Trans Nzoia" | NAME_1=="Bungoma" | NAME_1=="Kisii"| NAME_1=="Migori"
+                        | NAME_1=="Kisumu")
 
 #KEN-Need to add more...
-#Kuria,  B-Mumias, Bondo, Nuani, Oyiengo
-#Kibos, Alupe, Rachuonyo,  Migori, Kisumu, Nyando,  Rongo, Butere 
 
-#PLUS-------------------------------------------------------------------------
-#Found in Another level and need to find out how to add
-#Suba BUT Mbita is there too
+#Kuria,  Butere-Mumias,Nuani, Oyiengo
+#Kibos, Alupe, Rachuonyo, , 
 
-
-#study_sites<-subset(KEN2,NAME_2=="Suba" | NAME_2=="Teso North" )
+KEN2study_sites<-subset(KEN2,NAME_2=="Suba" | NAME_2=="Teso North" | NAME_2 =="Nyando"| NAME_2=="Vihiga" |NAME_2 == "Rongo" | NAME_2 == "Bondo"  | NAME_2 == "Butere"| NAME_2 == "Rarieda")
 #------------------------------------------------------------------------------
 
-# Find for Uganda: Bukedea 
-UGA_study_sites<-subset(UGA,NAME_1 =="Tororo" | NAME_1 =="Bugiri"| NAME_1 =="Iganga"
-                        | NAME_1 == "Busia" | NAME_1 == "Pallisa")
+# Find for Uganda: [ACCOUTED FOR]
+UGA_sites2<-subset(UGA,NAME_1 =="Tororo" | NAME_1 =="Bugiri"| 
+                          NAME_1 == "Busia" | NAME_1 == "Pallisa")
 
+#NAME_1 =="Iganga" MAY NOT NEED? 
+                        
+# Tanzania [ACCOUTED FOR]
+TZA_study_sites <- subset(TZA, NAME_2 == "Tarime" | NAME_2 == "Sengerema"| NAME_2 == "Misungwi")
 
-# Tanzania Tarime 
-TZA_study_sites <- subset(TZA, NAME_2 == "Tarime" )
-
-
+#ETHIOPIA
 ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Bako Tibe" | NAME_3 == "Jimma Arjo" | NAME_3 == "Boset"| NAME_3 == "Yayu" | NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew") 
 
 #(study ID #9//#Melkassa = "adama")
@@ -75,10 +74,13 @@ ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 
 plot(E_Af, col = "grey") 
 
 #Add points
-points(coordinates(KEN_study_sites),pch = 20, col = "red") 
+#color for frequency
+
 points(coordinates(UGA_study_sites),pch = 20, col = "red")
+points(coordinates(KEN2study_sites),pch = 20, col = "red") 
+points(coordinates(KEN_study_sites),pch = 20, col = "red") 
 points(coordinates(TZA_study_sites),pch = 20, col = "red")
-points(coordinates(ETH_study_sites),pch = 20, col = "red") #currently level 3
+points(coordinates(ETH_study_sites),pch = 20, col = "red") 
 
 ```
 
@@ -86,12 +88,12 @@ points(coordinates(ETH_study_sites),pch = 20, col = "red") #currently level 3
 ```{r}
 
 library(mapview)
-
+both_KEN <- bind(KEN2study_sites,KEN_study_sites)
 
 #viewmap <-
-mapview(E_Af, color = "grey", map.types = "Stamen.Toner") + mapView(KEN_study_sites, color = "red") +
+mapview(E_Af, col.regions = "grey", color = "black", alpha = "0.9" , map.types = "Stamen.Toner") + mapView(both_KEN, color = "red") +
   mapView(UGA_study_sites, color = "red") + mapView(TZA_study_sites, color = "red") +
-  mapView(ETH_study_sites, color = "red")
+  mapView(ETH_study_sites, color = "red") 
 
 # Save a pdf of the map
 mapshot(viewmap, file = "map.pdf")
