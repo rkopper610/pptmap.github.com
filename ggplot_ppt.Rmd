@@ -50,3 +50,25 @@ points(coordinates(ETH),pch = 20)
 
 ```
 
+```{r}
+
+#HOW to incorporate Tehuledre
+
+readRDS("/Users/ryankopper/Desktop/R work/PPTmap/Tehuledere Wereda/Tehuledere.shp")
+
+tehuledere <- st_read("/Users/ryankopper/Desktop/R work/PPTmap/Tehuledere Wereda/Tehuledere.shp")
+
+st_as_sf(tehuledere)
+
+points(coordinates(tehuledere2),pch = 20, col = "red")
+
+tehuledere2 <- tehuledere$geometry
+
+plot(tehuledere, add = T)
+
+head(tehuledere)
+
+
+
+```
+

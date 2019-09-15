@@ -42,6 +42,7 @@ E_Af<- bind(ETH3, KEN, UGA, TZA)
 KEN_study_sites<-subset(KEN,NAME_1=="Busia" | NAME_1=="Homa Bay" | NAME_1=="Siaya"| NAME_1=="Trans Nzoia" | NAME_1=="Bungoma" | NAME_1=="Kisii"| NAME_1=="Migori"
                         | NAME_1=="Kisumu")
 
+
 #KEN-Need to add more...
 
 #Kuria,  Butere-Mumias,Nuani, Oyiengo
@@ -51,7 +52,7 @@ KEN2study_sites<-subset(KEN2,NAME_2=="Suba" | NAME_2=="Teso North" | NAME_2 =="N
 #------------------------------------------------------------------------------
 
 # Find for Uganda: [ACCOUTED FOR]
-UGA_sites2<-subset(UGA,NAME_1 =="Tororo" | NAME_1 =="Bugiri"| 
+UGA_sites<-subset(UGA,NAME_1 =="Tororo" | NAME_1 =="Bugiri"| 
                           NAME_1 == "Busia" | NAME_1 == "Pallisa")
 
 #NAME_1 =="Iganga" MAY NOT NEED? 
@@ -60,23 +61,21 @@ UGA_sites2<-subset(UGA,NAME_1 =="Tororo" | NAME_1 =="Bugiri"|
 TZA_study_sites <- subset(TZA, NAME_2 == "Tarime" | NAME_2 == "Sengerema"| NAME_2 == "Misungwi")
 
 #ETHIOPIA
-ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Bako Tibe" | NAME_3 == "Jimma Arjo" | NAME_3 == "Boset"| NAME_3 == "Yayu" | NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew") 
+ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Bako Tibe" | NAME_3 == "Jimma Arjo" | NAME_3 == "Boset"| NAME_3 == "Yayu" | NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie") 
+
 
 #(study ID #9//#Melkassa = "adama")
 #Tula (ID 25) "Tula" is also in Hawassa with awasa zuria and wondo-genet 
 #Dore Bafano and Jara Gelelcha (ID 27)
-
-#From survey_based NEED TO LOCATE
-#Tehuledere in south wollo--near to the city of Hayq or Hayk
 
 
 #Plot Map of 4 countries
 plot(E_Af, col = "grey") 
 
 #Add points
-#color for frequency
+#color for frequency??
 
-points(coordinates(UGA_study_sites),pch = 20, col = "red")
+points(coordinates(UGA_sites),pch = 20, col = "red")
 points(coordinates(KEN2study_sites),pch = 20, col = "red") 
 points(coordinates(KEN_study_sites),pch = 20, col = "red") 
 points(coordinates(TZA_study_sites),pch = 20, col = "red")
@@ -90,13 +89,15 @@ points(coordinates(ETH_study_sites),pch = 20, col = "red")
 library(mapview)
 both_KEN <- bind(KEN2study_sites,KEN_study_sites)
 
-#viewmap <-
-mapview(E_Af, col.regions = "grey", color = "black", alpha = "0.9" , map.types = "Stamen.Toner") + mapView(both_KEN, color = "red") +
-  mapView(UGA_study_sites, color = "red") + mapView(TZA_study_sites, color = "red") +
-  mapView(ETH_study_sites, color = "red") 
 
-# Save a pdf of the map
-mapshot(viewmap, file = "map.pdf")
+
+#viewmap <-
+mapview(E_Af, col.regions = "grey", color = "black", alpha = "0.9" , map.types = "Stamen.Toner") + mapView(KEN_study_sites, col.regions = "red",  color = "red") +
+  mapView(UGA_sites, col.regions = "red", color = "red") + mapView(TZA_study_sites, col.regions = "red", color = "red") +
+  mapView(ETH_study_sites, col.regions = "red", color = "red") + mapView(KEN2study_sites, col.regions = "purple", color = "purple")
+
+# # Save a pdf of the map
+# mapshot(viewmap, file = "map.pdf")
 
 ```
 
