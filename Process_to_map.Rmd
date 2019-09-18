@@ -20,20 +20,30 @@ library(tidyr)
 knitr::opts_chunk$set(echo = TRUE)
 
 #Regions (Run once in order to download)
+#ETH0 <- getData(name = "GADM", country = "ETH", level = 0)
 #ETH <- getData(name = "GADM", country = "ETH", level = 2)
 #ETH3 <- getData(name = "GADM", country = "ETH", level = 3)
+#KEN0 <- getData(name = "GADM", country = "KEN", level = 0)
 #KEN2 <- getData(name = "GADM", country = "KEN", level = 2)
+#KEN3 <- getData(name = "GADM", country = "KEN", level = 3)
+#UGA0 <- getData(name = "GADM", country = "UGA", level = 0)
 #UGA <- getData(name = "GADM", country = "UGA", level = 1)
+#TZA0 <- getData(name = "GADM", country = "TZA", level = 0)
 #TZA <- getData(name = "GADM", country = "TZA", level = 2)
 
-
+ETH0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_0_sp.rds")
 ETH <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_2_sp.rds") #ETHIOPIA level 2
+ETH3 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_3_sp.rds")
+KEN0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_KEN_0_sp.rds")
 KEN <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_KEN_1_sp.rds")
 KEN2<- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_KEN_2_sp.rds")
+KEN3 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_KEN_3_sp.rds")
 UGA <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_UGA_1_sp.rds")
+UGA0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_UGA_0_sp.rds")
 TZA <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_TZA_2_sp.rds")
-ETH3 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_3_sp.rds")
+TZA0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_TZA_0_sp.rds")
 
+E_Af_No_b<- bind(ETH0, KEN0, UGA0, TZA0)
 
 E_Af<- bind(ETH3, KEN, UGA, TZA)
 #E_Af <- aggregate(E_Af) #if needed to blend for analysis
@@ -45,22 +55,23 @@ KEN_study_sites<-subset(KEN,NAME_1=="Busia" | NAME_1=="Homa Bay" | NAME_1=="Siay
 
 #KEN-Need to add more...
 
-#Kuria,  Butere-Mumias,Nuani, Oyiengo
+#Kuria,  Butere-Mumias, Nuani, Oyiengo
 #Kibos, Alupe, Rachuonyo, , 
 
 KEN2study_sites<-subset(KEN2,NAME_2=="Suba" | NAME_2=="Teso North" | NAME_2 =="Nyando"| NAME_2=="Vihiga" |NAME_2 == "Rongo" | NAME_2 == "Bondo"  | NAME_2 == "Butere"| NAME_2 == "Rarieda")
 #------------------------------------------------------------------------------
 
-# Find for Uganda: [ACCOUTED FOR]
+# Find for Uganda: #all are in the 2-5 study category
 UGA_sites<-subset(UGA,NAME_1 =="Tororo" | NAME_1 =="Bugiri"| 
                           NAME_1 == "Busia" | NAME_1 == "Pallisa")
 
 #NAME_1 =="Iganga" MAY NOT NEED? 
                         
 # Tanzania [ACCOUTED FOR]
-TZA_study_sites <- subset(TZA, NAME_2 == "Tarime" | NAME_2 == "Sengerema"| NAME_2 == "Misungwi")
+TZA_study_sites <- subset(TZA, NAME_2 == "Sengerema"| NAME_2 == "Misungwi") #single study
+TZA_3 <- subset(TZA, NAME_2 == "Tarime") #3studies/Blue 
 
-#ETHIOPIA
+#ETHIOPIA (all feature one study occurance so all are red)
 ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Bako Tibe" | NAME_3 == "Jimma Arjo" | NAME_3 == "Boset"| NAME_3 == "Yayu" | NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie") 
 
 
@@ -69,17 +80,37 @@ ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 
 #Dore Bafano and Jara Gelelcha (ID 27)
 
 
-#Plot Map of 4 countries
-plot(E_Af, col = "grey") 
+#Plot Map of 4 countries 
+#plot(E_Af_, col = "grey") 
+
+#Plot 4 countries without political boders (level 0)
+plot(E_Af_No_b, col = "grey") 
 
 #Add points
 #color for frequency??
 
-points(coordinates(UGA_sites),pch = 20, col = "red")
+
 points(coordinates(KEN2study_sites),pch = 20, col = "red") 
 points(coordinates(KEN_study_sites),pch = 20, col = "red") 
-points(coordinates(TZA_study_sites),pch = 20, col = "red")
+
+#Frequency mapping------
+
+#One Study Occurance (red)
 points(coordinates(ETH_study_sites),pch = 20, col = "red") 
+points(coordinates(TZA_study_sites),pch = 20, col = "red")
+
+#2--5 study Occurance (BLUE) 
+points(coordinates(TZA_3),pch = 20, col = "blue")
+points(coordinates(UGA_sites),pch = 20, col = "blue")
+
+# GREEN	5--10
+
+
+
+# Yellow 10 +
+
+
+
 
 ```
 
@@ -92,7 +123,7 @@ both_KEN <- bind(KEN2study_sites,KEN_study_sites)
 
 
 #viewmap <-
-mapview(E_Af, col.regions = "grey", color = "black", alpha = "0.9" , map.types = "Stamen.Toner") + mapView(KEN_study_sites, col.regions = "red",  color = "red") +
+mapview(E_Af_No_b, col.regions = "grey", color = "black", alpha = "0.9" , map.types = "Stamen.Toner") + mapView(KEN_study_sites, col.regions = "red",  color = "red") +
   mapView(UGA_sites, col.regions = "red", color = "red") + mapView(TZA_study_sites, col.regions = "red", color = "red") +
   mapView(ETH_study_sites, col.regions = "red", color = "red") + mapView(KEN2study_sites, col.regions = "purple", color = "purple")
 
