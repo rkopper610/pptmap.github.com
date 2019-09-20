@@ -9,6 +9,7 @@ editor_options:
 prerequisites:
 ```{r}
 library(raster)
+library(rgdal)
 library(dplyr)
 library(sf)
 library(tidyr)
@@ -24,6 +25,7 @@ knitr::opts_chunk$set(echo = TRUE)
 #ETH <- getData(name = "GADM", country = "ETH", level = 2)
 #ETH3 <- getData(name = "GADM", country = "ETH", level = 3)
 #KEN0 <- getData(name = "GADM", country = "KEN", level = 0)
+#KEN1 <- getData(name = "GADM", country = "KEN", level = 1)
 #KEN2 <- getData(name = "GADM", country = "KEN", level = 2)
 #KEN3 <- getData(name = "GADM", country = "KEN", level = 3)
 #UGA0 <- getData(name = "GADM", country = "UGA", level = 0)
@@ -37,6 +39,7 @@ ETH <-   readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_2_sp.rds")
 ETH3 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_3_sp.rds")
 
 KEN0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_KEN_0_sp.rds")
+KEN <-  readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_KEN_1_sp.rds")
 KEN2 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_KEN_2_sp.rds")
 KEN3 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_KEN_3_sp.rds")
 
@@ -101,9 +104,36 @@ ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 
 par(mar = c(0, 0, 1, 0 ))
 plot(E_Af_No_b, col = "grey") 
 
-legend(x = "bottomright", pch = 15, col = c("blue", "yellow", "orange", "red"),
-       legend = c("one study", "2-5 studies", "5-10 studies", "10+ studies"), bty = "n", pt.cex = 2)
 
+#ADD DEM and mask to East Africa
+#DEM
+DEM <- raster("/Users/ryankopper/Desktop/R work/PPTmap/gt30e020n40_dem/gt30e020n40.dem")
+DEM2 <-raster("/Users/ryankopper/Desktop/R work/PPTmap/gt30e020s10_dem/gt30e020s10.dem")
+
+DEM <- merge(DEM, DEM2)
+
+msk_DEM <- mask(DEM, E_Af_No_b)
+
+plot(msk_DEM, add = TRUE)
+plot(E_Af_No_b, add= TRUE)
+
+par(mar = c(0, 0, 1, 0 ))
+plot(msk_DEM);plot(E_Af_No_b,add=TRUE)
+
+#Hillshading---works but is causing fatal error
+
+# slope <- terrain(msk_DEM, opt='slope')
+# aspect <- terrain(msk_DEM, opt='aspect')
+# hill <- hillShade(slope, aspect, 40, 270)
+# plot(hill, col=grey(0:100/100), legend=FALSE, main='Elevation')
+# plot(msk_DEM, col=rainbow(25, alpha=0.35), add=TRUE)
+# 
+# 
+
+
+#Legend
+legend(x = "bottomleft", pch = 15, col = c("blue", "black", "purple", "red"),
+       legend = c("one study", "2-5 studies", "5-10 studies", "10+ studies"), bty = "n", pt.cex = 2)
 
 
 #Frequency mapping------
@@ -114,11 +144,11 @@ points(coordinates(blue),pch = 20, col = "blue")
 
 #2--5 study Occurance (Yellow) 
 yellow <- bind(TZA_3, UGA_sites)
-points(coordinates(yellow),pch = 20, col = "yellow")
+points(coordinates(yellow),pch = 20, col = "black")
 
 #5--10 study Occurance (orange) 
 orange <- bind(KEN2_5to10, KEN3_5to10)
-points(coordinates(orange), pch = 20, col = "orange")
+points(coordinates(orange), pch = 20, col = "purple")
 
 #10 + study Occurance (red)
 red <- bind(KEN_10, KEN_10_oth)
@@ -129,20 +159,44 @@ points(coordinates(red), pch = 20, col = "red")
 
 ```
 
+```{r}
+
+#PLOTTING DEM
+# plot_noaxes <- function(x, axes = FALSE, box = FALSE, mar = c(0, 0, 1, 4), 
+#                         ...) {
+#   if(!class(x) %in% c("RasterLayer", "RasterStack", "RasterBrick", "Extent")) {
+#     stop("This function is intended for rasters only", call. = FALSE)
+#   }
+#   par(mar = mar)
+#   plot(x, axes = axes, box = axes, ...)
+# }
+# 
+# plot_noaxes(msk_DEM)
+# plot(E_Af_No_b, add =T)
+
+```
+
+
+
+
+
+
+
+
 #Interative map with Mapview
 ```{r}
 
-library(mapview)
-
-mapview(KEN3)
-
-#viewmap <-
-mapview(E_Af_No_b, col.regions = "grey", color = "black", alpha = "0.9" , map.types = "Stamen.Toner") + mapView(KEN_study_sites, col.regions = "red",  color = "red") +
-  mapView(UGA_sites, col.regions = "red", color = "red") + mapView(TZA_study_sites, col.regions = "red", color = "red") +
-  mapView(ETH_study_sites, col.regions = "red", color = "red") + mapView(KEN2study_sites, col.regions = "purple", color = "purple")
-
-# # Save a pdf of the map
-# mapshot(viewmap, file = "map.pdf")
+# library(mapview)
+# 
+# mapview(KEN3)
+# 
+# #viewmap <-
+# mapview(E_Af_No_b, col.regions = "grey", color = "black", alpha = "0.9" , map.types = "Stamen.Toner") + mapView(KEN_study_sites, col.regions = "red",  color = "red") +
+#   mapView(UGA_sites, col.regions = "red", color = "red") + mapView(TZA_study_sites, col.regions = "red", color = "red") +
+#   mapView(ETH_study_sites, col.regions = "red", color = "red") + mapView(KEN2study_sites, col.regions = "purple", color = "purple")
+# 
+# # # Save a pdf of the map
+# # mapshot(viewmap, file = "map.pdf")
 
 ```
 
