@@ -114,11 +114,26 @@ DEM <- merge(DEM, DEM2)
 
 msk_DEM <- mask(DEM, E_Af_No_b)
 
-plot(msk_DEM, add = TRUE)
-plot(E_Af_No_b, add= TRUE)
+msk_DEM <- projectRaster(msk_DEM, 
+                                 crs = crs(E_Af_No_b))
 
 par(mar = c(0, 0, 1, 0 ))
-plot(msk_DEM);plot(E_Af_No_b,add=TRUE)
+plot(E_Af_No_b) #plot first to set up boundaries
+
+col <- terrain.colors(6)
+plot(msk_DEM, col = col,  alpha = 0.60, add = TRUE)
+
+
+#TO ZOOM TO SPECIFIC REGION
+
+#ext An extent object to zoom in a region (see also zoom and crop(x,drawExtent())
+
+#-----------------------------------------------------------------------------
+#Using ggplot  ----not run
+# ggplot() +
+#   geom_path(data = E_Af_No_b, aes(x = long, y = lat, group = group)) +
+#   labs(title = "East aFRICA - using ggplot") 
+
 
 #Hillshading---works but is causing fatal error
 
@@ -127,7 +142,7 @@ plot(msk_DEM);plot(E_Af_No_b,add=TRUE)
 # hill <- hillShade(slope, aspect, 40, 270)
 # plot(hill, col=grey(0:100/100), legend=FALSE, main='Elevation')
 # plot(msk_DEM, col=rainbow(25, alpha=0.35), add=TRUE)
-# 
+# # 
 # 
 
 
@@ -153,8 +168,6 @@ points(coordinates(orange), pch = 20, col = "purple")
 #10 + study Occurance (red)
 red <- bind(KEN_10, KEN_10_oth)
 points(coordinates(red), pch = 20, col = "red")
-
-
 
 
 ```
