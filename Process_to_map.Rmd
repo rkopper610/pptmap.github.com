@@ -118,22 +118,14 @@ msk_DEM <- projectRaster(msk_DEM,
                                  crs = crs(E_Af_No_b))
 
 par(mar = c(0, 0, 1, 0 ))
-plot(E_Af_No_b) #plot first to set up boundaries
+plot(E_Af_No_b, asp=NA) #plot first to set up boundaries
+box()
+title(main="PPT Study Site Frequency")
 
 col <- terrain.colors(6)
 plot(msk_DEM, col = col,  alpha = 0.60, add = TRUE)
 
-
-#TO ZOOM TO SPECIFIC REGION
-
-#ext An extent object to zoom in a region (see also zoom and crop(x,drawExtent())
-
 #-----------------------------------------------------------------------------
-#Using ggplot  ----not run
-# ggplot() +
-#   geom_path(data = E_Af_No_b, aes(x = long, y = lat, group = group)) +
-#   labs(title = "East aFRICA - using ggplot") 
-
 
 #Hillshading---works but is causing fatal error
 
@@ -166,11 +158,11 @@ blue <- rbind(st_as_sf(TZA_3) %>% select(NAME_1),
 plot(st_geometry(st_centroid(blue)), pch = 20, col = "blue", add = TRUE)
 
 
-#5--10 study Occurance (orange) 
+#5--10 study Occurance (purple) 
 
-orange <- rbind(st_as_sf(KEN2_5to10) %>% select(NAME_1), 
+purple <- rbind(st_as_sf(KEN2_5to10) %>% select(NAME_1), 
               st_as_sf(KEN3_5to10) %>% select(NAME_1))
-plot(st_geometry(st_centroid(orange )), pch = 20, col = "orange ", add = TRUE)
+plot(st_geometry(st_centroid(purple )), pch = 20, col = "purple ", add = TRUE)
 
 
 #10 + study Occurance (red)
@@ -184,40 +176,21 @@ plot(st_geometry(st_centroid(red )), pch = 20, col = "red ", add = TRUE)
 
 ```
 
-```{r}
 
-#PLOTTING DEM
-# plot_noaxes <- function(x, axes = FALSE, box = FALSE, mar = c(0, 0, 1, 4), 
-#                         ...) {
-#   if(!class(x) %in% c("RasterLayer", "RasterStack", "RasterBrick", "Extent")) {
-#     stop("This function is intended for rasters only", call. = FALSE)
-#   }
-#   par(mar = mar)
-#   plot(x, axes = axes, box = axes, ...)
-# }
-# 
-# plot_noaxes(msk_DEM)
-# plot(E_Af_No_b, add = T)
-
-```
-
-
-
-
-#Interative map with Mapview
+#Interactive map with Mapview
 ```{r}
 
 # library(mapview)
 # 
-# mapview(KEN3)
+# 
 # 
 # #viewmap <-
-# mapview(E_Af_No_b, col.regions = "grey", color = "black", alpha = "0.9" , map.types = "Stamen.Toner") + mapView(KEN_study_sites, col.regions = "red",  color = "red") +
-#   mapView(UGA_sites, col.regions = "red", color = "red") + mapView(TZA_study_sites, col.regions = "red", color = "red") +
-#   mapView(ETH_study_sites, col.regions = "red", color = "red") + mapView(KEN2study_sites, col.regions = "purple", color = "purple")
-# 
-# # # Save a pdf of the map
-# # mapshot(viewmap, file = "map.pdf")
+# mapview(E_Af_No_b, col.regions = "grey", color = "black", alpha = "0.9" , map.types = "Stamen.Toner") + mapView(red, col.regions = "red",  color = "red") +
+#   mapView(blue, col.regions = "blue", color = "blue") + mapView(black, col.regions = "black", color = "black") +  mapView(purple, col.regions = "purple", color = "purple")
+
+# # Save a pdf of the map
+# mapshot(viewmap, file = "map.pdf")
+
 
 ```
 
