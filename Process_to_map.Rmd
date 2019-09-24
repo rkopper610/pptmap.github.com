@@ -147,27 +147,39 @@ plot(msk_DEM, col = col,  alpha = 0.60, add = TRUE)
 
 
 #Legend
-legend(x = "bottomleft", pch = 15, col = c("blue", "black", "purple", "red"),
+legend(x = "bottomleft", pch = 15, col = c("black", "blue", "purple", "red"),
        legend = c("one study", "2-5 studies", "5-10 studies", "10+ studies"), bty = "n", pt.cex = 2)
 
 
 #Frequency mapping------
 
-#One Study Occurance (Blue)
-blue <- bind(ETH_study_sites, TZA_study_sites)
-points(coordinates(blue),pch = 20, col = "blue") 
+# One Study Occurance (Black)
 
-#2--5 study Occurance (Yellow) 
-yellow <- bind(TZA_3, UGA_sites)
-points(coordinates(yellow),pch = 20, col = "black")
+black <- rbind(st_as_sf(ETH_study_sites) %>% select(NAME_1), 
+              st_as_sf(TZA_study_sites) %>% select(NAME_1))
+plot(st_geometry(st_centroid(black)), pch = 20, col = "black", add = TRUE)
+
+#2--5 study Occurance (Blue)
+
+blue <- rbind(st_as_sf(TZA_3) %>% select(NAME_1), 
+              st_as_sf(UGA_sites) %>% select(NAME_1))
+plot(st_geometry(st_centroid(blue)), pch = 20, col = "blue", add = TRUE)
+
 
 #5--10 study Occurance (orange) 
-orange <- bind(KEN2_5to10, KEN3_5to10)
-points(coordinates(orange), pch = 20, col = "purple")
+
+orange <- rbind(st_as_sf(KEN2_5to10) %>% select(NAME_1), 
+              st_as_sf(KEN3_5to10) %>% select(NAME_1))
+plot(st_geometry(st_centroid(orange )), pch = 20, col = "orange ", add = TRUE)
+
 
 #10 + study Occurance (red)
-red <- bind(KEN_10, KEN_10_oth)
-points(coordinates(red), pch = 20, col = "red")
+
+red <- rbind(st_as_sf(KEN_10) %>% select(NAME_1), 
+              st_as_sf(KEN_10_oth) %>% select(NAME_1))
+
+plot(st_geometry(st_centroid(red )), pch = 20, col = "red ", add = TRUE)
+
 
 
 ```
@@ -185,13 +197,9 @@ points(coordinates(red), pch = 20, col = "red")
 # }
 # 
 # plot_noaxes(msk_DEM)
-# plot(E_Af_No_b, add =T)
+# plot(E_Af_No_b, add = T)
 
 ```
-
-
-
-
 
 
 
