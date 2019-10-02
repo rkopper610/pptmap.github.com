@@ -11,9 +11,9 @@ prerequisites:
 library(raster)
 library(rgdal)
 library(dplyr)
-library(sf)
-library(tidyr)
 
+library(tidyverse)
+library(sf)
 ```
 
 
@@ -123,20 +123,10 @@ box()
 title(main="PPT Study Site Frequency")
 
 col <- terrain.colors(6)
-plot(msk_DEM, col = col,  alpha = 0.60, add = TRUE)
+socolor <-  rev(col) 
+plot(msk_DEM, col = socolor,  alpha = 0.75, add = TRUE)
 
 #-----------------------------------------------------------------------------
-
-#Hillshading---works but is causing fatal error
-
-# slope <- terrain(msk_DEM, opt='slope')
-# aspect <- terrain(msk_DEM, opt='aspect')
-# hill <- hillShade(slope, aspect, 40, 270)
-# plot(hill, col=grey(0:100/100), legend=FALSE, main='Elevation')
-# plot(msk_DEM, col=rainbow(25, alpha=0.35), add=TRUE)
-# # 
-# 
-
 
 #Legend
 legend(x = "bottomleft", pch = 15, col = c("black", "blue", "purple", "red"),
@@ -147,30 +137,51 @@ legend(x = "bottomleft", pch = 15, col = c("black", "blue", "purple", "red"),
 
 # One Study Occurance (Black)
 
-black <- rbind(st_as_sf(ETH_study_sites) %>% select(NAME_1), 
-              st_as_sf(TZA_study_sites) %>% select(NAME_1))
-plot(st_geometry(st_centroid(black)), pch = 20, col = "black", add = TRUE)
+
+# black <- rbind(st_as_sf(ETH_study_sites) %>%  st_as_sf(TZA_study_sites)) 
+# plot(st_geometry(st_centroid(black)), pch = 20, col = "black", add = TRUE)
+#
+black <- bind(ETH_study_sites, TZA_study_sites)
+points(coordinates(black),pch = 20, col = "black") 
+
+
+
+
 
 #2--5 study Occurance (Blue)
 
-blue <- rbind(st_as_sf(TZA_3) %>% select(NAME_1), 
-              st_as_sf(UGA_sites) %>% select(NAME_1))
-plot(st_geometry(st_centroid(blue)), pch = 20, col = "blue", add = TRUE)
+# blue <- rbind(st_as_sf(TZA_3) %>% select(NAME_1), 
+#               st_as_sf(UGA_sites) %>% select(NAME_1))
+#  plot(st_geometry(st_centroid(blue)), pch = 20, col = "blue", add = TRUE)
+
+
+blue <- bind(TZA_3, UGA_sites)
+points(coordinates(blue),pch = 20, col = "blue")
+
 
 
 #5--10 study Occurance (purple) 
 
-purple <- rbind(st_as_sf(KEN2_5to10) %>% select(NAME_1), 
-              st_as_sf(KEN3_5to10) %>% select(NAME_1))
-plot(st_geometry(st_centroid(purple )), pch = 20, col = "purple ", add = TRUE)
+# purple <- rbind(st_as_sf(KEN2_5to10) %>% 
+#               st_as_sf(KEN3_5to10))
+# plot(st_geometry(st_centroid(purple )), pch = 20, col = "purple ", add = TRUE)
+
+
+purple <- bind(KEN2_5to10, KEN3_5to10)
+points(coordinates(purple), pch = 20, col = "purple")
 
 
 #10 + study Occurance (red)
 
-red <- rbind(st_as_sf(KEN_10) %>% select(NAME_1), 
-              st_as_sf(KEN_10_oth) %>% select(NAME_1))
+# red <- rbind(st_as_sf(KEN_10) %>% select(NAME_1), 
+#               st_as_sf(KEN_10_oth) %>% select(NAME_1))
+# plot(st_geometry(st_centroid(red )), pch = 20, col = "red ", add = TRUE)
 
-plot(st_geometry(st_centroid(red )), pch = 20, col = "red ", add = TRUE)
+red <- bind(KEN_10, KEN_10_oth)
+ points(coordinates(red), pch = 20, col = "red")
+
+
+
 
 
 
@@ -182,8 +193,6 @@ plot(st_geometry(st_centroid(red )), pch = 20, col = "red ", add = TRUE)
 
 # library(mapview)
 # 
-# 
-# 
 # #viewmap <-
 # mapview(E_Af_No_b, col.regions = "grey", color = "black", alpha = "0.9" , map.types = "Stamen.Toner") + mapView(red, col.regions = "red",  color = "red") +
 #   mapView(blue, col.regions = "blue", color = "blue") + mapView(black, col.regions = "black", color = "black") +  mapView(purple, col.regions = "purple", color = "purple")
@@ -194,4 +203,34 @@ plot(st_geometry(st_centroid(red )), pch = 20, col = "red ", add = TRUE)
 
 ```
 
+```{r}
+
+#ETHIOPIA map and study sites --------------------------------------------------
+par(mar = c(0, 0, 1, 0 ))
+plot(ETH0)
+
+ETH_dem <- mask(DEM, ETH0)
+col <- terrain.colors(6)
+plot(ETH_dem, col = socolor,  alpha = 0.70, add = TRUE)
+
+just_ETH <- st_as_sf(ETH_study_sites)  
+              
+plot(st_geometry(st_centroid(just_ETH)), pch = 20, col = "black", add = TRUE)
+
+# Changing resolution
+# test_with_aggregate <- disaggregate(ETH_dem, fact= 4)
+# plot(test_with_aggregate, col = col,  alpha = 0.60, add = TRUE)
+
+#Hillshading---works but is causing fatal error---------------------------------
+
+# slope <- terrain(ETH_dem, opt='slope')
+# aspect <- terrain(ETH_dem, opt='aspect')
+# hill <- hillShade(slope, aspect, 40, 270)
+# plot(hill, col=grey(0:100/100), legend=FALSE, main='Elevation')
+# plot(ETH_dem, col=rainbow(25, alpha=0.35), add=TRUE)
+
+
+#par(mfrow = c(1,2))
+
+```
 

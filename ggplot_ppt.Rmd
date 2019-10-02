@@ -51,24 +51,23 @@ points(coordinates(ETH),pch = 20)
 ```
 
 ```{r}
+library(ceramic)
+roi <- raster::extent(3.397448,	14.8940537,	32.9975838,	47.9823797)
+im <- cc_location(roi, type = "elevation-tiles-prod")
+par(mar = c(0, 0, 1, 0 ))
+raster::plotRGB(im)
 
-#HOW to incorporate Tehuledre
+#New Zealand', ((166.509144322, -46.641235447, 178.517093541, -34.4506617165)),
 
-readRDS("/Users/ryankopper/Desktop/R work/PPTmap/Tehuledere Wereda/Tehuledere.shp")
+#32.95418, 3.42206, 47.78942, 14.95943
 
-tehuledere <- st_read("/Users/ryankopper/Desktop/R work/PPTmap/Tehuledere Wereda/Tehuledere.shp")
-
-st_as_sf(tehuledere)
-
-points(coordinates(tehuledere2),pch = 20, col = "red")
-
-tehuledere2 <- tehuledere$geometry
-
-plot(tehuledere, add = T)
-
-head(tehuledere)
+#      -30 ,32.95418, 3.42206, -58)
 
 
 
 ```
+
+
+
+
 
