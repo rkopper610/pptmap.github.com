@@ -10,10 +10,10 @@ prerequisites:
 ```{r}
 library(raster)
 library(rgdal)
-library(dplyr)
-
 library(tidyverse)
 library(sf)
+
+
 ```
 
 
@@ -136,13 +136,16 @@ legend(x = "bottomleft", pch = 15, col = c("black", "blue", "purple", "red"),
 #Frequency mapping------
 
 # One Study Occurance (Black)
+library(dplyr)
+
+black <- rbind(st_as_sf(ETH_study_sites) %>% select(NAME_1),
+                 st_as_sf(TZA_study_sites) %>% select(NAME_1))
+
+plot(st_geometry(st_centroid(black)), pch = 20, col = "black", add = TRUE)
 
 
-# black <- rbind(st_as_sf(ETH_study_sites) %>%  st_as_sf(TZA_study_sites)) 
-# plot(st_geometry(st_centroid(black)), pch = 20, col = "black", add = TRUE)
-#
-black <- bind(ETH_study_sites, TZA_study_sites)
-points(coordinates(black),pch = 20, col = "black") 
+# black <- bind(ETH_study_sites, TZA_study_sites)
+# points(coordinates(black),pch = 20, col = "black") 
 
 
 
@@ -150,35 +153,36 @@ points(coordinates(black),pch = 20, col = "black")
 
 #2--5 study Occurance (Blue)
 
-# blue <- rbind(st_as_sf(TZA_3) %>% select(NAME_1), 
-#               st_as_sf(UGA_sites) %>% select(NAME_1))
-#  plot(st_geometry(st_centroid(blue)), pch = 20, col = "blue", add = TRUE)
+blue <- rbind(st_as_sf(TZA_3) %>% select(NAME_1),
+              st_as_sf(UGA_sites) %>% select(NAME_1))
+ plot(st_geometry(st_centroid(blue)), pch = 20, col = "blue", add = TRUE)
 
 
-blue <- bind(TZA_3, UGA_sites)
-points(coordinates(blue),pch = 20, col = "blue")
+# blue <- bind(TZA_3, UGA_sites)
+# points(coordinates(blue),pch = 20, col = "blue")
 
 
 
 #5--10 study Occurance (purple) 
 
-# purple <- rbind(st_as_sf(KEN2_5to10) %>% 
-#               st_as_sf(KEN3_5to10))
-# plot(st_geometry(st_centroid(purple )), pch = 20, col = "purple ", add = TRUE)
+purple <- rbind(st_as_sf(KEN2_5to10) %>% select(NAME_1),
+              st_as_sf(KEN3_5to10) %>% select(NAME_1))
+
+plot(st_geometry(st_centroid(purple )), pch = 20, col = "purple ", add = TRUE)
 
 
-purple <- bind(KEN2_5to10, KEN3_5to10)
-points(coordinates(purple), pch = 20, col = "purple")
+# purple <- bind(KEN2_5to10, KEN3_5to10)
+# points(coordinates(purple), pch = 20, col = "purple")
 
 
 #10 + study Occurance (red)
 
-# red <- rbind(st_as_sf(KEN_10) %>% select(NAME_1), 
-#               st_as_sf(KEN_10_oth) %>% select(NAME_1))
-# plot(st_geometry(st_centroid(red )), pch = 20, col = "red ", add = TRUE)
+red <- rbind(st_as_sf(KEN_10) %>% select(NAME_1),
+              st_as_sf(KEN_10_oth) %>% select(NAME_1))
+plot(st_geometry(st_centroid(red )), pch = 20, col = "red ", add = TRUE)
 
-red <- bind(KEN_10, KEN_10_oth)
- points(coordinates(red), pch = 20, col = "red")
+# red <- bind(KEN_10, KEN_10_oth)
+#  points(coordinates(red), pch = 20, col = "red")
 
 
 
@@ -230,7 +234,19 @@ plot(st_geometry(st_centroid(just_ETH)), pch = 20, col = "black", add = TRUE)
 # plot(ETH_dem, col=rainbow(25, alpha=0.35), add=TRUE)
 
 
-#par(mfrow = c(1,2))
+#-------------------------------------------------------------------------------
+#SIDE BY SIDE MAPS---
+# par(mfrow = c(1,2))
+# plot(ETH0)
+# 
+# ETH_dem <- mask(DEM, ETH0)
+# col <- terrain.colors(6)
+# plot(ETH_dem, col = socolor,  alpha = 0.70, add = TRUE)
+# 
+# just_ETH <- st_as_sf(ETH_study_sites)  
+#               
+# plot(st_geometry(st_centroid(just_ETH)), pch = 20, col = "black", add = TRUE)
+
 
 ```
 
