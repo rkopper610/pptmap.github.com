@@ -210,6 +210,8 @@ plot(st_geometry(st_centroid(red )), pch = 20, col = "red ", add = TRUE)
 ```{r}
 
 #ETHIOPIA map and study sites --------------------------------------------------
+library(raster)
+
 par(mar = c(0, 0, 1, 0 ))
 plot(ETH0)
 
@@ -217,9 +219,12 @@ ETH_dem <- mask(DEM, ETH0)
 col <- terrain.colors(6)
 plot(ETH_dem, col = socolor,  alpha = 0.70, add = TRUE)
 
-just_ETH <- st_as_sf(ETH_study_sites)  
+library(dplyr)
+just_ETH <- st_as_sf(ETH_study_sites) %>% select(NAME_1)
               
-plot(st_geometry(st_centroid(just_ETH)), pch = 20, col = "black", add = TRUE)
+ plot(st_geometry(st_centroid(just_ETH)), pch = 20, col = "black", add = TRUE)
+
+
 
 # Changing resolution
 # test_with_aggregate <- disaggregate(ETH_dem, fact= 4)

@@ -8,66 +8,116 @@ editor_options:
 ---
 #NOT RUN
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-
-library("rnaturalearth")
-library("rnaturalearthdata")
-
-world <- ne_countries(scale='medium',returnclass = 'sf')
-class(world)
-
-ggplot(data = world) +
-    geom_sf() +
-    coord_sf(xlim = c(48, 29.12), ylim = c(-11, 14))
-
+#set up Mapp
+# theme_map <- function(...) {
+#   theme_minimal() +
+#   theme(
+#     text = element_text(family = "times", color = "#22211d"),
+#     axis.line = element_blank(),
+#     axis.text.x = element_blank(),
+#     axis.text.y = element_blank(),
+#     axis.ticks = element_blank(),
+#     axis.title.x = element_blank(),
+#     axis.title.y = element_blank(),
+#     # panel.grid.minor = element_line(color = "#ebebe5", size = 0.2),
+#     panel.grid.major = element_line(color = "#ebebe5", size = 0.2),
+#     panel.grid.minor = element_blank(),
+#     plot.background = element_rect(fill = "#f5f5f2", color = NA), 
+#     panel.background = element_rect(fill = "#f5f5f2", color = NA), 
+#     legend.background = element_rect(fill = "#f5f5f2", color = NA),
+#     panel.border = element_blank(),
+#     ...
+#   )
+# }
 ```
-#NOTRUN
-Using GADMtools package
+
+
 
 ```{r}
-library(GADMTools)
-?GADMTools
+ETH0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_0_sp.rds")
+ETH <-   readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_2_sp.rds")
+ETH3 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_3_sp.rds")
+DEM <- raster("/Users/ryankopper/Desktop/R work/PPTmap/gt30e020n40_dem/gt30e020n40.dem")
+DEM2 <-raster("/Users/ryankopper/Desktop/R work/PPTmap/gt30e020s10_dem/gt30e020s10.dem")
+ETH_dem <- mask(DEM, ETH0)
 
-map <- gadm_sp_loadCountries(c("ETH","KEN","TZA", "UGA"), level = 2, basefile = "./") 
+#ETHIOPIA studies
+ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Bako Tibe" | NAME_3 == "Jimma Arjo" | NAME_3 == "Boset"| NAME_3 == "Yayu" | NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie") 
 
-gadm_plot(map)
-#add in points
-points(coordinates(map),pch = 20)
-
-#--------------------------------------------------------------------------------
-#Centroids
-library(rgeos)
-
-trueCentroids <-  gCentroid(KEN,byid=TRUE)
-plot(KEN)
-points(coordinates(KEN),pch = 20)
-points(trueCentroids, pch = 20, col = "red")
-
-
-plot(ETH)
-points(coordinates(ETH),pch = 20)
+just_ETH <- st_as_sf(ETH_study_sites) %>% select(NAME_1)
 
 
 ```
+Recreate using ggplot2 package
+```{r}
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(sf)
+# convert spatial object to a ggplot ready data frame
+
+pts_eth <- st_geometry(st_centroid(just_ETH))
+
+pt_df <- as.data.frame(pts_eth, region = "id")
+
+#NEED TO FIX THE COODINATES TO X AND Y VALUES
+datf <- separate(pt_df, geometry, into = c("lon", "lat"), sep = ",")
+datf$lon <- gsub("c\\(", "", datf$lon)
+datf$lat <- gsub("\\)", "", datf$lat)
+
+#plot points
+ggplot() +
+  geom_point(data = datf, aes(x = lon, y = lat )) +
+  labs(title = "Plot locations")
+
+#Make DEM
+dem.p  <-  rasterToPoints(ETH_dem)
+df <-  data.frame(dem.p)
+colnames(df) = c("lon", "lat", "alt")
+
+p1 <- ggplot(df, aes(lon,lat)) +
+  geom_raster(aes(fill = alt))
+  
+
+#Make GADM file for ggplot
+
+outline <- ggplot() + 
+  geom_polygon(data=ETH0, aes(long,lat,group=group), fill="gray") +
+  geom_path(data=ETH0, aes(long,lat, group=group), color="black",
+            size=0.1) 
+#   +
+#   geom_point(data = datf, aes(x = x, y = y ))
+# 
+# # plot lines and points together----no working properly
+# 
+ggplot() +
+  geom_point(data= datf,aes(x = lat, y = lon),
+             pch = 20, size = 5, colour = "black") +
+  geom_polygon(data = ETH0,
+               mapping = aes(x = long,
+                           y = lat,
+                           colour = "grey"),
+               alpha = 0)
+
+#----------------------------------------------------------------------------
+
+# 
+# z <- outline + geom_point(data= datf, aes(x = lon, y = lat))
+# 
+# #num <-  scale_x_continuous(datf)
+# 
+
+
+
+
+
+
+```
+
 
 ```{r}
-library(ceramic)
-roi <- raster::extent(3.397448,	14.8940537,	32.9975838,	47.9823797)
-im <- cc_location(roi, type = "elevation-tiles-prod")
-par(mar = c(0, 0, 1, 0 ))
-raster::plotRGB(im)
-
-#New Zealand', ((166.509144322, -46.641235447, 178.517093541, -34.4506617165)),
-
-#32.95418, 3.42206, 47.78942, 14.95943
-
-#      -30 ,32.95418, 3.42206, -58)
-
 
 
 ```
-
-
-
 
 
