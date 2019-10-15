@@ -1,5 +1,5 @@
 ---
-title: "tmap"
+title: "pptmap"
 author: "Ryan and Morgan"
 date: "9/5/2019"
 output: html_document
@@ -19,6 +19,7 @@ READ in all data
 ```{r}
 ETH0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_0_sp.rds")
 ETH <-   readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_2_sp.rds")
+ETH1 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_1_sp.rds")
 ETH3 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_3_sp.rds")
 DEM <- raster("/Users/ryankopper/Desktop/R work/PPTmap/gt30e020n40_dem/gt30e020n40.dem")
 DEM2 <-raster("/Users/ryankopper/Desktop/R work/PPTmap/gt30e020s10_dem/gt30e020s10.dem")
@@ -68,31 +69,22 @@ outline <- ggplot() +
   geom_polygon(data=ETH0, aes(long,lat,group=group), fill="gray") +
   geom_path(data=ETH0, aes(long,lat, group=group), color="black",
             size=0.1) 
-#   +
-#   geom_point(data = datf, aes(x = x, y = y ))
-# 
-# # plot lines and points together----no working properly
-# 
-ggplot() +
-  geom_point(data = datf, aes(x = lat, y = lon),
-             pch = 20, size = 5, colour = "black") +
-  geom_polygon(data = x,
-               mapping = aes(x = long,
-                           y = lat,
-                           colour = "grey"),
-               alpha = 0)
 
-#----------------------------------------------------------------------------
-
+#-------------------------------------------------------------------------------
 #PLOTTING USING RASTER After converting the point files to dots ^
-#must run code aove under the ggplot process.
+#must run code above under the ggplot process.
+par(mar = c(0, 0, 1, 0 ))
+plot(ETH0)
+plot(ETH_dem, add = T)
+plot(pts_eth, col = "black", pch = 20, add = T)
+plot(ETH1, add = T)
 
-plot(ETH)
-plot(pts_eth, col = "red", pch = 20, add = T)
-
+#-------------------------------------------------------------------------------
 #Using
 library(mapview)
  
+#URL to find maplayers to be used by mapview
+#http://leaflet-extras.github.io/leaflet-providers/preview/
 
 mapview(pts_eth, col.regions = "black", color = "red", map.types = c("Stamen.TerrainBackground", "Esri.WorldStreetMap")) 
 
