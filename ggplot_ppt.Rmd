@@ -88,6 +88,8 @@ library(mapview)
 
 mapview(pts_eth, col.regions = "black", color = "red", map.types = c("Stamen.TerrainBackground", "Esri.WorldStreetMap")) 
 
+
+
 ```
 
 

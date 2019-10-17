@@ -42,7 +42,7 @@ UGA <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_UGA_1_sp.rds")
 UGA0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_UGA_0_sp.rds")
 
 TZA0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_TZA_0_sp.rds")
-TZA1 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_TZA_1_sp.rds")
+#TZA1 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_TZA_1_sp.rds")
 TZA <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_TZA_2_sp.rds")
 
 E_Af_No_b<- bind(ETH0, KEN0, UGA0, TZA0)
@@ -90,15 +90,21 @@ TZA_study_sites <- subset(TZA, NAME_2 == "Sengerema"| NAME_2 == "Misungwi" |
 TZA_3 <- subset(TZA, NAME_2 == "Tarime") #3studies/Blue 
 
 
-
+#| NAME_3 == "Bako Tibe" | NAME_3 == "Jimma Arjo" | NAME_3 == "Yayu" | ARE PART OF
+#A STUDY DEEMED "QUALITATIVE ANALYSIS" AND THERFORE MAY BE EXCLUDED!!
 #ETHIOPIA studies
-ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Bako Tibe" | NAME_3 == "Jimma Arjo" | NAME_3 == "Boset"| NAME_3 == "Yayu" | NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie") 
+# ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Bako Tibe" | NAME_3 == "Jimma Arjo" | NAME_3 == "Boset"| NAME_3 == "Yayu" | NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie" |
+#                           NAME_3 == "Awasa") 
+#   
+#Tula = Awasa
+#(study ID #9//#Melkassa = "adama") = CORRECT
+#Dore Bafano and Jara Gelelcha (ID 26) = Awasa Zuria 
+
+#list of ETH studdies when qual study is removed.
+ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie" | NAME_3 == "Awasa") 
 
 
 
-#(study ID #9//#Melkassa = "adama")
-#Tula (ID 25) "Tula" is in kombulcha.
-#Dore Bafano and Jara Gelelcha (ID 27)
 
 #Plot 4 countries without political boders (level 0)
 par(mar = c(0, 0, 1, 0 ))
@@ -152,6 +158,8 @@ plot(st_geometry(st_centroid(black)), pch = 20, col = "black", add = TRUE)
 #2--5 study Occurance (Blue)
 blue <- rbind(st_as_sf(TZA_3) %>% select(NAME_1),
               st_as_sf(UGA_sites) %>% select(NAME_1))
+
+  
  plot(st_geometry(st_centroid(blue)), pch = 20, col = "blue", add = TRUE)
 
 
@@ -203,7 +211,7 @@ plot(st_geometry(st_centroid(red )), pch = 20, col = "red ", add = TRUE)
 library(raster)
 
 par(mar = c(0, 0, 1, 0 ))
-plot(ETH0)
+plot(ETH0, col = "tan")
 
 ETH_dem <- mask(DEM, ETH0)
 col <- terrain.colors(6)
@@ -214,11 +222,14 @@ ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 
 
 
 library(dplyr)
+library(sf)
 just_ETH <- st_as_sf(ETH_study_sites) %>% select(NAME_1)
               
- plot(st_geometry(st_centroid(just_ETH)), pch = 20, col = "black", add = TRUE)
+plot(st_geometry(st_centroid(just_ETH)), pch = 20, col = "black", add = TRUE)
 
-
+legend(x = "topleft", pch = 15, col = "black",
+       legend = ("Locations in Studies"), bty = "n", pt.cex = 2)
+ 
 
 # Changing resolution
 # test_with_aggregate <- disaggregate(ETH_dem, fact= 4)
