@@ -9,6 +9,7 @@ editor_options:
 prerequisites:
 ```{r}
 library(raster)
+
 ```
 
 
@@ -89,7 +90,7 @@ TZA_study_sites <- subset(TZA, NAME_2 == "Sengerema"| NAME_2 == "Misungwi" |
                             NAME_2 == "Igunga" | NAME_2 == "Bunda") #single study
 TZA_3 <- subset(TZA, NAME_2 == "Tarime") #3studies/Blue 
 
-
+#Not used----
 #| NAME_3 == "Bako Tibe" | NAME_3 == "Jimma Arjo" | NAME_3 == "Yayu" | ARE PART OF
 #A STUDY DEEMED "QUALITATIVE ANALYSIS" AND THERFORE MAY BE EXCLUDED!!
 #ETHIOPIA studies
@@ -100,10 +101,8 @@ TZA_3 <- subset(TZA, NAME_2 == "Tarime") #3studies/Blue
 #(study ID #9//#Melkassa = "adama") = CORRECT
 #Dore Bafano and Jara Gelelcha (ID 26) = Awasa Zuria 
 
-#list of ETH studdies when qual study is removed.
+#list of ETH studdies when qual study is removed.---We will use this---
 ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie" | NAME_3 == "Awasa") 
-
-
 
 
 #Plot 4 countries without political boders (level 0)
@@ -128,7 +127,7 @@ plot(E_Af_No_b, asp=NA, col = "light grey") #plot first to set up boundaries
 box()
 title(main="PPT Study Site Frequency")
 
-col <- terrain.colors(6)
+col <- terrain.colors(10)
 socolor <-  rev(col) 
 plot(msk_DEM, col = socolor,  alpha = 0.75, add = TRUE)
 
@@ -211,14 +210,19 @@ plot(st_geometry(st_centroid(red )), pch = 20, col = "red ", add = TRUE)
 library(raster)
 
 par(mar = c(0, 0, 1, 0 ))
-plot(ETH0, col = "tan")
+plot(ETH0)
 
 ETH_dem <- mask(DEM, ETH0)
-col <- terrain.colors(6)
+col <- terrain.colors(10)
+socolor <-  rev(col) 
 plot(ETH_dem, col = socolor,  alpha = 0.70, add = TRUE)
 
 #All ETHIOPIA SITES NO MATTER THE COUNT
-ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Bako Tibe" | NAME_3 == "Jimma Arjo" | NAME_3 == "Boset"| NAME_3 == "Yayu" | NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie") 
+# ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Bako Tibe" | NAME_3 == "Jimma Arjo" | NAME_3 == "Boset"| NAME_3 == "Yayu" | NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie") 
+
+#list of ETH studdies when qual study is removed.---We will use this---
+ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie" | NAME_3 == "Awasa") 
+
 
 
 library(dplyr)
@@ -228,7 +232,7 @@ just_ETH <- st_as_sf(ETH_study_sites) %>% select(NAME_1)
 plot(st_geometry(st_centroid(just_ETH)), pch = 20, col = "black", add = TRUE)
 
 legend(x = "topleft", pch = 15, col = "black",
-       legend = ("Locations in Studies"), bty = "n", pt.cex = 2)
+       legend = ("Locations of Studies"), bty = "n", pt.cex = 2)
  
 
 # Changing resolution
