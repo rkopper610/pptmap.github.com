@@ -70,13 +70,14 @@ outline <- ggplot() +
   geom_path(data=ETH0, aes(long,lat, group=group), color="black",
             size=0.1) 
 
+
 #-------------------------------------------------------------------------------
 #PLOTTING USING RASTER After converting the point files to dots ^
 #must run code above under the ggplot process.
 par(mar = c(0, 0, 1, 0 ))
-plot(ETH0)
+plot(ETH0, main = "Study Sites in Ethiopia")
 plot(ETH_dem, add = T)
-plot(pts_eth, col = "black", pch = 20, add = T)
+plot(pts_eth, col = "blue", pch = 20, add = T)
 plot(ETH1, add = T)
 
 #-------------------------------------------------------------------------------
@@ -86,7 +87,7 @@ library(mapview)
 #URL to find maplayers to be used by mapview
 #http://leaflet-extras.github.io/leaflet-providers/preview/
 
-mapview(pts_eth, col.regions = "black", color = "red", map.types = c("Stamen.TerrainBackground", "Esri.WorldStreetMap")) 
+mapview(pts_eth, col.regions = "red", color = "red", map.types = c("Stamen.TerrainBackground", "Esri.WorldStreetMap")) 
 
 
 

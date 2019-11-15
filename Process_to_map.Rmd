@@ -124,7 +124,6 @@ msk_DEM <- projectRaster(msk_DEM,
 
 par(mar = c(0, 0, 1, 0 ))
 plot(E_Af_No_b, asp=NA, col = "light grey") #plot first to set up boundaries
-box()
 title(main="PPT Study Site Frequency")
 
 col <- terrain.colors(10)
