@@ -26,8 +26,7 @@ DEM2 <-raster("/Users/ryankopper/Desktop/R work/PPTmap/gt30e020s10_dem/gt30e020s
 ETH_dem <- mask(DEM, ETH0)
 
 #ETHIOPIA studies
-ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Bako Tibe" | NAME_3 == "Jimma Arjo" | NAME_3 == "Boset"| NAME_3 == "Yayu" | NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie") 
-
+ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie" | NAME_3 == "Awasa") 
 just_ETH <- st_as_sf(ETH_study_sites) %>% select(NAME_1)
 
 
@@ -90,9 +89,9 @@ library(mapview)
 #URL to find maplayers to be used by mapview
 #http://leaflet-extras.github.io/leaflet-providers/preview/
 
-mapview(pts_eth, col.regions = "red", color = "red", map.types = c("Stamen.TerrainBackground", "Esri.WorldStreetMap")) 
+mp <- mapview(pts_eth, col.regions = "red", color = "red", map.types = c("Stamen.TerrainBackground", "Esri.WorldStreetMap")) 
 
-
+#mapshot(mp, file = "map.pdf") #saves to a file but need to figure out extend requirements
 
 ```
 

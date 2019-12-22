@@ -202,11 +202,11 @@ plot(st_geometry(st_centroid(red )), pch = 20, col = "red ", add = TRUE)
 #Interactive map with Mapview -
 ```{r}
 
-#library(mapview)
+library(mapview)
 #
 # #viewmap <-
-# mapview(E_Af_No_b, col.regions = "grey", color = "black", alpha = "0.9" , map.types = "Stamen.Toner") + mapView(red, col.regions = "red",  color = "red") +
-#   mapView(blue, col.regions = "blue", color = "blue") + mapView(black, col.regions = "black", color = "black") +  mapView(purple, col.regions = "purple", color = "purple")
+mapview(E_Af_No_b, col.regions = "grey", color = "black", alpha = "0.9" , map.types = "Stamen.Toner") + mapView(red, col.regions = "red",  color = "red") +
+  mapView(blue, col.regions = "blue", color = "blue") + mapView(black, col.regions = "black", color = "black") +  mapView(purple, col.regions = "purple", color = "purple")
 
 # # Save a pdf of the map
 # mapshot(viewmap, file = "map.pdf")
@@ -250,8 +250,8 @@ legend(x = "topleft", pch = 15, col = "black",
  
 
 # Changing resolution
-# test_with_aggregate <- disaggregate(ETH_dem, fact= 4)
-# plot(test_with_aggregate, col = col,  alpha = 0.60, add = TRUE)
+#test_with_aggregate <- disaggregate(ETH_dem, fact= 4)
+#plot(test_with_aggregate, col = col,  alpha = 0.60, add = TRUE)
 
 #Hillshading---works but is causing fatal error---------------------------------
 
