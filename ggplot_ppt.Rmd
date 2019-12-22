@@ -80,6 +80,9 @@ plot(ETH_dem, add = T)
 plot(pts_eth, col = "blue", pch = 20, add = T)
 plot(ETH1, add = T)
 
+legend(x = "topleft", pch = 20, col = "blue",
+       legend = ("Locations of Studies"), bty = "n", pt.cex = 2)
+
 #-------------------------------------------------------------------------------
 #Using
 library(mapview)
