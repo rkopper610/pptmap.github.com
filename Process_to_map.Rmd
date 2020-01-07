@@ -128,21 +128,26 @@ msk_DEM <- projectRaster(msk_DEM,
 
 par(mar = c(0, 0, 1, 0 ))
 plot(E_Af_No_b, asp=NA, col = "light grey") #plot first to set up boundaries
-title(main="PPT Study Site Frequency")
+
 
 col <- terrain.colors(10)
 socolor <-  rev(col) 
 plot(msk_DEM, col = socolor,  alpha = 0.75, add = TRUE,
   label = "masl", legend.args = list(text = "Elevation (m)", 
                       side = 3, 
-                      font = 2, 
+                      font = 1, 
                       line = 0.5, 
-                      cex = 1))
+                      cex = 1), legend.width=1, legend.shrink=0.75, 
+    smallplot=c(0.85,0.9, 0.3,0.6))
 
+
+# 
+# plot(msk_DEM, legend.only = T, col=socolor, alpha = 0.75, add = TRUE, legend.width=1, legend.shrink=0.75, 
+#     smallplot=c(0.85,0.9, 0.7,0.9)); par(mar = par("mar"), label = "masl")
 #-----------------------------------------------------------------------------
 
 #Legend
-legend(x = "bottomleft", pch = 15, col = c("black", "blue", "purple", "red"),
+legend(x = "bottomright", pch = 15, col = c("black", "blue", "purple", "red"),
        legend = c("one study", "2-5 studies", "5-10 studies", "10+ studies"), bty = "n", pt.cex = 2)
 
 
@@ -235,19 +240,24 @@ plot(ETH_dem, col = socolor,  alpha = 0.70, add = TRUE,
 # ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Bako Tibe" | NAME_3 == "Jimma Arjo" | NAME_3 == "Boset"| NAME_3 == "Yayu" | NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie") 
 
 #list of ETH studies when qual study is removed.---We will use this---
-ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie" | NAME_3 == "Awasa") 
+ETH_ex_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Awasa") 
+
+
+ETH_sur_sites<-subset(ETH3, NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie") 
 
 
 
 library(dplyr)
 library(sf)
-just_ETH <- st_as_sf(ETH_study_sites) %>% select(NAME_1)
-              
-plot(st_geometry(st_centroid(just_ETH)), pch = 20, col = "black", add = TRUE)
+just_ETHex <- st_as_sf(ETH_ex_sites) %>% select(NAME_1)
+just_ETHsur <- st_as_sf(ETH_sur_sites) %>% select(NAME_1)
 
-legend(x = "topleft", pch = 15, col = "black",
-       legend = ("Locations of Studies"), bty = "n", pt.cex = 2)
- 
+plot(st_geometry(st_centroid(just_ETHex)), pch = 20, col = "black", add = TRUE)
+plot(st_geometry(st_centroid(just_ETHsur)), pch = 20, col = "red", add = TRUE)
+
+legend(x = "bottomright", pch = 20, col = c("black", "red"),
+       legend = c("Experimental studies", "Survey studies"), bty = "n", pt.cex = 2)
+
 
 # Changing resolution
 #test_with_aggregate <- disaggregate(ETH_dem, fact= 4)

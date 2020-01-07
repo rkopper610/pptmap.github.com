@@ -26,8 +26,22 @@ DEM2 <-raster("/Users/ryankopper/Desktop/R work/PPTmap/gt30e020s10_dem/gt30e020s
 ETH_dem <- mask(DEM, ETH0)
 
 #ETHIOPIA studies
-ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie" | NAME_3 == "Awasa") 
-just_ETH <- st_as_sf(ETH_study_sites) %>% select(NAME_1)
+# ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie" | NAME_3 == "Awasa") 
+# just_ETH <- st_as_sf(ETH_study_sites) %>% select(NAME_1)
+
+#Broken into experi + survey based colors
+ETH_ex_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Awasa") 
+
+
+ETH_sur_sites<-subset(ETH3, NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie") 
+
+library(dplyr)
+library(sf)
+just_ETHex <- st_as_sf(ETH_ex_sites) %>% select(NAME_1)
+just_ETHsur <- st_as_sf(ETH_sur_sites) %>% select(NAME_1)
+
+
+
 
 
 ```
@@ -39,18 +53,29 @@ library(tidyr)
 library(sf)
 # convert spatial object to a ggplot ready data frame
 
-pts_eth <- st_geometry(st_centroid(just_ETH))
+pts_eth <- st_geometry(st_centroid(just_ETHex))
 
 pt_df <- as.data.frame(pts_eth, region = "id")
+
+pts_eth2 <- st_geometry(st_centroid(just_ETHsur))
+
+pt_df2 <- as.data.frame(pts_eth, region = "id")
+
 
 #NEED TO FIX THE COODINATES TO X AND Y VALUES
 datf <- separate(pt_df, geometry, into = c("lon", "lat"), sep = ",")
 datf$lon <- gsub("c\\(", "", datf$lon)
 datf$lat <- gsub("\\)", "", datf$lat)
 
+datf2 <- separate(pt_df2, geometry, into = c("lon", "lat"), sep = ",")
+datf2$lon <- gsub("c\\(", "", datf2$lon)
+datf2$lat <- gsub("\\)", "", datf2$lat)
+
+
 #plot points
 ggplot() +
-  geom_point(data = datf, aes(x = lon, y = lat )) +
+  geom_point(data = datf, aes(x = lon, y = lat )) + 
+  geom_point(data = datf2, aes(x = lon, y = lat )) +
   labs(title = "Plot locations")
 
 #Make DEM
@@ -74,13 +99,21 @@ outline <- ggplot() +
 #PLOTTING USING RASTER After converting the point files to dots ^
 #must run code above under the ggplot process.
 par(mar = c(0, 0, 1, 0 ))
-plot(ETH0, main = "Study Sites in Ethiopia")
-plot(ETH_dem, add = T)
+plot(ETH0)
+#plot(ETH_dem, add = T)
+plot(ETH_dem, col = socolor, add = TRUE,
+  label = "masl", legend.args = list(text = "Elevation (m)", 
+                      side = 3, 
+                      font = 1, 
+                      line = 0.5, 
+                      cex = 1), legend.width=1, legend.shrink=0.75, 
+    smallplot=c(0.85,0.9, 0.3,0.6))
 plot(pts_eth, col = "blue", pch = 20, add = T)
+plot(pts_eth2, col = "red", pch = 20, add = T)
 plot(ETH1, add = T)
 
-legend(x = "topleft", pch = 20, col = "blue",
-       legend = ("Locations of Studies"), bty = "n", pt.cex = 2)
+legend(x = "bottomright", pch = 20, col = c("blue", "red"),
+       legend = c("Exprimental studies", "Survey studies"), bty = "n", pt.cex = 2)
 
 #-------------------------------------------------------------------------------
 #Using
