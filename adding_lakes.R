@@ -81,6 +81,26 @@ ggplot() +
                aes(x=long, y = lat, group = group), fill = NA, colour = 'black') +
   theme_bw()
 
+#Hillshading??---Too big of an area 
+
+# slope.raster <- terrain(dem.raster, opt='slope')
+# aspect.raster <- terrain(dem.raster, opt='aspect')
+# hill.raster <- hillShade(slope.raster, aspect.raster, 40, 270)
+# 
+# hill.m <- rasterToPoints(hill.raster)
+# hill.df <-  data.frame(hill.m)
+# colnames(hill.df) <- c("lon", "lat", "hill")
+# 
+# 
+# ggplot() +
+#   geom_raster(data = hill.df, aes(lon, lat, fill = hill), alpha = .45) +
+#   scale_fill_gradientn(colours = grey.colors(100)) +
+#   geom_sf(data = my_bbox_buff_2500.sf, fill = NA) +
+#   coord_sf(xlim = c(st_bbox(my_bbox_buff_25000.sf)['xmin'], st_bbox(my_bbox_buff_25000.sf)['xmax']), 
+#            ylim = c(st_bbox(my_bbox_buff_25000.sf)['ymin'], st_bbox(my_bbox_buff_25000.sf)['ymax'])) +
+#   geom_polygon(data = my_world_map, 
+#                aes(x=long, y = lat, group = group), fill = NA, colour = 'black') +
+#   theme_bw()
 
 
 #Add bodies of water
