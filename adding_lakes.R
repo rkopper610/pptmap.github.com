@@ -1,7 +1,8 @@
+#Create bounding box of the East Africa Region
 my_points.df <-
   data.frame(lon = c(29, 47.9, 47.9, 29), 
              lat = c(-12, -12, 15.5, 15.5))
-#I will use the great sf package so let’s create a sf spatial object with
+#Using sf package to create a sf spatial object with
 
 library(sf)
 my_points.sf <- st_as_sf(my_points.df, coords = c("lon", "lat"), crs = 4326)
@@ -81,7 +82,7 @@ ggplot() +
                aes(x=long, y = lat, group = group), fill = NA, colour = 'black') +
   theme_bw()
 
-#Hillshading??---Too big of an area 
+#Hillshading---Works BUT too big of an area 
 
 # slope.raster <- terrain(dem.raster, opt='slope')
 # aspect.raster <- terrain(dem.raster, opt='aspect')
@@ -93,12 +94,12 @@ ggplot() +
 # 
 # 
 # ggplot() +
-#   geom_raster(data = hill.df, aes(lon, lat, fill = hill), alpha = .45) +
+#   geom_raster(data = hill.df, aes(lon, lat, fill = hill)) +
 #   scale_fill_gradientn(colours = grey.colors(100)) +
 #   geom_sf(data = my_bbox_buff_2500.sf, fill = NA) +
-#   coord_sf(xlim = c(st_bbox(my_bbox_buff_25000.sf)['xmin'], st_bbox(my_bbox_buff_25000.sf)['xmax']), 
+#   coord_sf(xlim = c(st_bbox(my_bbox_buff_25000.sf)['xmin'], st_bbox(my_bbox_buff_25000.sf)['xmax']),
 #            ylim = c(st_bbox(my_bbox_buff_25000.sf)['ymin'], st_bbox(my_bbox_buff_25000.sf)['ymax'])) +
-#   geom_polygon(data = my_world_map, 
+#   geom_polygon(data = my_world_map,
 #                aes(x=long, y = lat, group = group), fill = NA, colour = 'black') +
 #   theme_bw()
 
@@ -108,28 +109,48 @@ ggplot() +
 #We can use the osmdata package to query the Open Street Map (OSM) Overpass API to download
 #information about lakes and rivers. With the function osmdata::opq() we define the bbox for the query 
 #and with osmdata::add_osm_feature() we extract specific OSM features using the tags (key and value).
+# 
+# library(osmdata)
+# osm_lakes.sf <- 
+#   opq(bbox = st_bbox(my_bbox_buff_25000.sf)) %>%
+#   add_osm_feature(key = 'water', value = 'lake') %>%
+#   osmdata_sf()
+# osm_lakes.sf <- osm_lakes.sf$osm_multipolygons
+# 
+# osm_rivers.sf <- 
+#   opq(bbox = st_bbox(my_bbox_buff_25000.sf)) %>%
+#   add_osm_feature(key = 'waterway', value = 'river') %>%
+#   osmdata_sf()
+# osm_rivers.sf <- osm_rivers.sf$osm_lines
+# 
+# ggplot() +
+#   geom_raster(data = hill.df, aes(lon, lat, fill = hill), alpha = .45) +
+#   scale_fill_gradientn(colours = grey.colors(100)) +
+#   geom_sf(data = osm_lakes.sf, fill = '#9ecae1', colour = NA) +
+#   geom_sf(data = osm_rivers.sf, colour = '#9ecae1', size = 0.05) +
+#   geom_sf(data = my_bbox_buff_2500.sf, fill = NA) +
+#   coord_sf(xlim = c(st_bbox(my_bbox_buff_25000.sf)['xmin'], st_bbox(my_bbox_buff_25000.sf)['xmax']), 
+#            ylim = c(st_bbox(my_bbox_buff_25000.sf)['ymin'], st_bbox(my_bbox_buff_25000.sf)['ymax'])) +
+#   geom_polygon(data = my_world_map, 
+#                aes(x=long, y = lat, group = group), fill = NA, colour = 'black') +
+#   theme_bw()
 
-library(osmdata)
-osm_lakes.sf <- 
-  opq(bbox = st_bbox(my_bbox_buff_25000.sf)) %>%
-  add_osm_feature(key = 'water', value = 'lake') %>%
-  osmdata_sf()
-osm_lakes.sf <- osm_lakes.sf$osm_multipolygons
 
-osm_rivers.sf <- 
-  opq(bbox = st_bbox(my_bbox_buff_25000.sf)) %>%
-  add_osm_feature(key = 'waterway', value = 'river') %>%
-  osmdata_sf()
-osm_rivers.sf <- osm_rivers.sf$osm_lines
+#-------------------------------------------------------------------------------------------------
+#Downloading data from DIVA
 
-ggplot() +
-  geom_raster(data = hill.df, aes(lon, lat, fill = hill), alpha = .45) +
-  scale_fill_gradientn(colours = grey.colors(100)) +
-  geom_sf(data = osm_lakes.sf, fill = '#9ecae1', colour = NA) +
-  geom_sf(data = osm_rivers.sf, colour = '#9ecae1', size = 0.05) +
-  geom_sf(data = my_bbox_buff_2500.sf, fill = NA) +
-  coord_sf(xlim = c(st_bbox(my_bbox_buff_25000.sf)['xmin'], st_bbox(my_bbox_buff_25000.sf)['xmax']), 
-           ylim = c(st_bbox(my_bbox_buff_25000.sf)['ymin'], st_bbox(my_bbox_buff_25000.sf)['ymax'])) +
-  geom_polygon(data = my_world_map, 
-               aes(x=long, y = lat, group = group), fill = NA, colour = 'black') +
-  theme_bw()
+library(rgdal)
+data.shapeken <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/Water_shp_files/KEN_wat/KEN_water_areas_dcw.shp")
+data.shapetz <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/Water_shp_files/TZA_wat/TZA_water_areas_dcw.shp")
+data.shapeeth <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/Water_shp_files/ETH_wat/ETH_water_areas_dcw.shp")
+data.shapeug <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/Water_shp_files/UGA_wat/UGA_water_areas_dcw.shp")
+
+u_vic <-   subset(data.shapeug, NAME == "LAKE VICTORIA")
+k_vic <-   subset(data.shapeken, NAME == "LAKE VICTORIA")
+t_vic <-   subset(data.shapetz, NAME == "LAKE VICTORIA")                    
+e_tan <-   subset(data.shapeeth, NAME == "TANA HAYK")
+
+E_Af_water<- bind(e_tan, t_vic, k_vic, u_vic)
+
+plot(E_Af_No_b)
+plot(E_Af_water, add = TRUE, col = "light blue")
