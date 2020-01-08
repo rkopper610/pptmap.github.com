@@ -128,4 +128,109 @@ mp <- mapview(pts_eth, col.regions = "red", color = "red", map.types = c("Stamen
 
 ```
 
+```{r}
+#Create bounding box of the Ethiopia
+my_points.df <-
+  data.frame(lon = c(32, 47.9, 47.9, 32), 
+             lat = c(2.7, 2.7, 15.5, 15.5))
+#Using sf package to create a sf spatial object with
+
+library(sf)
+my_points.sf <- st_as_sf(my_points.df, coords = c("lon", "lat"), crs = 4326)
+
+
+my_bbox <- c(xmin = min(my_points.df$lon),
+             xmax = max(my_points.df$lon),
+             ymin = min(my_points.df$lat),
+             ymax = max(my_points.df$lat))
+
+my_bbox.m <- 
+  matrix(c(my_bbox['xmin'], my_bbox['xmin'], my_bbox['xmax'], my_bbox['xmax'], my_bbox['xmin'], 
+           my_bbox['ymax'], my_bbox['ymin'], my_bbox['ymin'], my_bbox['ymax'], my_bbox['ymax']),
+         ncol = 2)
+my_bbox.sf <- st_geometry(st_polygon(x = list(my_bbox.m)))
+st_crs(my_bbox.sf) <- 4326
+
+my_bbox_buff_2500.sf <- 
+  my_bbox.sf %>%
+  st_transform(crs = 32632) %>%
+  st_buffer(dist = 2500) %>% # 2.5 kilometers
+  st_transform(crs = 4326)
+
+my_bbox_buff_5000.sf <- 
+  my_bbox.sf %>%
+  st_transform(crs = 32632) %>%
+  st_buffer(dist = 5000) %>% # 5 kilometers
+  st_transform(crs = 4326)
+
+my_bbox_buff_25000.sf <- 
+  my_bbox.sf %>%
+  st_transform(crs = 32632) %>%
+  st_buffer(dist = 25000) %>% # 25 kilometers
+  st_transform(crs = 4326)
+#This is how my point data look like in its essence.
+
+library(ggplot2)
+
+my_world_map <- map_data('world')
+my_world_map <- my_world_map[my_world_map$region %in% ("Ethiopia"),]
+
+
+
+gpo <- ggplot() + 
+  geom_sf(data = my_points.sf) + 
+  geom_sf(data = my_bbox_buff_2500.sf, fill = NA) +
+  coord_sf(xlim = c(st_bbox(my_bbox_buff_25000.sf)['xmin'], st_bbox(my_bbox_buff_25000.sf)['xmax']), 
+           ylim = c(st_bbox(my_bbox_buff_25000.sf)['ymin'], st_bbox(my_bbox_buff_25000.sf)['ymax'])) +
+  geom_polygon(data = my_world_map, 
+               aes(x=long, y = lat, group = group,
+                   fill = region), colour = 'black', alpha = .4) +
+  theme_bw()
+
+#Load DEM and mask to East Africa
+library(raster)
+DEM <- raster("/Users/ryankopper/Desktop/R work/PPTmap/gt30e020n40_dem/gt30e020n40.dem")
+DEM2 <-raster("/Users/ryankopper/Desktop/R work/PPTmap/gt30e020s10_dem/gt30e020s10.dem")
+ETH_dem <- mask(DEM, ETH0)
+
+#DEM
+dem.raster <- crop(ETH_dem, as(my_bbox_buff_25000.sf, 'Spatial'), snap='out')
+
+dem.m  <-  rasterToPoints(dem.raster)
+dem.df <-  data.frame(dem.m)
+colnames(dem.df) = c("lon", "lat", "alt")
+
+ggplot() +
+  geom_raster(data = dem.df, aes(lon, lat, fill = alt), alpha = .95) +
+  scale_fill_gradientn(colours = terrain.colors(100)) +
+  geom_sf(data = my_bbox_buff_2500.sf, fill = NA) +
+  coord_sf(xlim = c(st_bbox(my_bbox_buff_25000.sf)['xmin'], st_bbox(my_bbox_buff_25000.sf)['xmax']), 
+           ylim = c(st_bbox(my_bbox_buff_25000.sf)['ymin'], st_bbox(my_bbox_buff_25000.sf)['ymax'])) +
+  geom_polygon(data = my_world_map, 
+               aes(x=long, y = lat, group = group), fill = NA, colour = 'black') +
+  theme_bw()
+
+#Hillshading---Works BUT too big of an area 
+
+# slope.raster <- terrain(dem.raster, opt='slope')
+# aspect.raster <- terrain(dem.raster, opt='aspect')
+# hill.raster <- hillShade(slope.raster, aspect.raster, 40, 270)
+# 
+# hill.m <- rasterToPoints(hill.raster)
+# hill.df <-  data.frame(hill.m)
+# colnames(hill.df) <- c("lon", "lat", "hill")
+# 
+# 
+# ggplot() +
+#   geom_raster(data = hill.df, aes(lon, lat, fill = hill)) +
+#   scale_fill_gradientn(colours = grey.colors(100)) +
+#   geom_sf(data = my_bbox_buff_2500.sf, fill = NA) +
+#   coord_sf(xlim = c(st_bbox(my_bbox_buff_25000.sf)['xmin'], st_bbox(my_bbox_buff_25000.sf)['xmax']),
+#            ylim = c(st_bbox(my_bbox_buff_25000.sf)['ymin'], st_bbox(my_bbox_buff_25000.sf)['ymax'])) +
+#   geom_polygon(data = my_world_map,
+#                aes(x=long, y = lat, group = group), fill = NA, colour = 'black') +
+#   theme_bw()
+
+
+```
 

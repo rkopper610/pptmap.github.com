@@ -127,7 +127,7 @@ msk_DEM <- projectRaster(msk_DEM,
                                  crs = crs(E_Af_No_b))
 
 par(mar = c(0, 0, 1, 0 ))
-plot(E_Af_No_b, asp=NA, col = "light grey") #plot first to set up boundaries
+plot(E_Af_No_b, asp=NA) #plot first to set up boundaries
 
 
 col <- terrain.colors(10)
@@ -150,7 +150,23 @@ plot(msk_DEM, col = socolor,  alpha = 0.75, add = TRUE,
 legend(x = "bottomright", pch = 15, col = c("black", "blue", "purple", "red"),
        legend = c("one study", "2-5 studies", "5-10 studies", "10+ studies"), bty = "n", pt.cex = 2)
 
+#---------------------------------------------------------------------------------------------
+library(rgdal)
+data.shapeken <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/Water_shp_files/KEN_wat/KEN_water_areas_dcw.shp")
+data.shapetz <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/Water_shp_files/TZA_wat/TZA_water_areas_dcw.shp")
+data.shapeeth <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/Water_shp_files/ETH_wat/ETH_water_areas_dcw.shp")
+data.shapeug <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/Water_shp_files/UGA_wat/UGA_water_areas_dcw.shp")
 
+u_vic <-   subset(data.shapeug, NAME == "LAKE VICTORIA")
+k_vic <-   subset(data.shapeken, NAME == "LAKE VICTORIA")
+t_vic <-   subset(data.shapetz, NAME == "LAKE VICTORIA")                    
+e_tan <-   subset(data.shapeeth, NAME == "TANA HAYK")
+
+E_Af_water<- bind(e_tan, t_vic, k_vic, u_vic)
+
+plot(E_Af_No_b)
+plot(E_Af_water, add = TRUE, col = "light blue", alpha = .75)
+#----------------------------------------------------------------------------------------------
 #Frequency mapping------Load packages
 library(dplyr)
 library(sf)
