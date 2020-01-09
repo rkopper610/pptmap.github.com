@@ -94,8 +94,8 @@ ggplot() +
 # 
 # 
 # ggplot() +
-#   geom_raster(data = hill.df, aes(lon, lat, fill = hill)) +
-#   scale_fill_gradientn(colours = grey.colors(100)) +
+# geom_raster(data = hill.df, aes(lon, lat, fill = hill), alpha = .45) +
+# scale_fill_gradientn(colours = grey.colors(100)) +
 #   geom_sf(data = my_bbox_buff_2500.sf, fill = NA) +
 #   coord_sf(xlim = c(st_bbox(my_bbox_buff_25000.sf)['xmin'], st_bbox(my_bbox_buff_25000.sf)['xmax']),
 #            ylim = c(st_bbox(my_bbox_buff_25000.sf)['ymin'], st_bbox(my_bbox_buff_25000.sf)['ymax'])) +

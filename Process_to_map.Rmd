@@ -132,13 +132,13 @@ plot(E_Af_No_b, asp=NA) #plot first to set up boundaries
 
 col <- terrain.colors(10)
 socolor <-  rev(col) 
-plot(msk_DEM, col = socolor,  alpha = 0.75, add = TRUE,
+plot(msk_DEM, col = socolor,  add = TRUE,
   label = "masl", legend.args = list(text = "Elevation (m)", 
                       side = 3, 
                       font = 1, 
                       line = 0.5, 
                       cex = 1), legend.width=1, legend.shrink=0.75, 
-    smallplot=c(0.85,0.9, 0.3,0.6))
+    smallplot=c(0.8,0.85, 0.3,0.6))
 
 
 # 
@@ -147,7 +147,7 @@ plot(msk_DEM, col = socolor,  alpha = 0.75, add = TRUE,
 #-----------------------------------------------------------------------------
 
 #Legend
-legend(x = "bottomright", pch = 15, col = c("black", "blue", "purple", "red"),
+legend(x = "bottomright", pch = 20, col = c("dark green", "blue", "purple", "red"),
        legend = c("one study", "2-5 studies", "5-10 studies", "10+ studies"), bty = "n", pt.cex = 2)
 
 #---------------------------------------------------------------------------------------------
@@ -164,8 +164,9 @@ e_tan <-   subset(data.shapeeth, NAME == "TANA HAYK")
 
 E_Af_water<- bind(e_tan, t_vic, k_vic, u_vic)
 
-plot(E_Af_No_b)
-plot(E_Af_water, add = TRUE, col = "light blue", alpha = .75)
+
+plot(E_Af_water, add = TRUE , col = "light blue")
+plot(E_Af_No_b, add = TRUE)
 #----------------------------------------------------------------------------------------------
 #Frequency mapping------Load packages
 library(dplyr)
@@ -174,10 +175,10 @@ library(sf)
 
 # One Study Occurance (Black)
 
-black <- rbind(st_as_sf(ETH_study_sites) %>% select(NAME_1),
+dgreen <- rbind(st_as_sf(ETH_study_sites) %>% select(NAME_1),
                  st_as_sf(TZA_study_sites) %>% select(NAME_1))
 
-plot(st_geometry(st_centroid(black)), pch = 20, col = "black", add = TRUE)
+plot(st_geometry(st_centroid(dgreen)), pch = 20, col = "dark green", add = TRUE)
 
 
 # black <- bind(ETH_study_sites, TZA_study_sites)
