@@ -191,7 +191,7 @@ gpo <- ggplot() +
 library(raster)
 DEM <- raster("/Users/ryankopper/Desktop/R work/PPTmap/gt30e020n40_dem/gt30e020n40.dem")
 DEM2 <-raster("/Users/ryankopper/Desktop/R work/PPTmap/gt30e020s10_dem/gt30e020s10.dem")
-ETH_dem <- mask(DEM, ETH0)
+ETH_dem <- mask(DEM, ETH0) #clip to Ethiopia
 
 #DEM
 dem.raster <- crop(ETH_dem, as(my_bbox_buff_25000.sf, 'Spatial'), snap='out')
@@ -200,9 +200,13 @@ dem.m  <-  rasterToPoints(dem.raster)
 dem.df <-  data.frame(dem.m)
 colnames(dem.df) = c("lon", "lat", "alt")
 
+#Map colors
+col <- terrain.colors(100)
+socolor <-  rev(col) 
+
 ggplot() +
-  geom_raster(data = dem.df, aes(lon, lat, fill = alt), alpha = .95) +
-  scale_fill_gradientn(colours = terrain.colors(100)) +
+  geom_raster(data = dem.df, aes(lon, lat, fill = alt), alpha = .99) +
+  scale_fill_gradientn(colours = socolor) +
   geom_sf(data = my_bbox_buff_2500.sf, fill = NA) +
   coord_sf(xlim = c(st_bbox(my_bbox_buff_25000.sf)['xmin'], st_bbox(my_bbox_buff_25000.sf)['xmax']), 
            ylim = c(st_bbox(my_bbox_buff_25000.sf)['ymin'], st_bbox(my_bbox_buff_25000.sf)['ymax'])) +
