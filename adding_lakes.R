@@ -43,7 +43,7 @@ library(ggplot2)
 
 my_world_map <- map_data('world')
 my_world_map <- my_world_map[my_world_map$region %in% c("Ethiopia","Uganda", "Tanzania", "Kenya"),]
-
+#my_world_map <- my_world_map[my_world_map$region %in% ("Ethiopia"),]
 
 
 gpo <- ggplot() + 

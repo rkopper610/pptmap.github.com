@@ -29,3 +29,6 @@ output_srtm.tif
 gadm36_USA_0_sp.rds
 Newest_EA_Af.png
 gadm36_USA_1_sp.rds
+plot_size_tech_r.csv
+wc0.5
+wc2-5
