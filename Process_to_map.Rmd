@@ -60,20 +60,19 @@ KEN2_oneS <- subset(KEN2, NAME_2 == "Rarieda")
 KEN2_2TO5 <- subset(KEN3, NAME_2 =="Nyando" | NAME_2 == "Rongo" |
                         NAME_2=="Teso North"  )
 
-KEN3_2TO5<-subset(KEN3, NAME_1=="Trans Nzoia"| NAME_1=="Kisumu" )
+KEN3_2TO5<-subset(KEN3, NAME_1=="Kisumu" )
 
 
 #Study sites with 5-10
 KEN2_5to10 <-subset(KEN2,  NAME_2 == "Butere" |NAME_2 == "Bondo")
-KEN3_5to10 <- subset(KEN,  NAME_1=="Kisii")
+KEN4_5to10 <- subset(KEN3, NAME_1=="Trans Nzoia"| NAME_1=="Kisii")
 
 #Butere-Mumias is now just Butere
 #acounted for--Rachuonyo--is now part of Homa bay (rachuonyo + homa bay = 14)
 #acounted for--Kuria became migori
 #Alupe (in busia),
 #Study sites with more than 10
-KEN_10 <- subset(KEN,NAME_1=="Busia" | NAME_1 == "Migori"| NAME_1=="Homa Bay" | NAME_1=="Siaya"
-                 | NAME_1=="Bungoma")
+KEN_10 <- subset(KEN,NAME_1=="Busia" | NAME_1 == "Migori"| NAME_1=="Homa Bay" | NAME_1=="Siaya" | NAME_1=="Bungoma")
 KEN_10_oth <- subset(KEN,NAME_1=="Suba" | NAME_1=="Vihiga")
 
 
@@ -109,7 +108,7 @@ TZA_3 <- subset(TZA, NAME_2 == "Tarime") #3studies/Blue
 ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie" | NAME_3 == "Awasa") 
 
 
-#Plot 4 countries without political boders (level 0)
+#Plot 4 countries without political borders (level 0)
 par(mar = c(0, 0, 1, 0 ))
 plot(E_Af_No_b, col = "grey") 
 
@@ -200,13 +199,13 @@ plot(st_geometry(st_centroid(blue)), pch = 20, col = "blue", add = TRUE)
 #5--10 study Occurance (purple) 
 
 purple <- rbind(st_as_sf(KEN2_5to10) %>% select(NAME_1),
-              st_as_sf(KEN3_5to10) %>% select(NAME_1),
+              st_as_sf(KEN4_5to10) %>% select(NAME_1),
              st_as_sf(UGA_5to10) %>% select(NAME_1))
 
 plot(st_geometry(st_centroid(purple)), pch = 20, col = "purple ", add = TRUE)
 
 
-# purple <- bind(KEN2_5to10, KEN3_5to10)
+# purple <- bind(KEN2_5to10, KEN3_5to10,KEN4_5to10 )
 # points(coordinates(purple), pch = 20, col = "purple")
 
 
@@ -275,7 +274,9 @@ plot(st_geometry(st_centroid(just_ETHsur)), pch = 20, col = "red", add = TRUE)
 legend(x = "bottomright", pch = 20, col = c("black", "red"),
        legend = c("Experimental studies", "Survey studies"), bty = "n", pt.cex = 2)
 
+```
 
+```{r}
 # Changing resolution
 #test_with_aggregate <- disaggregate(ETH_dem, fact= 4)
 #plot(test_with_aggregate, col = col,  alpha = 0.60, add = TRUE)

@@ -116,6 +116,9 @@ legend(x = "bottomright", pch = 20, col = c("blue", "red"),
        legend = c("Exprimental studies", "Survey studies"), bty = "n", pt.cex = 2)
 
 #-------------------------------------------------------------------------------
+```
+
+```{r}
 #Using
 library(mapview)
  
@@ -201,7 +204,7 @@ dem.df <-  data.frame(dem.m)
 colnames(dem.df) = c("lon", "lat", "alt")
 
 #Map colors
-col <- terrain.colors(100)
+col <- terrain.colors(10)
 socolor <-  rev(col) 
 
 ggplot() +
@@ -212,28 +215,40 @@ ggplot() +
            ylim = c(st_bbox(my_bbox_buff_25000.sf)['ymin'], st_bbox(my_bbox_buff_25000.sf)['ymax'])) +
   geom_polygon(data = my_world_map, 
                aes(x=long, y = lat, group = group), fill = NA, colour = 'black') +
-  theme_bw()
+  theme_bw() 
+ 
+```
 
+
+scalebar(data = NULL, location = "bottomright", dist = NULL,
+  dist_unit = NULL, transform = NULL, dd2km = NULL, model = NULL,
+  height = 0.02, st.dist = 0.02, st.bottom = TRUE, st.size = 5,
+  st.color = "black", box.fill = c("black", "white"),
+  box.color = "black", border.size = 1, x.min = NULL, x.max = NULL,
+  y.min = NULL, y.max = NULL, anchor = NULL, facet.var = NULL,
+  facet.lev = NULL, ...)
+
+```{r}
 #Hillshading---Works BUT too big of an area 
 
-# slope.raster <- terrain(dem.raster, opt='slope')
-# aspect.raster <- terrain(dem.raster, opt='aspect')
-# hill.raster <- hillShade(slope.raster, aspect.raster, 40, 270)
-# 
-# hill.m <- rasterToPoints(hill.raster)
-# hill.df <-  data.frame(hill.m)
-# colnames(hill.df) <- c("lon", "lat", "hill")
-# # 
-# # 
-# ggplot() +
-#   geom_raster(data = hill.df, aes(lon, lat, fill = hill), alpha = .95) +
-#   scale_fill_gradientn(colours = grey.colors(100)) +
-#   geom_sf(data = my_bbox_buff_2500.sf, fill = NA) +
-#   coord_sf(xlim = c(st_bbox(my_bbox_buff_25000.sf)['xmin'], st_bbox(my_bbox_buff_25000.sf)['xmax']),
-#            ylim = c(st_bbox(my_bbox_buff_25000.sf)['ymin'], st_bbox(my_bbox_buff_25000.sf)['ymax'])) +
-#   geom_polygon(data = my_world_map,
-#                aes(x=long, y = lat, group = group), fill = NA, colour = 'black') +
-#   theme_bw()
+slope.raster <- terrain(dem.raster, opt='slope')
+aspect.raster <- terrain(dem.raster, opt='aspect')
+hill.raster <- hillShade(slope.raster, aspect.raster, 40, 270)
+
+hill.m <- rasterToPoints(hill.raster)
+hill.df <-  data.frame(hill.m)
+colnames(hill.df) <- c("lon", "lat", "hill")
+#
+#
+ggplot() +
+  geom_raster(data = hill.df, aes(lon, lat, fill = hill), alpha = .95) +
+  scale_fill_gradientn(colours = socolor) +
+  geom_sf(data = my_bbox_buff_2500.sf, fill = NA) +
+  coord_sf(xlim = c(st_bbox(my_bbox_buff_25000.sf)['xmin'], st_bbox(my_bbox_buff_25000.sf)['xmax']),
+           ylim = c(st_bbox(my_bbox_buff_25000.sf)['ymin'], st_bbox(my_bbox_buff_25000.sf)['ymax'])) +
+  geom_polygon(data = my_world_map,
+               aes(x=long, y = lat, group = group), fill = NA, colour = 'black') +
+  theme_bw()
 
 
 ```
