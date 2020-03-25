@@ -104,8 +104,10 @@ TZA_3 <- subset(TZA, NAME_2 == "Tarime") #3studies/Blue
 #(study ID #9//#Melkassa = "adama") = CORRECT
 #Dore Bafano and Jara Gelelcha (ID 26) = Awasa Zuria 
 
-#list of ETH studdies when qual study is removed.---We will use this---
-ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie" | NAME_3 == "Awasa") 
+#list of ETH studies when qual study is removed.---We will use this---
+ETH_study_sites<-subset(ETH3, NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie" | NAME_3 == "Awasa", NAME_3 == "Sibu Sire") 
+
+
 
 
 #Plot 4 countries without political borders (level 0)

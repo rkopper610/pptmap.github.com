@@ -30,7 +30,7 @@ ETH_dem <- mask(DEM, ETH0)
 # just_ETH <- st_as_sf(ETH_study_sites) %>% select(NAME_1)
 
 #Broken into experi + survey based colors
-ETH_ex_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Awasa") 
+ETH_ex_sites<-subset(ETH3, NAME_3 == "Sibu Sire"| NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 == "Awasa" ) 
 
 
 ETH_sur_sites<-subset(ETH3, NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie") 
