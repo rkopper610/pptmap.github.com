@@ -48,6 +48,9 @@ TZA <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_TZA_2_sp.rds")
 
 E_Af_No_b<- bind(ETH0, KEN0, UGA0, TZA0)
 
+```
+
+```{r}
 #E_Af<- bind(ETH3, KEN, UGA, TZA) map includes political internal boundaries
 #E_Af <- aggregate(E_Af) #if needed to blend for analysis
 
@@ -56,22 +59,30 @@ E_Af_No_b<- bind(ETH0, KEN0, UGA0, TZA0)
 KEN2_oneS <- subset(KEN2, NAME_2 == "Rarieda")
 
 
-#Kenya study sites 2-5
-KEN2_2TO5 <- subset(KEN3, NAME_2 =="Nyando" | NAME_2 == "Rongo" |
-                        NAME_2=="Teso North"  )
 
-KEN3_2TO5<-subset(KEN3, NAME_1=="Kisumu" )
+plot(st_geometry(st_centroid(dgreen)), pch = 20, col = "dark green", add = TRUE)
+
+
+#Kenya study sites 2-5
+KEN_2to5 <- subset(KEN, NAME_1=="Kisumu")
+
+KEN2_2to5 <- subset(KEN2,NAME_2 == "Butere")
+
+KEN3_2to5 <- subset(KEN3, NAME_2 =="Nyando" | NAME_2 == "Rongo")
+
+
 
 
 #Study sites with 5-10
-KEN2_5to10 <-subset(KEN2,  NAME_2 == "Butere" |NAME_2 == "Bondo")
-KEN4_5to10 <- subset(KEN3, NAME_1=="Trans Nzoia"| NAME_1=="Kisii")
+KEN2_5to10 <-subset(KEN2, NAME_2 == "Bondo")
+KEN4_5to10 <- subset(KEN3, NAME_1=="Trans Nzoia"| NAME_1=="Kisii" | NAME_2=="Teso North")
 
 #Butere-Mumias is now just Butere
 #acounted for--Rachuonyo--is now part of Homa bay (rachuonyo + homa bay = 14)
 #acounted for--Kuria became migori
 #Alupe (in busia),
 #Study sites with more than 10
+
 KEN_10 <- subset(KEN,NAME_1=="Busia" | NAME_1 == "Migori"| NAME_1=="Homa Bay" | NAME_1=="Siaya" | NAME_1=="Bungoma")
 KEN_10_oth <- subset(KEN,NAME_1=="Suba" | NAME_1=="Vihiga")
 
@@ -81,8 +92,9 @@ KEN_10_oth <- subset(KEN,NAME_1=="Suba" | NAME_1=="Vihiga")
 
 # Uganda studies
 #add in bukedea and Iganga one study each (12/15 updated)
-UGA_sites <- subset(UGA,NAME_1 =="Bukedea" | NAME_1 =="Iganga"| 
-                          NAME_1 == "Busia" | NAME_1 == "Pallisa")
+UGA_sites <- subset(UGA,NAME_1 =="Bukedea" | NAME_1 =="Iganga")
+
+UGA_2to5 <- subset(UGA, NAME_1 == "Busia" | NAME_1 == "Pallisa")
 
 #Update 12/15---now the following 2 are 6 count falling into 5 to 10 category**
 UGA_5to10 <- subset(UGA,NAME_1 =="Tororo" | NAME_1 =="Bugiri")
@@ -91,7 +103,14 @@ UGA_5to10 <- subset(UGA,NAME_1 =="Tororo" | NAME_1 =="Bugiri")
 # Tanzania studies
 TZA_study_sites <- subset(TZA, NAME_2 == "Sengerema"| NAME_2 == "Misungwi" |
                             NAME_2 == "Igunga" | NAME_2 == "Bunda") #single study
-TZA_3 <- subset(TZA, NAME_2 == "Tarime") #3studies/Blue 
+TZA_2to5 <- subset(TZA, NAME_2 == "Tarime") #3studies/Blue 
+
+
+#list of ETH studies when qual study is removed.---We will use this---
+# ETH_study_sites <- subset(ETH3, NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie" | NAME_3 == "Awasa", NAME_3 == "Sibu Sire") 
+
+ETH_study_sites <- subset(ETH3, NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Awasa" | NAME_3 == "Boset" | NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie") 
+
 
 #Not used----
 #| NAME_3 == "Bako Tibe" | NAME_3 == "Jimma Arjo" | NAME_3 == "Yayu" | ARE PART OF
@@ -104,11 +123,10 @@ TZA_3 <- subset(TZA, NAME_2 == "Tarime") #3studies/Blue
 #(study ID #9//#Melkassa = "adama") = CORRECT
 #Dore Bafano and Jara Gelelcha (ID 26) = Awasa Zuria 
 
-#list of ETH studies when qual study is removed.---We will use this---
-ETH_study_sites<-subset(ETH3, NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie" | NAME_3 == "Awasa", NAME_3 == "Sibu Sire") 
+```
 
 
-
+```{r}
 
 #Plot 4 countries without political borders (level 0)
 par(mar = c(0, 0, 1, 0 ))
@@ -141,17 +159,19 @@ plot(msk_DEM, col = socolor,  add = TRUE,
                       cex = 1), legend.width=1, legend.shrink=0.75, 
     smallplot=c(0.8,0.85, 0.3,0.6))
 
+#Legend
+legend(x = "bottomright", pch = 20, col = c("dark green", "blue", "purple", "red"),
+       legend = c("one study", "2-5 studies", "5-10 studies", "10+ studies"), bty = "n", pt.cex = 2)
 
 # 
 # plot(msk_DEM, legend.only = T, col=socolor, alpha = 0.75, add = TRUE, legend.width=1, legend.shrink=0.75, 
 #     smallplot=c(0.85,0.9, 0.7,0.9)); par(mar = par("mar"), label = "masl")
 #-----------------------------------------------------------------------------
+```
 
-#Legend
-legend(x = "bottomright", pch = 20, col = c("dark green", "blue", "purple", "red"),
-       legend = c("one study", "2-5 studies", "5-10 studies", "10+ studies"), bty = "n", pt.cex = 2)
 
-#---------------------------------------------------------------------------------------------
+```{r}
+
 library(rgdal)
 data.shapeken <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/Water_shp_files/KEN_wat/KEN_water_areas_dcw.shp")
 data.shapetz <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/Water_shp_files/TZA_wat/TZA_water_areas_dcw.shp")
@@ -168,28 +188,50 @@ E_Af_water<- bind(e_tan, t_vic, k_vic, u_vic)
 
 plot(E_Af_water, add = TRUE , col = "light blue")
 plot(E_Af_No_b, add = TRUE)
-#----------------------------------------------------------------------------------------------
+```
+
+```{r}
+
 #Frequency mapping------Load packages
 library(dplyr)
 library(sf)
 
 
-# One Study Occurance (Black)
+# One Study Occurance (dark green)
 
+# dgreen <- rbind(st_as_sf(ETH_study_sites) %>% select(NAME_1),
+#                  st_as_sf(TZA_study_sites) %>% select(NAME_1))
+
+#update 5/13/20
 dgreen <- rbind(st_as_sf(ETH_study_sites) %>% select(NAME_1),
-                 st_as_sf(TZA_study_sites) %>% select(NAME_1))
+                 st_as_sf(TZA_study_sites) %>% select(NAME_1),
+                st_as_sf(UGA_sites) %>% select(NAME_1),
+                st_as_sf(KEN2_oneS) %>% select(NAME_1))
+
+
+
 
 plot(st_geometry(st_centroid(dgreen)), pch = 20, col = "dark green", add = TRUE)
+
 
 
 # black <- bind(ETH_study_sites, TZA_study_sites)
 # points(coordinates(black),pch = 20, col = "black") 
 
 #2--5 study Occurance (Blue)
-blue <- rbind(st_as_sf(TZA_3) %>% select(NAME_1),
-              st_as_sf(UGA_sites) %>% select(NAME_1))
 
+# blue <- rbind(st_as_sf(TZA_3) %>% select(NAME_1),
+#               st_as_sf(UGA_sites) %>% select(NAME_1))
+
+#Updated 5/13/20
+blue <- rbind(st_as_sf(TZA_2to5) %>% select(NAME_1),
+              st_as_sf(KEN_2to5) %>% select(NAME_1),
+              st_as_sf(KEN2_2to5) %>% select(NAME_1),
+              st_as_sf(KEN3_2to5) %>% select(NAME_1),
+              st_as_sf(UGA_2to5) %>% select(NAME_1))
   
+
+
 plot(st_geometry(st_centroid(blue)), pch = 20, col = "blue", add = TRUE)
 
 
@@ -204,6 +246,9 @@ purple <- rbind(st_as_sf(KEN2_5to10) %>% select(NAME_1),
               st_as_sf(KEN4_5to10) %>% select(NAME_1),
              st_as_sf(UGA_5to10) %>% select(NAME_1))
 
+
+
+
 plot(st_geometry(st_centroid(purple)), pch = 20, col = "purple ", add = TRUE)
 
 
@@ -215,11 +260,13 @@ plot(st_geometry(st_centroid(purple)), pch = 20, col = "purple ", add = TRUE)
 
 red <- rbind(st_as_sf(KEN_10) %>% select(NAME_1),
               st_as_sf(KEN_10_oth) %>% select(NAME_1))
+
 plot(st_geometry(st_centroid(red )), pch = 20, col = "red ", add = TRUE)
 
 # red <- bind(KEN_10, KEN_10_oth)
 #  points(coordinates(red), pch = 20, col = "red")
 ```
+
 
 
 #Interactive map with Mapview -
