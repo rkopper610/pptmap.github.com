@@ -154,3 +154,7 @@ E_Af_water<- bind(e_tan, t_vic, k_vic, u_vic)
 
 plot(E_Af_No_b)
 plot(E_Af_water, add = TRUE, col = "light blue")
+
+
+
+

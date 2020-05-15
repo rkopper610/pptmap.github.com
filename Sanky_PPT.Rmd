@@ -1,0 +1,179 @@
+---
+title: "Sanky Diagram"
+author: "Ryan Kopper"
+date: "5/15/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#SANKEY diagrams consist of three sets of elements: the nodes, the links, and the instructions which determine their positions
+
+library(plotly)
+data <- read.csv(file = "/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/4Sanky.csv")
+
+```
+
+```{r}
+
+fig <- plot_ly(
+    type = "sankey",
+    orientation = "h",
+
+    node = list(
+      label = c("A1", "A2", "B1", "B2", "C1", "C2"),
+      color = c("blue", "red", "yellow", "blue", "red", "yellow"),
+      pad = 15,
+      thickness = 20,
+      line = list(
+        color = "black",
+        width = 0.5
+      )
+    ),
+
+    link = list(
+      source = c(0,1,0,2,3,3),
+      target = c(2,3,3,4,4,5),
+      value =  c(8,4,2,8,4,2)
+    )
+  )
+fig <- fig %>% layout(
+    title = "Basic Sankey Diagram",
+    font = list(
+      size = 10
+    )
+)
+
+fig
+
+```
+
+```{r}
+library(plotly)
+
+fig <- plot_ly(
+    type = "sankey",
+    domain = list(
+      x =  c(0,1),
+      y =  c(0,1)
+    ),
+    orientation = "h",
+    valueformat = ".0f",
+    valuesuffix = "TWh"
+)
+fig <- fig %>% layout(
+    title = "Energy forecast for 2050, UK - Department of Energy & Climate Change",
+    font = list(
+      size = 10
+    ),
+    xaxis = list(showgrid = F, zeroline = F),
+    yaxis = list(showgrid = F, zeroline = F)
+  )
+```
+
+```{r}
+library(plotly)
+library(rjson)
+
+json_file <- "https://raw.githubusercontent.com/plotly/plotly.js/master/test/image/mocks/sankey_energy.json"
+json_data <- fromJSON(paste(readLines(json_file), collapse=""))
+
+fig <- plot_ly(
+    type = "sankey",
+    domain = list(
+      x =  c(0,1),
+      y =  c(0,1)
+    ),
+    orientation = "h",
+    valueformat = ".0f",
+    valuesuffix = "TWh",
+
+    node = list(
+      label = json_data$data[[1]]$node$label,
+      color = json_data$data[[1]]$node$color,
+      pad = 15,
+      thickness = 15,
+      line = list(
+        color = "black",
+        width = 0.5
+      )
+    )
+  ) 
+fig <- fig %>% layout(
+    title = "Energy forecast for 2050, UK - Department of Energy & Climate Change",
+    font = list(
+      size = 10
+    ),
+    xaxis = list(showgrid = F, zeroline = F),
+    yaxis = list(showgrid = F, zeroline = F)
+)
+```
+
+```{r}
+library(plotly)
+library(rjson)
+
+json_file <- "https://raw.githubusercontent.com/plotly/plotly.js/master/test/image/mocks/sankey_energy.json"
+json_data <- fromJSON(paste(readLines(json_file), collapse=""))
+
+fig <- plot_ly(
+    type = "sankey",
+    domain = list(
+      x =  c(0,1),
+      y =  c(0,1)
+    ),
+    orientation = "h",
+    valueformat = ".0f",
+    valuesuffix = "TWh",
+
+    node = list(
+      label = json_data$data[[1]]$node$label,
+      color = json_data$data[[1]]$node$color,
+      pad = 15,
+      thickness = 15,
+      line = list(
+        color = "black",
+        width = 0.5
+      )
+    ),
+
+    link = list(
+      source = json_data$data[[1]]$link$source,
+      target = json_data$data[[1]]$link$target,
+      value =  json_data$data[[1]]$link$value,
+      label =  json_data$data[[1]]$link$label
+    )
+  ) 
+fig <- fig %>% layout(
+    title = "Energy forecast for 2050<br>Source: Department of Energy & Climate Change, Tom Counsell via <a href='https://bost.ocks.org/mike/sankey/'>Mike Bostock</a>",
+    font = list(
+      size = 10
+    ),
+    xaxis = list(showgrid = F, zeroline = F),
+    yaxis = list(showgrid = F, zeroline = F)
+)
+
+fig
+```
+
+Or we can use the "networkD3" Package
+
+https://towardsdatascience.com/using-networkd3-in-r-to-create-simple-and-clear-sankey-diagrams-48f8ba8a4ace
+
+```{r}
+
+## load libraries
+library(dplyr)
+library(networkD3)
+library(tidyr)
+# read in EU referendum results dataset
+
+data <- read.csv(file = "/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/4Sanky.csv")
+
+
+
+
+```
