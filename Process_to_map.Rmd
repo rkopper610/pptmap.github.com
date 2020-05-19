@@ -305,11 +305,10 @@ plot(ETH_dem, col = socolor,  alpha = 0.70, add = TRUE,
 # ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Bako Tibe" | NAME_3 == "Jimma Arjo" | NAME_3 == "Boset"| NAME_3 == "Yayu" | NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie") 
 
 #list of ETH studies when qual study is removed.---We will use this---
-ETH_ex_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Awasa") 
+ETH_ex_sites<-subset(ETH3, NAME_3 == "Sibu Sire"| NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"|  NAME_3 == "Awasa") 
 
 
 ETH_sur_sites<-subset(ETH3, NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie") 
-
 
 
 library(dplyr)
@@ -318,7 +317,7 @@ just_ETHex <- st_as_sf(ETH_ex_sites) %>% select(NAME_1)
 just_ETHsur <- st_as_sf(ETH_sur_sites) %>% select(NAME_1)
 
 plot(st_geometry(st_centroid(just_ETHex)), pch = 20, col = "black", add = TRUE)
-plot(st_geometry(st_centroid(just_ETHsur)), pch = 20, col = "red", add = TRUE)
+plot(st_geometry(st_centroid(just_ETHsur)), pch = 18, col = "red", add = TRUE)
 
 legend(x = "bottomright", pch = 20, col = c("black", "red"),
        legend = c("Experimental studies", "Survey studies"), bty = "n", pt.cex = 2)

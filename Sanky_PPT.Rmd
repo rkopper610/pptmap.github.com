@@ -12,13 +12,20 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #SANKEY diagrams consist of three sets of elements: the nodes, the links, and the instructions which determine their positions
 
+#trying the following pckages
 library(plotly)
+library(networkD3)
+
 data <- read.csv(file = "/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/4Sanky.csv")
 
 ```
+https://www.youtube.com/watch?v=S6me1r6RI4I
+
+Nodes
+
 
 ```{r}
-
+#USING library(plotly)
 fig <- plot_ly(
     type = "sankey",
     orientation = "h",
@@ -164,16 +171,17 @@ Or we can use the "networkD3" Package
 https://towardsdatascience.com/using-networkd3-in-r-to-create-simple-and-clear-sankey-diagrams-48f8ba8a4ace
 
 ```{r}
-
+#Using library(networkD3)
 ## load libraries
 library(dplyr)
 library(networkD3)
 library(tidyr)
+require(openxlsx)
 # read in EU referendum results dataset
 
 data <- read.csv(file = "/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/4Sanky.csv")
 
-
-
+??networkD3
+??sankey
 
 ```
