@@ -46,7 +46,7 @@ The first step is some kind of join command
 the second one is using the joined columns to create a new matrix with counts.
 ```{r}
 
-joined_tibble <- left_join(Recode_tables, Relationships, by = c("Independent variable" = "Dependent variable")) 
+joined_tibble <- left_join(Recode_tables, Relationships, by = c("Independent_variable" = "Dependent_variable")) 
 
 
 glimpse(joined_tibble)
@@ -54,6 +54,27 @@ str(joined_tibble)
 
 ```
 alter long data to wide data with value as counts.
+
+https://datacarpentry.org/R-ecology-lesson/03-dplyr.html
+
+```{r}
+restruc <- joined_tibble %>%
+  filter(!is.na(Count...3)) %>%
+  group_by(Independent_variable, Dependent_variable) %>%
+  summarize(joined_tibble = mean(Count...3))
+
+str(restruc)
+
+
+restruc_spread <- restruc %>%
+  spread(key = Dependent_variable, value = joined_tibble)
+
+str(restruc_spread)
+
+
+
+```
+
 
 
 
