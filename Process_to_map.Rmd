@@ -194,6 +194,7 @@ plot(E_Af_No_b, add = TRUE)
 
 #Frequency mapping------Load packages
 library(dplyr)
+library(raster)
 library(sf)
 
 

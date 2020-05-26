@@ -1,11 +1,64 @@
 ---
-title: "Sanky Diagram"
+title: "Survey variables analysis to produce Sanky Diagram"
 author: "Ryan Kopper"
-date: "5/15/2020"
+date: "5/22/2020"
 output: html_document
 editor_options: 
   chunk_output_type: console
 ---
+
+```{r}
+## load libraries
+library(dplyr)
+#info sheet https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf
+library(networkD3)
+library(tidyverse)
+library(readxl)
+library(readr)
+
+#Read in each sheet individually which creates a Tibble for each.
+
+Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Relationships")
+
+Recode_tables <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Recoding Tables")
+
+Count_of_recodes <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Count of recodes")
+
+```
+Use DPLYR to bring together the "relationships" and "recording" sheets
+ 
+```{r}
+#Creates value for  each sheet
+sheets <- excel_sheets("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx")
+
+#Maps sheets to the data
+#map_df() returns a data frame.
+f <- map_df(sheets, ~ read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = .x))
+
+#f = all the sheets combined.
+```
+Join independent/dependent variable of recode table to original,
+
+https://www.infoworld.com/article/3454356/how-to-merge-data-in-r-using-r-merge-dplyr-or-datatable.html
+
+The first step is some kind of join command 
+
+the second one is using the joined columns to create a new matrix with counts.
+```{r}
+
+joined_tibble <- left_join(Recode_tables, Relationships, by = c("Independent variable" = "Dependent variable")) 
+
+
+glimpse(joined_tibble)
+str(joined_tibble)
+
+```
+alter long data to wide data with value as counts.
+
+
+
+
+SANKEY DIAGRAMS
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -14,6 +67,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #trying the following pckages
 library(plotly)
+#or
 library(networkD3)
 
 data <- read.csv(file = "/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/4Sanky.csv")
@@ -22,166 +76,11 @@ data <- read.csv(file = "/Users/ryankopper/Clark University/Morgan Ruelle - Ryan
 https://www.youtube.com/watch?v=S6me1r6RI4I
 
 Nodes
-
-
-```{r}
-#USING library(plotly)
-fig <- plot_ly(
-    type = "sankey",
-    orientation = "h",
-
-    node = list(
-      label = c("A1", "A2", "B1", "B2", "C1", "C2"),
-      color = c("blue", "red", "yellow", "blue", "red", "yellow"),
-      pad = 15,
-      thickness = 20,
-      line = list(
-        color = "black",
-        width = 0.5
-      )
-    ),
-
-    link = list(
-      source = c(0,1,0,2,3,3),
-      target = c(2,3,3,4,4,5),
-      value =  c(8,4,2,8,4,2)
-    )
-  )
-fig <- fig %>% layout(
-    title = "Basic Sankey Diagram",
-    font = list(
-      size = 10
-    )
-)
-
-fig
-
-```
-
-```{r}
-library(plotly)
-
-fig <- plot_ly(
-    type = "sankey",
-    domain = list(
-      x =  c(0,1),
-      y =  c(0,1)
-    ),
-    orientation = "h",
-    valueformat = ".0f",
-    valuesuffix = "TWh"
-)
-fig <- fig %>% layout(
-    title = "Energy forecast for 2050, UK - Department of Energy & Climate Change",
-    font = list(
-      size = 10
-    ),
-    xaxis = list(showgrid = F, zeroline = F),
-    yaxis = list(showgrid = F, zeroline = F)
-  )
-```
-
-```{r}
-library(plotly)
-library(rjson)
-
-json_file <- "https://raw.githubusercontent.com/plotly/plotly.js/master/test/image/mocks/sankey_energy.json"
-json_data <- fromJSON(paste(readLines(json_file), collapse=""))
-
-fig <- plot_ly(
-    type = "sankey",
-    domain = list(
-      x =  c(0,1),
-      y =  c(0,1)
-    ),
-    orientation = "h",
-    valueformat = ".0f",
-    valuesuffix = "TWh",
-
-    node = list(
-      label = json_data$data[[1]]$node$label,
-      color = json_data$data[[1]]$node$color,
-      pad = 15,
-      thickness = 15,
-      line = list(
-        color = "black",
-        width = 0.5
-      )
-    )
-  ) 
-fig <- fig %>% layout(
-    title = "Energy forecast for 2050, UK - Department of Energy & Climate Change",
-    font = list(
-      size = 10
-    ),
-    xaxis = list(showgrid = F, zeroline = F),
-    yaxis = list(showgrid = F, zeroline = F)
-)
-```
-
-```{r}
-library(plotly)
-library(rjson)
-
-json_file <- "https://raw.githubusercontent.com/plotly/plotly.js/master/test/image/mocks/sankey_energy.json"
-json_data <- fromJSON(paste(readLines(json_file), collapse=""))
-
-fig <- plot_ly(
-    type = "sankey",
-    domain = list(
-      x =  c(0,1),
-      y =  c(0,1)
-    ),
-    orientation = "h",
-    valueformat = ".0f",
-    valuesuffix = "TWh",
-
-    node = list(
-      label = json_data$data[[1]]$node$label,
-      color = json_data$data[[1]]$node$color,
-      pad = 15,
-      thickness = 15,
-      line = list(
-        color = "black",
-        width = 0.5
-      )
-    ),
-
-    link = list(
-      source = json_data$data[[1]]$link$source,
-      target = json_data$data[[1]]$link$target,
-      value =  json_data$data[[1]]$link$value,
-      label =  json_data$data[[1]]$link$label
-    )
-  ) 
-fig <- fig %>% layout(
-    title = "Energy forecast for 2050<br>Source: Department of Energy & Climate Change, Tom Counsell via <a href='https://bost.ocks.org/mike/sankey/'>Mike Bostock</a>",
-    font = list(
-      size = 10
-    ),
-    xaxis = list(showgrid = F, zeroline = F),
-    yaxis = list(showgrid = F, zeroline = F)
-)
-
-fig
-```
-
-Or we can use the "networkD3" Package
+"networkD3" Package
 
 https://towardsdatascience.com/using-networkd3-in-r-to-create-simple-and-clear-sankey-diagrams-48f8ba8a4ace
 
 ```{r}
-#Using library(networkD3)
-## load libraries
-library(dplyr)
-library(networkD3)
-library(tidyr)
-require(openxlsx)
-# read in EU referendum results dataset
 
-data <- read.csv(file = "/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/4Sanky.csv")
-
-??networkD3
-??sankey
 
 ```
