@@ -20,9 +20,9 @@ library(readr)
 
 Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Relationships")
 
-Recode_tables <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Recoding Tables")
+Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Independent recode")
 
-Count_of_recodes <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Count of recodes")
+Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Dependent recode")
 
 ```
 Use DPLYR to bring together the "relationships" and "recording" sheets
@@ -46,17 +46,38 @@ The first step is some kind of join command
 the second one is using the joined columns to create a new matrix with counts.
 ```{r}
 
-joined_tibble <- left_join(Recode_tables, Relationships, by = c("Independent_variable" = "Dependent_variable")) 
+joined_tibble_check <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>% left_join(Dependent_recode, by = "Dependent_variable")
 
 
-glimpse(joined_tibble)
-str(joined_tibble)
+joined_tibble <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>% left_join(Dependent_recode, by = "Dependent_variable") %>%  select(Independent_variable_recode, Dependent_variable_recode) %>% group_by(Independent_variable_recode, Dependent_variable_recode) %>% summarise(count = n()) %>% spread(key = Dependent_variable_recode, value = count)
+
+# glimpse(joined_tibble)
+# str(joined_tibble)
 
 ```
 alter long data to wide data with value as counts.
 
 https://datacarpentry.org/R-ecology-lesson/03-dplyr.html
 
+```{r}
+restruc <- joined_tibble %>%
+  group_by(Independent_variable, Dependent_variable) %>%
+  summarize(joined_tibble = mean(Count...3, Count...7))
+
+str(restruc)
+
+
+restruc_spread <- restruc %>%
+  spread(key = Dependent_variable, value = joined_tibble)
+
+str(restruc_spread)
+
+
+
+```
+
+###
+Original version made
 ```{r}
 restruc <- joined_tibble %>%
   filter(!is.na(Count...3)) %>%
@@ -71,10 +92,7 @@ restruc_spread <- restruc %>%
 
 str(restruc_spread)
 
-
-
 ```
-
 
 
 
