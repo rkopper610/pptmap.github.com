@@ -25,6 +25,46 @@ Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruel
 Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Dependent recode")
 
 ```
+
+Join independent/dependent variable of recode table to original,
+
+https://www.infoworld.com/article/3454356/how-to-merge-data-in-r-using-r-merge-dplyr-or-datatable.html
+
+The first step is some kind of join command 
+
+the second one is using the joined columns to create a new matrix with counts.
+
+alter long data to wide data with value as counts.
+
+https://datacarpentry.org/R-ecology-lesson/03-dplyr.html
+```{r}
+
+joined_long <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>% left_join(Dependent_recode, by = "Dependent_variable") %>%  select(Independent_variable_recode, Dependent_variable_recode) %>% group_by(Independent_variable_recode, Dependent_variable_recode) %>% summarise(count = n()) 
+
+joined_matrix <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>% left_join(Dependent_recode, by = "Dependent_variable") %>%  select(Independent_variable_recode, Dependent_variable_recode) %>% group_by(Independent_variable_recode, Dependent_variable_recode) %>% summarise(count = n()) %>% spread(key = Dependent_variable_recode, value = count) %>% replace(is.na(.), 0 )
+
+# glimpse(joined_tibble)
+# str(joined_tibble)
+
+```
+
+
+```{r}
+require(scales)
+
+ggplot(joined_long, aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count )) + geom_point(aes(size = count)) + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) +
+  scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30))
+
+
+#polish graph and note the oberservations
+
+#change gradient to more distinct colors
+#combine count and other count keys into 1
+#look into fixing the x axis text labels to have multiple lines
+
+```
+
+EXTRA-------------------------------
 Use DPLYR to bring together the "relationships" and "recording" sheets
  
 ```{r}
@@ -37,62 +77,7 @@ f <- map_df(sheets, ~ read_excel("/Users/ryankopper/Clark University/Morgan Ruel
 
 #f = all the sheets combined.
 ```
-Join independent/dependent variable of recode table to original,
 
-https://www.infoworld.com/article/3454356/how-to-merge-data-in-r-using-r-merge-dplyr-or-datatable.html
-
-The first step is some kind of join command 
-
-the second one is using the joined columns to create a new matrix with counts.
-```{r}
-
-joined_tibble_check <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>% left_join(Dependent_recode, by = "Dependent_variable")
-
-
-joined_tibble <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>% left_join(Dependent_recode, by = "Dependent_variable") %>%  select(Independent_variable_recode, Dependent_variable_recode) %>% group_by(Independent_variable_recode, Dependent_variable_recode) %>% summarise(count = n()) %>% spread(key = Dependent_variable_recode, value = count)
-
-# glimpse(joined_tibble)
-# str(joined_tibble)
-
-```
-alter long data to wide data with value as counts.
-
-https://datacarpentry.org/R-ecology-lesson/03-dplyr.html
-
-```{r}
-restruc <- joined_tibble %>%
-  group_by(Independent_variable, Dependent_variable) %>%
-  summarize(joined_tibble = mean(Count...3, Count...7))
-
-str(restruc)
-
-
-restruc_spread <- restruc %>%
-  spread(key = Dependent_variable, value = joined_tibble)
-
-str(restruc_spread)
-
-
-
-```
-
-###
-Original version made
-```{r}
-restruc <- joined_tibble %>%
-  filter(!is.na(Count...3)) %>%
-  group_by(Independent_variable, Dependent_variable) %>%
-  summarize(joined_tibble = mean(Count...3))
-
-str(restruc)
-
-
-restruc_spread <- restruc %>%
-  spread(key = Dependent_variable, value = joined_tibble)
-
-str(restruc_spread)
-
-```
 
 
 
