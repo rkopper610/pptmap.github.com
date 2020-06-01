@@ -84,11 +84,11 @@ Use DPLYR to bring together the "relationships" and "recording" sheets
  
 ```{r}
 #Creates value for  each sheet
-sheets <- excel_sheets("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx")
-
-#Maps sheets to the data
-#map_df() returns a data frame.
-f <- map_df(sheets, ~ read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = .x))
+# sheets <- excel_sheets("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx")
+# 
+# #Maps sheets to the data
+# #map_df() returns a data frame.
+# f <- map_df(sheets, ~ read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = .x))
 
 #f = all the sheets combined.
 ```
@@ -109,7 +109,10 @@ library(plotly)
 #or
 library(networkD3)
 
-data <- read.csv(file = "/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/4Sanky.csv")
+links2 <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "links")
+
+nodes2 <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "nodes") 
+
 
 ```
 https://www.youtube.com/watch?v=S6me1r6RI4I
@@ -120,6 +123,31 @@ Nodes
 https://towardsdatascience.com/using-networkd3-in-r-to-create-simple-and-clear-sankey-diagrams-48f8ba8a4ace
 
 ```{r}
-
+sankeyNetwork(Links = links2, Nodes = nodes2, Source = "source", 
+              Target = "Target", Value = "value", NodeID = "name", 
+              fontSize = 12, nodeWidth = 13,
+              fontFamily = "sans serif", iterations = 0)
 
 ```
+CREATING IT IN R
+```{r}
+#
+# create nodes dataframe
+
+results <- joined_long %>% 
+  dplyr::group_by(Independent_variable_recode) %>% 
+  dplyr::summarise(Remain = sum(Remain), Leave = sum(Leave))
+
+
+IV <- unique(as.character(joined_long$Independent_variable_recode))
+nodes <- data.frame(node = c(0:18))
+
+
+#create links dataframe
+IV <- merge(IV, nodes, by.x = "Region", by.y = "name")
+IV <- merge(IV, nodes, by.x = "result", by.y = "name")
+links <- IV[ , c("node.x", "node.y", "vote")]
+colnames(links) <- c("source", "target", "value") 
+                   
+```
+
