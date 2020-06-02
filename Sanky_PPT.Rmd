@@ -41,39 +41,44 @@ https://datacarpentry.org/R-ecology-lesson/03-dplyr.html
 
 joined_long <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>% left_join(Dependent_recode, by = "Dependent_variable") %>%  select(Independent_variable_recode, Dependent_variable_recode) %>% group_by(Independent_variable_recode, Dependent_variable_recode) %>% summarise(count = n()) 
 
-joined_matrix <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>% left_join(Dependent_recode, by = "Dependent_variable") %>%  select(Independent_variable_recode, Dependent_variable_recode) %>% group_by(Independent_variable_recode, Dependent_variable_recode) %>% summarise(count = n()) %>% spread(key = Dependent_variable_recode, value = count) %>% replace(is.na(.), 0 )
+joined_matrix <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>% left_join(Dependent_recode, by = "Dependent_variable") %>%  select(Independent_variable_recode, Dependent_variable_recode) %>% group_by(Independent_variable_recode, Dependent_variable_recode) %>% summarise(count = n()) %>% spread(key = Dependent_variable_recode, value = count) %>% replace(is.na(.), 0 ) 
 
 # glimpse(joined_tibble)
 # str(joined_tibble)
 
 ```
 
+```{r}
+
+
+```
+
 
 ```{r}
-require(scales)
+#Bubble plot
+
+library(scales)
 library(RColorBrewer)
 
 ggplot(joined_long, aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count )) + geom_point(aes(size = count)) + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) 
-
-
 
 #polish graph and note the oberservations
 
 #change gradient to more distinct colors
 
 #removed doubled count key
-g1 <- ggplot(joined_long, aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count)) + geom_point(aes(size = count)) + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) + guides(size = FALSE) + xlab("Dependent variable") + ylab("Independent variable")
+g1 <- ggplot(joined_long, aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count)) + geom_point(aes(size = count)) + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) + guides(size = FALSE) + xlab("Dependent variable") + ylab("Independent variable")
 
 #COLOR OPTIONS
 
 #change color to green
-g1 + scale_color_gradient(low = 'greenyellow', high = 'darkgreen') + guides(size = FALSE) 
+
+g1 +  scale_color_gradient(low = 'greenyellow', high = 'darkgreen') + guides(color = guide_legend(), size = guide_legend()) 
 
 #change color to green
 g1 + scale_color_gradient2(low = 'orange', mid = 'white', high = 'purple') + guides(size = FALSE) 
 
 #look into fixing the x axis text labels to have multiple lines
-
 
 ggplot(joined_long, aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count )) + geom_point(aes(size = count)) + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) 
 
@@ -94,9 +99,6 @@ Use DPLYR to bring together the "relationships" and "recording" sheets
 ```
 
 
-
-
-
 SANKEY DIAGRAMS
 
 ```{r setup, include=FALSE}
@@ -104,9 +106,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #SANKEY diagrams consist of three sets of elements: the nodes, the links, and the instructions which determine their positions
 
-#trying the following pckages
-library(plotly)
-#or
 library(networkD3)
 
 links2 <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "links")
@@ -122,32 +121,91 @@ Nodes
 
 https://towardsdatascience.com/using-networkd3-in-r-to-create-simple-and-clear-sankey-diagrams-48f8ba8a4ace
 
-```{r}
-sankeyNetwork(Links = links2, Nodes = nodes2, Source = "source", 
-              Target = "Target", Value = "value", NodeID = "name", 
-              fontSize = 12, nodeWidth = 13,
-              fontFamily = "sans serif", iterations = 0)
 
-```
 CREATING IT IN R
 ```{r}
 #
 # create nodes dataframe
 
-results <- joined_long %>% 
-  dplyr::group_by(Independent_variable_recode) %>% 
-  dplyr::summarise(Remain = sum(Remain), Leave = sum(Leave))
+IV <- unique(joined_long$Independent_variable_recode)
+DV <- unique(joined_long$Dependent_variable_recode)
+node <- data.frame(key = 0:30, variable = c(IV, DV))
 
 
-IV <- unique(as.character(joined_long$Independent_variable_recode))
-nodes <- data.frame(node = c(0:18))
+#create links dataframe and rename 
+links <- joined_long %>% inner_join(node,  by = c("Independent_variable_recode" = "variable")) %>% rename(IV_key = key) %>% 
+  inner_join(node,  by = c("Dependent_variable_recode" = "variable")) %>% rename(DV_key = key)
 
 
-#create links dataframe
-IV <- merge(IV, nodes, by.x = "Region", by.y = "name")
-IV <- merge(IV, nodes, by.x = "result", by.y = "name")
-links <- IV[ , c("node.x", "node.y", "vote")]
-colnames(links) <- c("source", "target", "value") 
-                   
+sankeyNetwork(Links = links, Nodes = node, Source = 'IV_key', 
+              Target = 'DV_key', Value = 'count', NodeID = "variable", 
+              fontSize = 12, nodeWidth = 20, 
+              fontFamily = "sans serif", iterations = 0)
+
+
 ```
+
+```{r}
+#LinkGroup
+#when we bring in significant and non
+#https://www.r-graph-gallery.com/322-custom-colours-in-sankey-diagram.html    
+
+
+joined_long_sig <- Relationships %>% filter(Relationship == "significant") %>% left_join(Independent_recode, by = "Independent_variable") %>% left_join(Dependent_recode, by = "Dependent_variable") %>% select(Independent_variable_recode, Dependent_variable_recode) %>% group_by(Independent_variable_recode, Dependent_variable_recode) %>% summarise(significant = n()) %>% full_join(joined_long) %>% replace(is.na(.), 0 ) %>% mutate(significance = if_else(significant == 0, "no sig", if_else(significant == count, "sig", "mixed")))
+
+
+# create nodes dataframe
+
+IVsig <- unique(joined_long_sig$Independent_variable_recode)
+DVsig <- unique(joined_long_sig$Dependent_variable_recode)
+nodesig <- data.frame(key = 0:30, variable = c(IVsig, DVsig))
+
+
+linkssig <- joined_long_sig %>% inner_join(nodesig,  by = c("Independent_variable_recode" = "variable")) %>% rename(IV_key = key) %>% 
+  inner_join(nodesig,  by = c("Dependent_variable_recode" = "variable")) %>% rename(DV_key = key)
+
+
+#create links dataframe and rename 
+
+# Add a 'group' column to each node. Here I decide to put all of them in the same group to make them grey
+node$group <- as.factor(c("group"))
+ 
+# Give a color for each group:
+# sig = green
+# mixed yellow
+# not sig = grey
+my_color <- 'd3.scaleOrdinal() .domain(["sig","mixed","no sig"]) .range(["green", "orange", "grey"])'
+ 
+# Make the Network
+
+#no "no sig" grey lines are not appearing
+sankeyNetwork(Links = linkssig,
+              Nodes = nodesig,
+              Source = 'IV_key', 
+              Target = 'DV_key',
+              Value = 'count',
+              NodeID = "variable", 
+              colourScale = my_color,
+              LinkGroup = "significance",
+              fontSize = 12, nodeWidth = 20, 
+              fontFamily = "sans serif", iterations = 0)
+
+#Attempt to change
+
+sankeyNetwork(Links = linkssig,
+              Nodes = nodesig,
+              Source = "IV_key",
+              Target = "DV_key",
+              Value = "count",
+              NodeID = "variable",
+              LinkGroup = "significance")
+
+
+??sankeyNetwork
+
+
+
+
+```
+
 
