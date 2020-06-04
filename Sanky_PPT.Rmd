@@ -15,15 +15,24 @@ library(networkD3)
 library(tidyverse)
 library(readxl)
 library(readr)
+#library(xlsx)
 
 #Read in each sheet individually which creates a Tibble for each.
 
-Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Relationships")
+
+Relationships <- read.xlsx("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Relationships")
+
+
+Relationships <- data.frame(lapply(Relationships, as.factor))
+
 
 Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Independent recode")
 
+Independent_recode <- data.frame(lapply(Independent_recode, as.factor))
+
 Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Dependent recode")
 
+Dependent_recode <- data.frame(lapply(Dependent_recode, as.factor))
 ```
 
 Join independent/dependent variable of recode table to original,
@@ -45,11 +54,6 @@ joined_matrix <- left_join( Relationships, Independent_recode, by = "Independent
 
 # glimpse(joined_tibble)
 # str(joined_tibble)
-
-```
-
-```{r}
-
 
 ```
 
@@ -101,19 +105,6 @@ Use DPLYR to bring together the "relationships" and "recording" sheets
 
 SANKEY DIAGRAMS
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-
-#SANKEY diagrams consist of three sets of elements: the nodes, the links, and the instructions which determine their positions
-
-library(networkD3)
-
-links2 <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "links")
-
-nodes2 <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "nodes") 
-
-
-```
 https://www.youtube.com/watch?v=S6me1r6RI4I
 
 Nodes
@@ -129,7 +120,7 @@ CREATING IT IN R
 
 IV <- unique(joined_long$Independent_variable_recode)
 DV <- unique(joined_long$Dependent_variable_recode)
-node <- data.frame(key = 0:30, variable = c(IV, DV))
+node <- data.frame(key = 0:30, variable = as.factor(c(as.character(IV), as.character(DV))))
 
 
 #create links dataframe and rename 
@@ -151,14 +142,14 @@ sankeyNetwork(Links = links, Nodes = node, Source = 'IV_key',
 #https://www.r-graph-gallery.com/322-custom-colours-in-sankey-diagram.html    
 
 
-joined_long_sig <- Relationships %>% filter(Relationship == "significant") %>% left_join(Independent_recode, by = "Independent_variable") %>% left_join(Dependent_recode, by = "Dependent_variable") %>% select(Independent_variable_recode, Dependent_variable_recode) %>% group_by(Independent_variable_recode, Dependent_variable_recode) %>% summarise(significant = n()) %>% full_join(joined_long) %>% replace(is.na(.), 0 ) %>% mutate(significance = if_else(significant == 0, "no sig", if_else(significant == count, "sig", "mixed")))
+joined_long_sig <- Relationships %>% filter(Relationship == "significant") %>% left_join(Independent_recode, by = "Independent_variable") %>% left_join(Dependent_recode, by = "Dependent_variable") %>% select(Independent_variable_recode, Dependent_variable_recode) %>% group_by(Independent_variable_recode, Dependent_variable_recode) %>% summarise(significant = n()) %>% full_join(joined_long) %>% replace(is.na(.), 0 ) %>% mutate(significance = if_else(significant == 0, "apple", if_else(significant == count, "muz", "mango")))
 
 
 # create nodes dataframe
 
 IVsig <- unique(joined_long_sig$Independent_variable_recode)
 DVsig <- unique(joined_long_sig$Dependent_variable_recode)
-nodesig <- data.frame(key = 0:30, variable = c(IVsig, DVsig))
+nodesig <- data.frame(key = 0:30, variable = as.factor(c(as.character(IVsig), as.character(DVsig))))
 
 
 linkssig <- joined_long_sig %>% inner_join(nodesig,  by = c("Independent_variable_recode" = "variable")) %>% rename(IV_key = key) %>% 
@@ -168,26 +159,39 @@ linkssig <- joined_long_sig %>% inner_join(nodesig,  by = c("Independent_variabl
 #create links dataframe and rename 
 
 # Add a 'group' column to each node. Here I decide to put all of them in the same group to make them grey
-node$group <- as.factor(c("group"))
+
+#node$group <- as.factor(c("group"))
  
 # Give a color for each group:
 # sig = green
 # mixed yellow
 # not sig = grey
-my_color <- 'd3.scaleOrdinal() .domain(["sig","mixed","no sig"]) .range(["green", "orange", "grey"])'
- 
+
+nb.cols <- 34
+my_color <- colorRampPalette(brewer.pal(8, "Set2"))(nb.cols)
+
+node_names <- as.character(unique(nodesig$variable))
+link_names <- as.character(unique(linkssig$significance))
+all_names <- c(node_names, link_names)
+
+new_color <- JS('d3.scaleOrdinal() .domain([all_names]) .range([my_color])')
+
 # Make the Network
 
 #no "no sig" grey lines are not appearing
+
+
+#DOES N0T WORK YET
+
 sankeyNetwork(Links = linkssig,
               Nodes = nodesig,
               Source = 'IV_key', 
               Target = 'DV_key',
               Value = 'count',
               NodeID = "variable", 
-              colourScale = my_color,
+              colourScale = new_color,
               LinkGroup = "significance",
-              fontSize = 12, nodeWidth = 20, 
+              NodeGroup = "variable",
               fontFamily = "sans serif", iterations = 0)
 
 #Attempt to change
@@ -196,15 +200,12 @@ sankeyNetwork(Links = linkssig,
               Nodes = nodesig,
               Source = "IV_key",
               Target = "DV_key",
+              nodeWidth = 30,
               Value = "count",
               NodeID = "variable",
               LinkGroup = "significance")
 
-
-??sankeyNetwork
-
-
-
+summary(as.factor(linkssig$significance))
 
 ```
 
