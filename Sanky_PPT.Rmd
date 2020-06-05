@@ -250,16 +250,15 @@ MORGANS ADDITIONS
 ```{r}
 #MORGANS ADDITIONS
 
+# Try some new options in the developer version
+# https://rdrr.io/github/fbreitwieser/sankeyD3/man/sankeyNetwork.html
+# I added some of these but there are a lot more to play with
+
 # Installation
 #install.packages('devtools')
 #devtools::install_github("fbreitwieser/sankeyD3")
 
-# Try some new options in the developer version
-# https://rdrr.io/github/fbreitwieser/sankeyD3/man/sankeyNetwork.html
-# I added some of these but there are a lot more to play with
-#require(githubinstall)
-#githubinstall
-
+#https://github.com/fbreitwieser/sankeyD3
 library(sankeyD3)
 
 my_color <- 'd3.scaleOrdinal() .domain(["node_group","not_sig","mixed","sig"]) .range(["tan","red","dimgrey", "green"])'
@@ -273,15 +272,20 @@ sankeyD3::sankeyNetwork(Links = linkssig,
               LinkGroup = "significance",
               NodeGroup = "group",
               colourScale = my_color,
-              fontSize = 14,
+              fontSize = 12,
               fontFamily = "sans-serif",
               orderByPath = TRUE,
               showNodeValues = FALSE,
-              nodeWidth = 20,
+              nodePadding = 10,
+              nodeWidth = 30,
               align="center",
               linkOpacity = 0.4,
               curvature = 0.4,
-              dragY = TRUE )
+              dragY = TRUE,
+              iterations = 0)
+
+
+
 
 ```
 
