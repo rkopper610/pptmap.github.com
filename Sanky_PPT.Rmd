@@ -20,19 +20,15 @@ library(readr)
 #Read in each sheet individually which creates a Tibble for each.
 
 
-Relationships <- read.xlsx("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Relationships")
-
-
-Relationships <- data.frame(lapply(Relationships, as.factor))
+Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Relationships")
+#Relationships <- data.frame(lapply(Relationships, as.factor))
 
 
 Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Independent recode")
-
-Independent_recode <- data.frame(lapply(Independent_recode, as.factor))
+#Independent_recode <- data.frame(lapply(Independent_recode, as.factor))
 
 Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Dependent recode")
-
-Dependent_recode <- data.frame(lapply(Dependent_recode, as.factor))
+#Dependent_recode <- data.frame(lapply(Dependent_recode, as.factor))
 ```
 
 Join independent/dependent variable of recode table to original,
@@ -141,19 +137,36 @@ sankeyNetwork(Links = links, Nodes = node, Source = 'IV_key',
 #when we bring in significant and non
 #https://www.r-graph-gallery.com/322-custom-colours-in-sankey-diagram.html    
 
+joined_long_sig <- Relationships %>% filter(Relationship == "significant") %>%
+  left_join(Independent_recode, by = "Independent_variable") %>%
+  left_join(Dependent_recode, by = "Dependent_variable") %>%
+  select(Independent_variable_recode, Dependent_variable_recode) %>%
+  group_by(Independent_variable_recode, Dependent_variable_recode) %>%
+  summarise(significant = n()) %>%
+  full_join(joined_long) %>% 
+  replace(is.na(.), 0 ) %>%
+  mutate(significance = if_else(significant == 0, "not_sig", if_else(significant == count, "sig", "mixed")))
 
-joined_long_sig <- Relationships %>% filter(Relationship == "significant") %>% left_join(Independent_recode, by = "Independent_variable") %>% left_join(Dependent_recode, by = "Dependent_variable") %>% select(Independent_variable_recode, Dependent_variable_recode) %>% group_by(Independent_variable_recode, Dependent_variable_recode) %>% summarise(significant = n()) %>% full_join(joined_long) %>% replace(is.na(.), 0 ) %>% mutate(significance = if_else(significant == 0, "apple", if_else(significant == count, "muz", "mango")))
+
 
 
 # create nodes dataframe
 
 IVsig <- unique(joined_long_sig$Independent_variable_recode)
 DVsig <- unique(joined_long_sig$Dependent_variable_recode)
+
 nodesig <- data.frame(key = 0:30, variable = as.factor(c(as.character(IVsig), as.character(DVsig))))
 
+#MORGAN'S variable---DOESNT WOKR HERE (above)
+#nodesig <- data.frame(key = 0:30, variable = c(IVsig, DVsig))
 
 linkssig <- joined_long_sig %>% inner_join(nodesig,  by = c("Independent_variable_recode" = "variable")) %>% rename(IV_key = key) %>% 
   inner_join(nodesig,  by = c("Dependent_variable_recode" = "variable")) %>% rename(DV_key = key)
+
+
+
+
+linkssig <- data.frame(linkssig)
 
 
 #create links dataframe and rename 
@@ -167,14 +180,36 @@ linkssig <- joined_long_sig %>% inner_join(nodesig,  by = c("Independent_variabl
 # mixed yellow
 # not sig = grey
 
-nb.cols <- 34
-my_color <- colorRampPalette(brewer.pal(8, "Set2"))(nb.cols)
 
-node_names <- as.character(unique(nodesig$variable))
-link_names <- as.character(unique(linkssig$significance))
-all_names <- c(node_names, link_names)
+# Put all notes in one group for now
+nodesig$group <- as.factor(c("node_group"))
 
-new_color <- JS('d3.scaleOrdinal() .domain([all_names]) .range([my_color])')
+# Set up colors for groups
+my_color <- 'd3.scaleOrdinal() .domain(["node_group","mixed","not_sig", "sig"]) .range(["tan", "lightgreen" , "lightgrey", "darkgreen"])'
+
+
+sankeyNetwork(Links = linkssig,
+              Nodes = nodesig,
+              Source = 'IV_key', 
+              Target = 'DV_key',
+              Value = 'count',
+              NodeID = "variable", 
+              LinkGroup = "significance",
+              NodeGroup = "group",
+              colourScale = my_color,
+              fontSize = 12)
+
+
+
+
+# nb.cols <- 34
+# my_color <- colorRampPalette(brewer.pal(8, "Set2"))(nb.cols)
+# 
+# node_names <- as.character(unique(nodesig$variable))
+# link_names <- as.character(unique(linkssig$significance))
+# all_names <- c(node_names, link_names)
+# 
+# new_color <- JS('d3.scaleOrdinal() .domain([all_names]) .range([my_color])')
 
 # Make the Network
 
@@ -189,23 +224,64 @@ sankeyNetwork(Links = linkssig,
               Target = 'DV_key',
               Value = 'count',
               NodeID = "variable", 
-              colourScale = new_color,
+              colourScale = my_color,
               LinkGroup = "significance",
               NodeGroup = "variable",
               fontFamily = "sans serif", iterations = 0)
 
 #Attempt to change
-
-sankeyNetwork(Links = linkssig,
-              Nodes = nodesig,
-              Source = "IV_key",
-              Target = "DV_key",
-              nodeWidth = 30,
-              Value = "count",
-              NodeID = "variable",
-              LinkGroup = "significance")
+#older format--no specifci color assigned
+# sankeyNetwork(Links = linkssig,
+#               Nodes = nodesig,
+#               Source = "IV_key",
+#               Target = "DV_key",
+#               nodeWidth = 30,
+#               Value = "count",
+#               NodeID = "variable",
+#               LinkGroup = "significance")
 
 summary(as.factor(linkssig$significance))
+
+```
+
+
+
+MORGANS ADDITIONS
+```{r}
+#MORGANS ADDITIONS
+
+# Installation
+#install.packages('devtools')
+#devtools::install_github("fbreitwieser/sankeyD3")
+
+# Try some new options in the developer version
+# https://rdrr.io/github/fbreitwieser/sankeyD3/man/sankeyNetwork.html
+# I added some of these but there are a lot more to play with
+#require(githubinstall)
+#githubinstall
+
+library(sankeyD3)
+
+my_color <- 'd3.scaleOrdinal() .domain(["node_group","not_sig","mixed","sig"]) .range(["tan","red","dimgrey", "green"])'
+
+sankeyD3::sankeyNetwork(Links = linkssig,
+              Nodes = nodesig,
+              Source = 'IV_key', 
+              Target = 'DV_key',
+              Value = 'count',
+              NodeID = "variable", 
+              LinkGroup = "significance",
+              NodeGroup = "group",
+              colourScale = my_color,
+              fontSize = 14,
+              fontFamily = "sans-serif",
+              orderByPath = TRUE,
+              showNodeValues = FALSE,
+              nodeWidth = 20,
+              align="center",
+              linkOpacity = 0.4,
+              curvature = 0.4,
+              dragY = TRUE )
 
 ```
 
