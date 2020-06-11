@@ -60,6 +60,7 @@ joined_matrix <- left_join( Relationships, Independent_recode, by = "Independent
 library(scales)
 library(RColorBrewer)
 
+
 ggplot(joined_long, aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count )) + geom_point(aes(size = count)) + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) 
 
 #polish graph and note the oberservations
@@ -75,12 +76,32 @@ g1 <- ggplot(joined_long, aes(x = Dependent_variable_recode, y = Independent_var
 
 g1 +  scale_color_gradient(low = 'greenyellow', high = 'darkgreen') + guides(color = guide_legend(), size = guide_legend()) 
 
+
 #change color to green
 g1 + scale_color_gradient2(low = 'orange', mid = 'white', high = 'purple') + guides(size = FALSE) 
+```
 
-#look into fixing the x axis text labels to have multiple lines
+#-------------------------------------------------------------------------------
+#using paletteer package
 
-ggplot(joined_long, aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count )) + geom_point(aes(size = count)) + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) 
+```{r}
+library(paletteer)
+
+#it doesnt work within the ggplot object
+
+#use either of the following and auto complete will display available types--
+paletteer_c()
+paletteer_d()
+
+
+x <- paletteer_d("vapoRwave::floralShoppe")
+x <- paletteer_d("khroma::soil")
+x <- paletteer_d("colorBlindness::PairedColor12Steps")
+
+g1 +  scale_color_gradient(low = x, high = x) + guides(color = guide_legend(), size = guide_legend()) 
+
+
+
 
 ```
 
@@ -213,10 +234,7 @@ sankeyNetwork(Links = linkssig,
 
 # Make the Network
 
-#no "no sig" grey lines are not appearing
-
-
-#DOES N0T WORK YET
+#
 
 sankeyNetwork(Links = linkssig,
               Nodes = nodesig,
@@ -282,6 +300,7 @@ sankeyD3::sankeyNetwork(Links = linkssig,
               linkOpacity = 0.4,
               curvature = 0.4,
               dragY = TRUE,
+              title = NULL,
               iterations = 0)
 
 
