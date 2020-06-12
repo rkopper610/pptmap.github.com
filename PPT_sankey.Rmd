@@ -1,13 +1,13 @@
 ---
-title: "Survey variables analysis to produce Sanky Diagram"
-author: "Ryan Kopper"
-date: "5/22/2020"
+title: "Experiment & survey studies variable analysis to produce visuals"
+author: "Ryan Kopper and Morgan Ruelle"
+date: "6/12/2020"
 output: html_document
 editor_options: 
   chunk_output_type: console
 ---
 
-```{r}
+```{r include=FALSE}
 ## load libraries
 library(dplyr)
 #info sheet https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf
@@ -16,14 +16,30 @@ library(networkD3)
 library(tidyverse)
 library(readxl)
 library(readr)
-#library(xlsx)
+#4 plot
+library(scales)
+library(RColorBrewer)
+library(paletteer)
+#Package 'ggthemes' needed. Please install it by running `install.packages('ggthemes')
+
+#4Sankey
+library(sankeyD3)
+# Installation
+#install.packages('devtools')
+#devtools::install_github("fbreitwieser/sankeyD3")
+
+
 ```
+
+##### Choose Data
 
 Choose between the next 2 chunks Experiment or Survey data sets 
 comment out the one not using...
 
+#### EXPERIMENT
+
 ```{r}
-#EXPERIMENT
+
 
 #Read in each sheet individually which creates a Tibble for each.
 
@@ -39,9 +55,9 @@ Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle
 
 ```
 
+### SURVEY
 
 ```{r}
-#SURVEY
 
 # Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Relationships")
 # #Relationships <- data.frame(lapply(Relationships, as.factor))
@@ -54,7 +70,7 @@ Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle
 # #Dependent_recode <- data.frame(lapply(Dependent_recode, as.factor))
 ```
 
-
+##### Format Data
 ```{r}
 
 joined_long <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>% left_join(Dependent_recode, by = "Dependent_variable") %>%  select(Independent_variable_recode, Dependent_variable_recode) %>% group_by(Independent_variable_recode, Dependent_variable_recode) %>% summarise(count = n()) 
@@ -66,28 +82,24 @@ joined_matrix <- left_join( Relationships, Independent_recode, by = "Independent
 
 ```
 
+#### Bubble plot
 
 ```{r}
-#Bubble plot
+#basic bubble plot colors+theme 
 
-library(scales)
-library(RColorBrewer)
-library(paletteer)
-#Package 'ggthemes' needed. Please install it by running `install.packages('ggthemes')
-
-
-ggplot(joined_long, aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count )) + geom_point(aes(size = count)) + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) 
+# ggplot(joined_long, aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count )) + geom_point(aes(size = count)) + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) 
 
 
 #show this one-has green as highest number
+
 ggplot(joined_long, aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count)) + geom_point(aes(size = count)) + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) + guides(size = FALSE) + xlab("Dependent variable") + ylab("Independent variable")  +
 scale_colour_paletteer_c("ggthemes::Classic Area Red-Green") + guides(color = guide_legend(title = "Number of\nstudies"), size = guide_legend(title = "Number of\nstudies")) 
 
 
 ```
 
-#-------------------------------------------------------------------------------
-#using paletteer package
+
+##### using paletteer package
 
 ```{r}
 #show this one--has blue as highest number
@@ -100,9 +112,9 @@ g1 + scale_color_gradient(low = x) + guides(color = guide_legend(title = "Number
 
 ```
 
-SANKEY DIAGRAMS
+#### SANKEY DIAGRAMS
 
-CREATING IT IN R
+
 ```{r}
 # create nodes dataframe
 
@@ -216,20 +228,8 @@ my_color <- 'd3.scaleOrdinal() .domain(["node_group","mixed","not_sig", "sig"]) 
 
 ```
 
-The following Sankey is the one to use---features red, grey and green to dipict significance
+##### The following Sankey is the one to use---features red, grey and green to dipict significance
 ```{r}
-
-
-# Try some new options in the developer version
-# https://rdrr.io/github/fbreitwieser/sankeyD3/man/sankeyNetwork.html
-# I added some of these but there are a lot more to play with
-
-# Installation
-#install.packages('devtools')
-#devtools::install_github("fbreitwieser/sankeyD3")
-
-#https://github.com/fbreitwieser/sankeyD3
-library(sankeyD3)
 
 my_color <- 'd3.scaleOrdinal() .domain(["node_group","not_sig","mixed","sig"]) .range(["tan","red","dimgrey", "green"])'
 
