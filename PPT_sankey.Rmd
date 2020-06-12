@@ -11,37 +11,50 @@ editor_options:
 ## load libraries
 library(dplyr)
 #info sheet https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf
+
 library(networkD3)
 library(tidyverse)
 library(readxl)
 library(readr)
 #library(xlsx)
+```
+
+Choose between the next 2 chunks Experiment or Survey data sets 
+comment out the one not using...
+
+```{r}
+#EXPERIMENT
 
 #Read in each sheet individually which creates a Tibble for each.
 
-
-Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Relationships")
+Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Experiment relationships 2020_06_11.xlsx", sheet = "Relationships")
 #Relationships <- data.frame(lapply(Relationships, as.factor))
 
 
-Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Independent recode")
+Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Experiment relationships 2020_06_11.xlsx", sheet = "Independent recode")
 #Independent_recode <- data.frame(lapply(Independent_recode, as.factor))
 
-Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Dependent recode")
+Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Experiment relationships 2020_06_11.xlsx", sheet = "Dependent recode")
 #Dependent_recode <- data.frame(lapply(Dependent_recode, as.factor))
+
 ```
 
-Join independent/dependent variable of recode table to original,
 
-https://www.infoworld.com/article/3454356/how-to-merge-data-in-r-using-r-merge-dplyr-or-datatable.html
+```{r}
+#SURVEY
 
-The first step is some kind of join command 
+# Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Relationships")
+# #Relationships <- data.frame(lapply(Relationships, as.factor))
+# 
+# 
+# Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Independent recode")
+# #Independent_recode <- data.frame(lapply(Independent_recode, as.factor))
+# 
+# Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = "Dependent recode")
+# #Dependent_recode <- data.frame(lapply(Dependent_recode, as.factor))
+```
 
-the second one is using the joined columns to create a new matrix with counts.
 
-alter long data to wide data with value as counts.
-
-https://datacarpentry.org/R-ecology-lesson/03-dplyr.html
 ```{r}
 
 joined_long <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>% left_join(Dependent_recode, by = "Dependent_variable") %>%  select(Independent_variable_recode, Dependent_variable_recode) %>% group_by(Independent_variable_recode, Dependent_variable_recode) %>% summarise(count = n()) 
@@ -59,80 +72,38 @@ joined_matrix <- left_join( Relationships, Independent_recode, by = "Independent
 
 library(scales)
 library(RColorBrewer)
+library(paletteer)
+#Package 'ggthemes' needed. Please install it by running `install.packages('ggthemes')
 
 
 ggplot(joined_long, aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count )) + geom_point(aes(size = count)) + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) 
 
-#polish graph and note the oberservations
 
-#change gradient to more distinct colors
-
-#removed doubled count key
-g1 <- ggplot(joined_long, aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count)) + geom_point(aes(size = count)) + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) + guides(size = FALSE) + xlab("Dependent variable") + ylab("Independent variable")
-
-#COLOR OPTIONS
-
-#change color to green
-
-g1 +  scale_color_gradient(low = 'greenyellow', high = 'darkgreen') + guides(color = guide_legend(), size = guide_legend()) 
+#show this one-has green as highest number
+ggplot(joined_long, aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count)) + geom_point(aes(size = count)) + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) + guides(size = FALSE) + xlab("Dependent variable") + ylab("Independent variable")  +
+scale_colour_paletteer_c("ggthemes::Classic Area Red-Green") + guides(color = guide_legend(title = "Number of\nstudies"), size = guide_legend(title = "Number of\nstudies")) 
 
 
-#change color to green
-g1 + scale_color_gradient2(low = 'orange', mid = 'white', high = 'purple') + guides(size = FALSE) 
 ```
 
 #-------------------------------------------------------------------------------
 #using paletteer package
 
 ```{r}
-library(paletteer)
+#show this one--has blue as highest number
 
-#it doesnt work within the ggplot object
+g1 <- ggplot(joined_long, aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count)) + geom_point(aes(size = count)) + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) + guides(size = FALSE) + xlab("Dependent variable") + ylab("Independent variable")
 
-#use either of the following and auto complete will display available types--
-paletteer_c()
-paletteer_d()
+x <- paletteer_c("ggthemes::Classic Area Red-Green", 10)
 
-
-x <- paletteer_d("vapoRwave::floralShoppe")
-x <- paletteer_d("khroma::soil")
-x <- paletteer_d("colorBlindness::PairedColor12Steps")
-
-g1 +  scale_color_gradient(low = x, high = x) + guides(color = guide_legend(), size = guide_legend()) 
-
-
-
+g1 + scale_color_gradient(low = x) + guides(color = guide_legend(title = "Number of\nstudies"), size = guide_legend(title = "Number of\nstudies")) 
 
 ```
-
-EXTRA-------------------------------
-Use DPLYR to bring together the "relationships" and "recording" sheets
- 
-```{r}
-#Creates value for  each sheet
-# sheets <- excel_sheets("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx")
-# 
-# #Maps sheets to the data
-# #map_df() returns a data frame.
-# f <- map_df(sheets, ~ read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey relationships 2020_05_19.xlsx", sheet = .x))
-
-#f = all the sheets combined.
-```
-
 
 SANKEY DIAGRAMS
 
-https://www.youtube.com/watch?v=S6me1r6RI4I
-
-Nodes
-"networkD3" Package
-
-https://towardsdatascience.com/using-networkd3-in-r-to-create-simple-and-clear-sankey-diagrams-48f8ba8a4ace
-
-
 CREATING IT IN R
 ```{r}
-#
 # create nodes dataframe
 
 IV <- unique(joined_long$Independent_variable_recode)
@@ -145,10 +116,10 @@ links <- joined_long %>% inner_join(node,  by = c("Independent_variable_recode" 
   inner_join(node,  by = c("Dependent_variable_recode" = "variable")) %>% rename(DV_key = key)
 
 
-sankeyNetwork(Links = links, Nodes = node, Source = 'IV_key', 
-              Target = 'DV_key', Value = 'count', NodeID = "variable", 
-              fontSize = 12, nodeWidth = 20, 
-              fontFamily = "sans serif", iterations = 0)
+# sankeyNetwork(Links = links, Nodes = node, Source = 'IV_key', 
+#               Target = 'DV_key', Value = 'count', NodeID = "variable", 
+#               fontSize = 12, nodeWidth = 20, 
+#               fontFamily = "sans serif", iterations = 0)
 
 
 ```
@@ -157,6 +128,8 @@ sankeyNetwork(Links = links, Nodes = node, Source = 'IV_key',
 #LinkGroup
 #when we bring in significant and non
 #https://www.r-graph-gallery.com/322-custom-colours-in-sankey-diagram.html    
+
+#rating significance
 
 joined_long_sig <- Relationships %>% filter(Relationship == "significant") %>%
   left_join(Independent_recode, by = "Independent_variable") %>%
@@ -168,9 +141,6 @@ joined_long_sig <- Relationships %>% filter(Relationship == "significant") %>%
   replace(is.na(.), 0 ) %>%
   mutate(significance = if_else(significant == 0, "not_sig", if_else(significant == count, "sig", "mixed")))
 
-
-
-
 # create nodes dataframe
 
 IVsig <- unique(joined_long_sig$Independent_variable_recode)
@@ -178,18 +148,14 @@ DVsig <- unique(joined_long_sig$Dependent_variable_recode)
 
 nodesig <- data.frame(key = 0:30, variable = as.factor(c(as.character(IVsig), as.character(DVsig))))
 
-#MORGAN'S variable---DOESNT WOKR HERE (above)
-#nodesig <- data.frame(key = 0:30, variable = c(IVsig, DVsig))
-
 linkssig <- joined_long_sig %>% inner_join(nodesig,  by = c("Independent_variable_recode" = "variable")) %>% rename(IV_key = key) %>% 
   inner_join(nodesig,  by = c("Dependent_variable_recode" = "variable")) %>% rename(DV_key = key)
 
-
-
-
 linkssig <- data.frame(linkssig)
+```
 
 
+```{r}
 #create links dataframe and rename 
 
 # Add a 'group' column to each node. Here I decide to put all of them in the same group to make them grey
@@ -209,16 +175,16 @@ nodesig$group <- as.factor(c("node_group"))
 my_color <- 'd3.scaleOrdinal() .domain(["node_group","mixed","not_sig", "sig"]) .range(["tan", "lightgreen" , "lightgrey", "darkgreen"])'
 
 
-sankeyNetwork(Links = linkssig,
-              Nodes = nodesig,
-              Source = 'IV_key', 
-              Target = 'DV_key',
-              Value = 'count',
-              NodeID = "variable", 
-              LinkGroup = "significance",
-              NodeGroup = "group",
-              colourScale = my_color,
-              fontSize = 12)
+# sankeyNetwork(Links = linkssig,
+#               Nodes = nodesig,
+#               Source = 'IV_key', 
+#               Target = 'DV_key',
+#               Value = 'count',
+#               NodeID = "variable", 
+#               LinkGroup = "significance",
+#               NodeGroup = "group",
+#               colourScale = my_color,
+#               fontSize = 16)
 
 
 
@@ -236,37 +202,23 @@ sankeyNetwork(Links = linkssig,
 
 #
 
-sankeyNetwork(Links = linkssig,
-              Nodes = nodesig,
-              Source = 'IV_key', 
-              Target = 'DV_key',
-              Value = 'count',
-              NodeID = "variable", 
-              colourScale = my_color,
-              LinkGroup = "significance",
-              NodeGroup = "variable",
-              fontFamily = "sans serif", iterations = 0)
-
-#Attempt to change
-#older format--no specifci color assigned
 # sankeyNetwork(Links = linkssig,
 #               Nodes = nodesig,
-#               Source = "IV_key",
-#               Target = "DV_key",
-#               nodeWidth = 30,
-#               Value = "count",
-#               NodeID = "variable",
-#               LinkGroup = "significance")
-
-summary(as.factor(linkssig$significance))
+#               Source = 'IV_key', 
+#               Target = 'DV_key',
+#               Value = 'count',
+#               NodeID = "variable", 
+#               colourScale = my_color,
+#               LinkGroup = "significance",
+#               NodeGroup = "variable",
+#               fontSize = 14,
+#               fontFamily = "sans serif", iterations = 0)
 
 ```
 
-
-
-MORGANS ADDITIONS
+The following Sankey is the one to use---features red, grey and green to dipict significance
 ```{r}
-#MORGANS ADDITIONS
+
 
 # Try some new options in the developer version
 # https://rdrr.io/github/fbreitwieser/sankeyD3/man/sankeyNetwork.html
