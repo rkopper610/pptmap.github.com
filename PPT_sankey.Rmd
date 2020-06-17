@@ -55,7 +55,7 @@ Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle
 
 ```
 
-### SURVEY
+#### SURVEY
 
 ```{r}
 
@@ -73,42 +73,26 @@ Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle
 ##### Format Data
 ```{r}
 
-joined_long <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>% left_join(Dependent_recode, by = "Dependent_variable") %>%  select(Independent_variable_recode, Dependent_variable_recode) %>% group_by(Independent_variable_recode, Dependent_variable_recode) %>% summarise(count = n()) 
+joined_long <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>% left_join(Dependent_recode, by = "Dependent_variable") %>%  select(Title, Independent_variable_recode, Dependent_variable_recode) %>% distinct() %>% group_by(Independent_variable_recode, Dependent_variable_recode) %>% summarise(count = n()) 
 
-joined_matrix <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>% left_join(Dependent_recode, by = "Dependent_variable") %>%  select(Independent_variable_recode, Dependent_variable_recode) %>% group_by(Independent_variable_recode, Dependent_variable_recode) %>% summarise(count = n()) %>% spread(key = Dependent_variable_recode, value = count) %>% replace(is.na(.), 0 ) 
 
-# glimpse(joined_tibble)
-# str(joined_tibble)
+#ordering independent and dependent variables
+
+indi_order <- group_by(joined_long, Independent_variable_recode) %>%  summarise(total = sum(count)) %>% arrange(total, by_group = TRUE) %>% pull(Independent_variable_recode)
+
+dep_order <- group_by(joined_long, Dependent_variable_recode) %>%
+summarise(total = sum(count)) %>% arrange(total, by_group = TRUE) %>% pull(Dependent_variable_recode)
+
 
 ```
 
 #### Bubble plot
 
 ```{r}
-#basic bubble plot colors+theme 
 
-# ggplot(joined_long, aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count )) + geom_point(aes(size = count)) + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) 
+joined_long %>% mutate(Independent_variable_recode = factor(Independent_variable_recode,levels = indi_order), Dependent_variable_recode = factor(Dependent_variable_recode,levels = rev(dep_order))) %>% ggplot(aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count)) + geom_point(aes(size = count)) + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) + guides(size = FALSE) + xlab("Dependent variable") + ylab("Independent variable")  +
+scale_colour_paletteer_c("ggthemes::Classic Area Red-Green", breaks =c(9,7,5,3,1)) + scale_size_continuous(breaks = c(9,7,5,3,1)) + guides(color = guide_legend(title = "Number of\nstudies"), size = guide_legend(title = "Number of\nstudies")) 
 
-
-#show this one-has green as highest number
-
-ggplot(joined_long, aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count)) + geom_point(aes(size = count)) + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) + guides(size = FALSE) + xlab("Dependent variable") + ylab("Independent variable")  +
-scale_colour_paletteer_c("ggthemes::Classic Area Red-Green") + guides(color = guide_legend(title = "Number of\nstudies"), size = guide_legend(title = "Number of\nstudies")) 
-
-
-```
-
-
-##### using paletteer package
-
-```{r}
-#show this one--has blue as highest number
-
-g1 <- ggplot(joined_long, aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count)) + geom_point(aes(size = count)) + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) + guides(size = FALSE) + xlab("Dependent variable") + ylab("Independent variable")
-
-x <- paletteer_c("ggthemes::Classic Area Red-Green", 10)
-
-g1 + scale_color_gradient(low = x) + guides(color = guide_legend(title = "Number of\nstudies"), size = guide_legend(title = "Number of\nstudies")) 
 
 ```
 
