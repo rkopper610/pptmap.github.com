@@ -43,14 +43,14 @@ comment out the one not using...
 
 #Read in each sheet individually which creates a Tibble for each.
 
-Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Experiment relationships 2020_06_11.xlsx", sheet = "Relationships")
+Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Experiment relationships 2020_06_17.xlsx", sheet = "Relationships")
 #Relationships <- data.frame(lapply(Relationships, as.factor))
 
 
-Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Experiment relationships 2020_06_11.xlsx", sheet = "Independent recode")
+Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Experiment relationships 2020_06_17.xlsx", sheet = "Independent recode")
 #Independent_recode <- data.frame(lapply(Independent_recode, as.factor))
 
-Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Experiment relationships 2020_06_11.xlsx", sheet = "Dependent recode")
+Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Experiment relationships 2020_06_17.xlsx", sheet = "Dependent recode")
 #Dependent_recode <- data.frame(lapply(Dependent_recode, as.factor))
 
 ```
