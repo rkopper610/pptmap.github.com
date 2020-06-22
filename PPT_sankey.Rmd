@@ -104,7 +104,7 @@ scale_colour_paletteer_c("ggthemes::Classic Area Red-Green", breaks =c(9,7,5,3,1
 
 IV <- unique(joined_long$Independent_variable_recode)
 DV <- unique(joined_long$Dependent_variable_recode)
-node <- data.frame(key = 0:30, variable = as.factor(c(as.character(IV), as.character(DV))))
+node <- data.frame(key = 0:32, variable = as.factor(c(as.character(IV), as.character(DV))))
 
 
 #create links dataframe and rename 
@@ -142,7 +142,7 @@ joined_long_sig <- Relationships %>% filter(Relationship == "significant") %>%
 IVsig <- unique(joined_long_sig$Independent_variable_recode)
 DVsig <- unique(joined_long_sig$Dependent_variable_recode)
 
-nodesig <- data.frame(key = 0:30, variable = as.factor(c(as.character(IVsig), as.character(DVsig))))
+nodesig <- data.frame(key = 0:32, variable = as.factor(c(as.character(IVsig), as.character(DVsig))))
 
 linkssig <- joined_long_sig %>% inner_join(nodesig,  by = c("Independent_variable_recode" = "variable")) %>% rename(IV_key = key) %>% 
   inner_join(nodesig,  by = c("Dependent_variable_recode" = "variable")) %>% rename(DV_key = key)
