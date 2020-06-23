@@ -1,82 +1,4 @@
-library(sankeyD3)
-library(networkD3)
-library(tidyverse)
-library(readxl)
-library(readr)
-library(scales)
-library(RColorBrewer)
-library(paletteer)
-
-
-# Column 1 à Column 2
-# Gender, Age, Agricultural Knowledge à Farmer characteristics
-# Conventional vs alternate intercrop, Climate-smart vs alternate intercrop à Use of alternate intercrop
-# 
-# Connect Columns 2 and 3 with fake data
-# Farmer characteristicsà Yield
-# Use of alternate intercrop à Yield
-# Farmer characteristicsà Pest impacts
-# Use of alternate intercrop à Pest impacts
-# 
-# Column 3 à Column 4
-# Yield à Maize grain yield, Sorghum grain yield, Maize plant height
-# Pest impacts à Stemborer damage, stemborer abundance, striga abundance
-
-
-#Conventional vs alternate intercrop, Climate-smart vs alternate intercrop
-#-> Use of alternate intercrop
-
-#using network D3 package
-library(networkD3)
-nodes = data.frame("name" = 
-                     c("Gender", #1
-                       "Age", #1
-                       "Agricultural Knowledge", # 1
-                       "Conventional vs alternate intercrop", #1
-                       "Climate-smart vs alternate intercrop", #1
-                       "Farmer characteristics", # 2
-                       "Use of alternate intercrop", #2
-                       "Yield", #3,
-                       "Pest impacts", #3
-                       "Maize grain yield", #4
-                       "Sorghum grain yield",  #4 
-                       "Maize plant height",
-                       "Stemborer damage", 
-                       "stemborer abundance",
-                       "striga abundance"), key = 0:14) #4
-
-# Each row represents a link. The first number represents the node being
-# conntected from.
-
-# The second number represents the node connected to.
-# The third number is the value of the node.
-
-links = as.data.frame(matrix(c(
-  0, 5, 10, #gender
-  1, 5, 20, #age
-  2, 5, 5,  #ag knowlwdge
-  3, 6, 20, #Conventional vs alternate intercrop
-  4, 6, 20, #Climate-smart vs alternate intercrop
-  5, 7, 10, #farmer characteristics
-  6, 7, 35, #use of alt intercrop
-  5, 8, 45, 
-  6, 8, 40,
-  7, 9, 43,
-  7,10, 43,
-  7,11, 41,
-  8,12, 40,
-  8,13, 20,
-  8,14, 20
-  ),
-  
-  byrow = TRUE, ncol = 3))
-names(links) = c("source", "target", "value")
-
-sankeyD3::sankeyNetwork(Links = links, Nodes = nodes,
-              Source = "source", Target = "target",
-              Value = "value", NodeID = "name", dragY = TRUE,
-              fontSize= 12, nodeWidth = 30) 
-
+#Sankey diagram with 4 nodes 
 
 #-------------------------------------------------------------------------
 library(sankeyD3)
@@ -142,7 +64,7 @@ links <- joined_long %>% inner_join(node,  by = c("source" = "variable")) %>% re
   inner_join(node,  by = c("target" = "variable")) %>% rename(target_key = key)
 
 
-my_color <- 'd3.scaleOrdinal() .domain(["node_group","not_sig","mixed","sig"]) .range(["tan","red","dimgrey", "green"])'
+my_color <- 'd3.scaleOrdinal() .domain(["source","target"]) .range(["red", "green"])'
 
 sankeyD3::sankeyNetwork(Links = links,
                         Nodes = node,
@@ -150,7 +72,7 @@ sankeyD3::sankeyNetwork(Links = links,
                         Target = 'target_key',
                         Value = 'count',
                         NodeID = "variable", 
-                        #colourScale = my_color,
+                        colourScale = my_color,
                         fontSize = 12,
                         fontFamily = "sans-serif",
                         orderByPath = TRUE,
