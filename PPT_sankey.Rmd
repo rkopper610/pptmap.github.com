@@ -148,6 +148,7 @@ linkssig <- joined_long_sig %>% inner_join(nodesig,  by = c("Independent_variabl
   inner_join(nodesig,  by = c("Dependent_variable_recode" = "variable")) %>% rename(DV_key = key)
 
 linkssig <- data.frame(linkssig)
+
 ```
 
 

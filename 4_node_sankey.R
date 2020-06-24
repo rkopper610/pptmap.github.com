@@ -2,49 +2,75 @@
 
 #-------------------------------------------------------------------------
 library(sankeyD3)
-
+library(dplyr)
+library(networkD3)
+library(tidyverse)
+library(readxl)
+library(readr)
 
 #Read in each sheet individually which creates a Tibble for each.
+#comment out either the below survey or experiement to use the other
+#-------------------------------------------------------------------------
 
-Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/experi_4_dummy_sankey.xlsx", sheet = "Relationships")
+#Experiment paths
+
+# Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/experi_4_dummy_sankey.xlsx", sheet = "Relationships")
+# #Relationships <- data.frame(lapply(Relationships, as.factor))
+# 
+# Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/experi_4_dummy_sankey.xlsx", sheet = "Independent recode")
+# #Independent_recode <- data.frame(lapply(Independent_recode, as.factor))
+# 
+# Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/experi_4_dummy_sankey.xlsx", sheet = "Dependent recode")
+# #Dependent_recode <- data.frame(lapply(Dependent_recode, as.factor))
+
+#-------------------------------------------------------------------------
+#Survey paths
+
+Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey_4dummy_sankey.xlsx", sheet = "Relationships")
 #Relationships <- data.frame(lapply(Relationships, as.factor))
 
-
-Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/experi_4_dummy_sankey.xlsx", sheet = "Independent recode")
+Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey_4dummy_sankey.xlsx", sheet = "Independent recode")
 #Independent_recode <- data.frame(lapply(Independent_recode, as.factor))
 
-Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/experi_4_dummy_sankey.xlsx", sheet = "Dependent recode")
+Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey_4dummy_sankey.xlsx", sheet = "Dependent recode")
 #Dependent_recode <- data.frame(lapply(Dependent_recode, as.factor))
 
-#------
-IV_2_BIV <- left_join(Relationships, Independent_recode, by = "Independent_variable") %>% 
-  select(Title, Independent_variable_recode, Independent_broad_category) %>% distinct() %>% 
-group_by(Independent_variable_recode, Independent_broad_category) %>%
-  summarise(count = n()) %>%
-  rename(source = Independent_variable_recode, target = Independent_broad_category)
 
-DV_2_BDV <- left_join(Relationships, Dependent_recode, by = "Dependent_variable") %>% 
-  select(Title, Dependent_variable_recode, Dependent_broad_category) %>% distinct() %>% 
-  group_by(Dependent_variable_recode, Dependent_broad_category) %>%
-  summarise(count = n()) %>%
-  rename(target = Dependent_variable_recode, source = Dependent_broad_category)
+#-------------------------------------------------------------------------
 
-
-BIV_2_BDV <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>%
+distinct_rel <- left_join( Relationships, Independent_recode,
+                           by = "Independent_variable") %>%
   left_join(Dependent_recode, by = "Dependent_variable") %>%
   distinct(Title, Independent_variable_recode,
-           Dependent_variable_recode, Independent_broad_category, Dependent_broad_category ) %>% 
+           Dependent_variable_recode, Independent_broad_category,
+           Dependent_broad_category )
+
+
+BIV_2_BDV <- distinct_rel %>% 
   select(Title, Independent_broad_category, Dependent_broad_category) %>%
   group_by(Independent_broad_category, Dependent_broad_category) %>%
   summarise(count = n()) %>% rename(target = Dependent_broad_category,
                                     source = Independent_broad_category)
 
+IV_2_BIV <- distinct_rel %>%
+  group_by(Independent_variable_recode, Independent_broad_category) %>%
+  summarise(count = n()) %>%
+  rename(source = Independent_variable_recode, target = Independent_broad_category)
+
+
+DV_2_BDV <- distinct_rel %>%
+  group_by(Dependent_variable_recode, Dependent_broad_category) %>%
+  summarise(count = n()) %>%
+  rename(target = Dependent_variable_recode, source = Dependent_broad_category)
+
+
+
+
+
 joined_long <- bind_rows(IV_2_BIV , DV_2_BDV, BIV_2_BDV)
 
 
 #### SANKEY DIAGRAMS
-
-
 
 # create nodes dataframe
 
@@ -72,10 +98,10 @@ sankeyD3::sankeyNetwork(Links = links,
                         Target = 'target_key',
                         Value = 'count',
                         NodeID = "variable", 
-                        colourScale = my_color,
+                        #colourScale = my_color,
                         fontSize = 12,
                         fontFamily = "sans-serif",
-                        orderByPath = TRUE,
+                        orderByPath = F,
                         showNodeValues = FALSE,
                         nodePadding = 10,
                         nodeWidth = 30,
