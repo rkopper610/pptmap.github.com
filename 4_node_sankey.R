@@ -26,9 +26,10 @@ library(readr)
 #-------------------------------------------------------------------------
 #Survey paths
 # Set working directory for Ryan
-#setwd("C:/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/")
+setwd("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/")
+
 # Set working directory for Morgan
-setwd("C:/Users/Morgan/OneDrive - Clark University/Ryan Kopper Research/Push Pull Systematic Review/")
+#setwd("C:/Users/Morgan/OneDrive - Clark University/Ryan Kopper Research/Push Pull Systematic Review/")
 
 Relationships <- read_excel("Survey_4dummy_sankey.xlsx", sheet = "Relationships")
 #Relationships <- data.frame(lapply(Relationships, as.factor))
