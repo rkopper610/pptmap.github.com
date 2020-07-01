@@ -30,21 +30,21 @@ knitr::opts_chunk$set(echo = TRUE)
 #TZA0 <- getData(name = "GADM", country = "TZA", level = 0)
 #TZA <- getData(name = "GADM", country = "TZA", level = 2)
 
-ETH0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_0_sp.rds")
-ETH <-   readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_2_sp.rds")
-ETH3 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_3_sp.rds")
+ETH0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gadm36_ETH_0_sp.rds")
+ETH <-   readRDS("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gadm36_ETH_2_sp.rds")
+ETH3 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gadm36_ETH_3_sp.rds")
 
-KEN0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_KEN_0_sp.rds")
-KEN <-  readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_KEN_1_sp.rds")
-KEN2 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_KEN_2_sp.rds")
-KEN3 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_KEN_3_sp.rds")
+KEN0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gadm36_KEN_0_sp.rds")
+KEN <-  readRDS("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gadm36_KEN_1_sp.rds")
+KEN2 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gadm36_KEN_2_sp.rds")
+KEN3 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gadm36_KEN_3_sp.rds")
 
-UGA <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_UGA_1_sp.rds")
-UGA0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_UGA_0_sp.rds")
+UGA <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gadm36_UGA_1_sp.rds")
+UGA0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gadm36_UGA_0_sp.rds")
 
-TZA0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_TZA_0_sp.rds")
-#TZA1 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_TZA_1_sp.rds")
-TZA <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_TZA_2_sp.rds")
+TZA0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gadm36_TZA_0_sp.rds")
+#TZA1 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gadm36_TZA_1_sp.rds")
+TZA <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gadm36_TZA_2_sp.rds")
 
 E_Af_No_b<- bind(ETH0, KEN0, UGA0, TZA0)
 
@@ -135,8 +135,8 @@ plot(E_Af_No_b, col = "grey")
 
 #ADD DEM and mask to East Africa
 #DEM
-DEM <- raster("/Users/ryankopper/Desktop/R work/PPTmap/gt30e020n40_dem/gt30e020n40.dem")
-DEM2 <-raster("/Users/ryankopper/Desktop/R work/PPTmap/gt30e020s10_dem/gt30e020s10.dem")
+DEM <- raster("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gt30e020n40_dem/gt30e020n40.dem")
+DEM2 <-raster("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gt30e020s10_dem/gt30e020s10.dem")
 
 DEM <- merge(DEM, DEM2)
 
@@ -173,10 +173,10 @@ legend(x = "bottomright", pch = 20, col = c("dark green", "blue", "purple", "red
 ```{r}
 
 library(rgdal)
-data.shapeken <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/Water_shp_files/KEN_wat/KEN_water_areas_dcw.shp")
-data.shapetz <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/Water_shp_files/TZA_wat/TZA_water_areas_dcw.shp")
-data.shapeeth <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/Water_shp_files/ETH_wat/ETH_water_areas_dcw.shp")
-data.shapeug <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/Water_shp_files/UGA_wat/UGA_water_areas_dcw.shp")
+data.shapeken <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/map_files/Water_shp_files/KEN_wat/KEN_water_areas_dcw.shp")
+data.shapetz <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/map_files/Water_shp_files/TZA_wat/TZA_water_areas_dcw.shp")
+data.shapeeth <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/map_files/Water_shp_files/ETH_wat/ETH_water_areas_dcw.shp")
+data.shapeug <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/map_files/Water_shp_files/UGA_wat/UGA_water_areas_dcw.shp")
 
 u_vic <-   subset(data.shapeug, NAME == "LAKE VICTORIA")
 k_vic <-   subset(data.shapeken, NAME == "LAKE VICTORIA")
@@ -284,7 +284,7 @@ mapview(E_Af_No_b, col.regions = "grey", color = "black", alpha = "0.9" , map.ty
 
 ```
 
-```{r}
+```{r, dpi=300}
 
 #ETHIOPIA map and study sites --------------------------------------------------
 library(raster)

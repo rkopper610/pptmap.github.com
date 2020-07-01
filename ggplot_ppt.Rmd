@@ -17,12 +17,12 @@ library(sf)
 
 READ in all data
 ```{r}
-ETH0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_0_sp.rds")
-ETH <-   readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_2_sp.rds")
-ETH1 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_1_sp.rds")
-ETH3 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/gadm36_ETH_3_sp.rds")
-DEM <- raster("/Users/ryankopper/Desktop/R work/PPTmap/gt30e020n40_dem/gt30e020n40.dem")
-DEM2 <-raster("/Users/ryankopper/Desktop/R work/PPTmap/gt30e020s10_dem/gt30e020s10.dem")
+ETH0 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gadm36_ETH_0_sp.rds")
+ETH <-   readRDS("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gadm36_ETH_2_sp.rds")
+ETH1 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gadm36_ETH_1_sp.rds")
+ETH3 <- readRDS("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gadm36_ETH_3_sp.rds")
+DEM <- raster("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gt30e020n40_dem/gt30e020n40.dem")
+DEM2 <-raster("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gt30e020s10_dem/gt30e020s10.dem")
 ETH_dem <- mask(DEM, ETH0)
 
 ```
@@ -112,7 +112,7 @@ outline <- ggplot() +
 ```
 
 
-```{r}
+```{r, dpi = 300}
 
 #PLOTTING USING RASTER After converting the point files to dots ^
 #must run code above under the ggplot process.
@@ -238,7 +238,7 @@ gpo <- ggplot() +
                    fill = region), colour = 'black', alpha = .4) +
   theme_bw()
 
-
+gpo
 ```
 
 ```{r}
@@ -246,8 +246,8 @@ gpo <- ggplot() +
 
 #Load DEM and mask to East Africa
 library(raster)
-DEM <- raster("/Users/ryankopper/Desktop/R work/PPTmap/gt30e020n40_dem/gt30e020n40.dem")
-DEM2 <-raster("/Users/ryankopper/Desktop/R work/PPTmap/gt30e020s10_dem/gt30e020s10.dem")
+DEM <- raster("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gt30e020n40_dem/gt30e020n40.dem")
+DEM2 <-raster("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gt30e020s10_dem/gt30e020s10.dem")
 ETH_dem <- mask(DEM, ETH0) #clip to Ethiopia
 
 #DEM

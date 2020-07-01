@@ -140,10 +140,10 @@ ggplot() +
 #Downloading data from DIVA
 
 library(rgdal)
-data.shapeken <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/Water_shp_files/KEN_wat/KEN_water_areas_dcw.shp")
-data.shapetz <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/Water_shp_files/TZA_wat/TZA_water_areas_dcw.shp")
-data.shapeeth <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/Water_shp_files/ETH_wat/ETH_water_areas_dcw.shp")
-data.shapeug <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/Water_shp_files/UGA_wat/UGA_water_areas_dcw.shp")
+data.shapeken <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/map_files/Water_shp_files/KEN_wat/KEN_water_areas_dcw.shp")
+data.shapetz <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/map_files/Water_shp_files/TZA_wat/TZA_water_areas_dcw.shp")
+data.shapeeth <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/map_files/Water_shp_files/ETH_wat/ETH_water_areas_dcw.shp")
+data.shapeug <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/map_files/Water_shp_files/UGA_wat/UGA_water_areas_dcw.shp")
 
 u_vic <-   subset(data.shapeug, NAME == "LAKE VICTORIA")
 k_vic <-   subset(data.shapeken, NAME == "LAKE VICTORIA")

@@ -93,7 +93,7 @@ summarise(total = sum(count)) %>% arrange(total, by_group = TRUE) %>% pull(Depen
 
 #### Bubble plot
 
-```{r fig.height= 10, fig.width= 8, dpi= 300}
+```{r fig.height= 6, fig.width= 6, dpi= 300}
 
 
 joined_long %>% mutate(Independent_variable_recode = factor(Independent_variable_recode,levels = indi_order), Dependent_variable_recode = factor(Dependent_variable_recode,levels = rev(dep_order))) %>% ggplot(aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count)) + geom_point(aes(size = count)) + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) + guides(size = FALSE) + xlab("Dependent variable") + ylab("Independent variable")  +
@@ -188,7 +188,7 @@ links <- joined_long %>%
 ```
 
 
-```{r fig.height= 10, fig.width= 10, dpi= 100}
+```{r fig.height= 6, fig.width= 6, dpi= 100}
 my_color <- 'd3.scaleOrdinal() .domain(["all","mixed","not_sig","sig","subset"]) .range(["tan", "yellow" , "blue", "darkgreen","lightgrey"])'
 
 sankeyD3::sankeyNetwork(Links = links,
