@@ -64,13 +64,13 @@ Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle
 ```{r}
 #Survey paths
 
-Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey_4dummy_sankey.xlsx", sheet = "Relationships")
-
-
-Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey_4dummy_sankey.xlsx", sheet = "Independent recode")
-
-
-Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey_4dummy_sankey.xlsx", sheet = "Dependent recode")
+# Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey_4dummy_sankey.xlsx", sheet = "Relationships")
+# 
+# 
+# Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey_4dummy_sankey.xlsx", sheet = "Independent recode")
+# 
+# 
+# Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey_4dummy_sankey.xlsx", sheet = "Dependent recode")
 
 
 ```
@@ -93,11 +93,11 @@ summarise(total = sum(count)) %>% arrange(total, by_group = TRUE) %>% pull(Depen
 
 #### Bubble plot
 
-```{r fig.height= 6, fig.width= 6, dpi= 300}
+```{r , fig.height= 7, fig.width= 10, dpi= 300}
 
 
-joined_long %>% mutate(Independent_variable_recode = factor(Independent_variable_recode,levels = indi_order), Dependent_variable_recode = factor(Dependent_variable_recode,levels = rev(dep_order))) %>% ggplot(aes(x = Dependent_variable_recode, y = Independent_variable_recode, color = count)) + geom_point(aes(size = count)) + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = .5 ,  hjust = 1)) + scale_x_discrete(labels = label_wrap(20)) + scale_y_discrete(labels = label_wrap(30)) + guides(size = FALSE) + xlab("Dependent variable") + ylab("Independent variable")  +
-scale_colour_paletteer_c("ggthemes::Classic Area Red-Green", breaks =c(9,7,5,3,1)) + scale_size_continuous(breaks = c(9,7,5,3,1)) + guides(color = guide_legend(title = "Number of\nstudies"), size = guide_legend(title = "Number of\nstudies")) 
+joined_long %>% mutate(Independent_variable_recode = factor(Independent_variable_recode,levels = rev(indi_order)), Dependent_variable_recode = factor(Dependent_variable_recode,levels = dep_order)) %>% ggplot(aes(x = Independent_variable_recode, y = Dependent_variable_recode, color = count)) + geom_point(aes(size = count)) + theme_bw() + theme(axis.text.x = element_text(size = 10, angle = 90, vjust = .5 ,  hjust = 1), axis.text.y = element_text(size = 10), legend.position = "bottom") +  guides(size = FALSE) + ylab("Dependent variable") + xlab("Independent variable")  +
+scale_colour_paletteer_c("ggthemes::Classic Area Red-Green", breaks = c(9, 5, 3, 2, 1)) + scale_size_continuous(breaks = c(9, 5, 3, 2, 1)) + guides(color = guide_legend(title = "Number of\nstudies"), size = guide_legend(title = "Number of\nstudies")) 
 
 
 ```
@@ -188,8 +188,8 @@ links <- joined_long %>%
 ```
 
 
-```{r fig.height= 6, fig.width= 6, dpi= 100}
-my_color <- 'd3.scaleOrdinal() .domain(["all","mixed","not_sig","sig","subset"]) .range(["tan", "yellow" , "blue", "darkgreen","lightgrey"])'
+```{r fig.height= 6, fig.width= 8, dpi= 100}
+my_color <- 'd3.scaleOrdinal() .domain(["all","mixed","not_sig","sig","subset"]) .range(["tan", "orange" , "yellow", "red","lightgrey"])'
 
 sankeyD3::sankeyNetwork(Links = links,
                         Nodes = nodes,
@@ -216,3 +216,19 @@ sankeyD3::sankeyNetwork(Links = links,
 
 ```
 
+Number of papers Per variable
+
+```{r}
+# group_by(Title, Independent_broad_category) %>% summarize (count=n())
+# 
+# count_ind <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>% select(Title, Independent_variable_recode) %>% distinct() %>% group_by(Independent_variable_recode) %>% summarise(count = n()) 
+# count_dep <- left_join( Relationships, Dependent_recode, by = "Dependent_variable") %>% select(Title, Dependent_variable_recode) %>% distinct() %>% group_by(Dependent_variable_recode) %>% summarise(count = n()) 
+# 
+# count_indBC <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>% select(Title, Independent_broad_category) %>% distinct() %>% group_by(Independent_broad_category) %>% summarise(count = n()) 
+# 
+# count_depBC <- left_join( Relationships, Dependent_recode, by = "Dependent_variable") %>% select(Title, Dependent_broad_category) %>% distinct() %>% group_by(Dependent_broad_category) %>% summarise(count = n()) 
+# 
+
+
+#Independent_broad_category
+```
