@@ -1,0 +1,121 @@
+---
+title: "Analysis for table of variables"
+author: "Morgan Ruelle"
+date: "7/20/2020"
+output:
+  word_document: default
+  html_document: default
+---
+```{r}
+# Import data
+require(openxlsx)
+exp_data <- read.xlsx("Field Experiment Data for Analysis 2020_07_20.xlsx",   
+                      sheet="Relationships")
+exp_ind_codes <- read.xlsx("Field Experiment Data for Analysis 2020_07_20.xlsx",
+                      sheet="Independent recode")
+exp_dep_codes <- read.xlsx("Field Experiment Data for Analysis 2020_07_20.xlsx",
+                      sheet="Dependent recode")
+```
+# Join data
+```{r}
+require(dplyr)
+exp_data <- exp_data %>%
+  select(Title,Independent_variable,Dependent_variable) %>% 
+  left_join(exp_ind_codes) %>% left_join(exp_dep_codes)
+```
+# Field experiments: Independent variables
+```{r}
+# Count number of studies that included each variable (coded)
+require(knitr)
+ind_codes <- exp_data %>% 
+  group_by(Independent_broad_category,Independent_variable_recode) %>% 
+  summarize(count_pubs=n_distinct(Title))
+
+# Count number of studies that included each broad category, and combine with the previous table
+ind_table <- exp_data %>% 
+  group_by(Independent_broad_category) %>% 
+  summarize(count_cats=n_distinct(Title)) %>%
+  left_join(ind_codes) %>% 
+  arrange(desc(count_cats),Independent_broad_category,desc(count_pubs)) %>%
+  rename('Specific variable'=Independent_variable_recode,
+         'Articles with specific variable'=count_pubs,
+         'Broad category'=Independent_broad_category,
+         'Articles in broad category'=count_cats)
+kable(ind_table)
+```
+# Field experiments: Dependent variables
+```{r}
+# Count number of studies that included each variable (coded)
+dep_codes <- exp_data %>% 
+  group_by(Dependent_broad_category,Dependent_variable_recode) %>% 
+  summarize(count_pubs=n_distinct(Title))
+
+# Count number of studies that included each broad category, and combine with the previous table
+dep_table <- exp_data %>% 
+  group_by(Dependent_broad_category) %>% 
+  summarize(count_cats=n_distinct(Title)) %>%
+  left_join(dep_codes) %>% 
+  arrange(desc(count_cats),Dependent_broad_category,desc(count_pubs)) %>%
+  rename('Specific variable'=Dependent_variable_recode,
+         'Articles with specific variable'=count_pubs,
+         'Broad category'=Dependent_broad_category,
+         'Articles in broad category'=count_cats)
+kable(dep_table)
+```
+
+# Survey data
+```{r}
+# Import data
+svy_data <- read.xlsx("Survey Data for Analysis 2020_07_20.xlsx",   
+                      sheet="Relationships")
+svy_ind_codes <- read.xlsx("Survey Data for Analysis 2020_07_20.xlsx",
+                      sheet="Independent recode")
+svy_dep_codes <- read.xlsx("Survey Data for Analysis 2020_07_20.xlsx",
+                      sheet="Dependent recode")
+```
+# Join data
+```{r}
+svy_data <- svy_data %>%
+  select(Title,Independent_variable,Dependent_variable) %>% 
+  left_join(svy_ind_codes) %>% left_join(svy_dep_codes)
+```
+# Surveys: Independent variables
+```{r}
+# Count number of studies that included each variable (coded)
+require(knitr)
+ind_codes <- svy_data %>% 
+  group_by(Independent_broad_category,Independent_variable_recode) %>% 
+  summarize(count_pubs=n_distinct(Title))
+
+# Count number of studies that included each broad category, and combine with the previous table
+ind_table <- svy_data %>% 
+  group_by(Independent_broad_category) %>% 
+  summarize(count_cats=n_distinct(Title)) %>%
+  left_join(ind_codes) %>% 
+  arrange(desc(count_cats),Independent_broad_category,desc(count_pubs)) %>%
+  rename('Specific variable'=Independent_variable_recode,
+         'Articles with specific variable'=count_pubs,
+         'Broad category'=Independent_broad_category,
+         'Articles in broad category'=count_cats)
+kable(ind_table)
+```
+# Surveys: Dependent variables
+```{r}
+# Count number of studies that included each variable (coded)
+dep_codes <- svy_data %>% 
+  group_by(Dependent_broad_category,Dependent_variable_recode) %>% 
+  summarize(count_pubs=n_distinct(Title))
+
+# Count number of studies that included each broad category, and combine with the previous table
+dep_table <- svy_data %>% 
+  group_by(Dependent_broad_category) %>% 
+  summarize(count_cats=n_distinct(Title)) %>%
+  left_join(dep_codes) %>% 
+  arrange(desc(count_cats),Dependent_broad_category,desc(count_pubs)) %>%
+  rename('Specific variable'=Dependent_variable_recode,
+         'Articles with specific variable'=count_pubs,
+         'Broad category'=Dependent_broad_category,
+         'Articles in broad category'=count_cats)
+kable(dep_table)
+```
+
