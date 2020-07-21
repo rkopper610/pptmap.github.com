@@ -70,7 +70,24 @@ ind_table <- exp_data %>%
          'Articles with specific variable'=count_pubs,
          'Broad category'=Independent_broad_category,
          'Articles in broad category'=count_cats)
+```
+
+#### remove the repeat broad categories and merge the cells
+```{r}
+ind_table <- ind_table %>% 
+  mutate_at(vars(2:3), funs(replace(., duplicated(., fromFirst = TRUE), '')))
+
+ind_table <- ind_table %>% 
+  mutate_at(vars(1:2), funs(replace(., duplicated(., fromFirst = TRUE), '')))
+
 kable(ind_table)
+
+
+library(formattable)
+
+#format_table(ind_table)
+
+formattable(ind_table, align = c("l", rep("r", NCOL(ind_table))))
 ```
 # Field experiments: Dependent variables
 ```{r}
@@ -89,8 +106,26 @@ dep_table <- exp_data %>%
          'Articles with specific variable'=count_pubs,
          'Broad category'=Dependent_broad_category,
          'Articles in broad category'=count_cats)
-kable(dep_table)
 ```
+
+#### remove the repeat broad categories and merge the cells
+```{r}
+dep_table <- dep_table %>% 
+  mutate_at(vars(2:3), funs(replace(., duplicated(., fromFirst = TRUE), '')))
+
+dep_table <- dep_table %>% 
+  mutate_at(vars(1:2), funs(replace(., duplicated(., fromFirst = TRUE), '')))
+
+kable(dep_table)
+
+
+library(formattable)
+
+#format_table(dep_table)
+
+formattable(dep_table, align = c("l", rep("r", NCOL(dep_table))))
+```
+
 
 # Load Survey data --Morgan's Path
 ```{r}
@@ -138,8 +173,27 @@ ind_table <- svy_data %>%
          'Articles with specific variable'=count_pubs,
          'Broad category'=Independent_broad_category,
          'Articles in broad category'=count_cats)
-kable(ind_table)
+
 ```
+
+#### remove the repeat broad categories and merge the cells
+```{r}
+ind_table <- ind_table %>% 
+  mutate_at(vars(2:3), funs(replace(., duplicated(., fromFirst = TRUE), '')))
+
+ind_table <- ind_table %>% 
+  mutate_at(vars(1:2), funs(replace(., duplicated(., fromFirst = TRUE), '')))
+
+kable(ind_table)
+
+
+#format_table(ind_table)
+
+formattable(ind_table, align = c("l", rep("r", NCOL(ind_table))))
+
+```
+
+
 # Surveys: Dependent variables
 ```{r}
 # Count number of studies that included each variable (coded)
@@ -157,6 +211,22 @@ dep_table <- svy_data %>%
          'Articles with specific variable'=count_pubs,
          'Broad category'=Dependent_broad_category,
          'Articles in broad category'=count_cats)
-kable(dep_table)
+
 ```
 
+#### remove the repeat broad categories and merge the cells
+```{r}
+dep_table <- dep_table %>% 
+  mutate_at(vars(2:3), funs(replace(., duplicated(., fromFirst = TRUE), '')))
+
+dep_table <- dep_table %>% 
+  mutate_at(vars(1:2), funs(replace(., duplicated(., fromFirst = TRUE), '')))
+
+
+kable(dep_table)
+
+#format_table(dep_table)
+
+formattable(dep_table, align = c("l", rep("r", NCOL(dep_table))))
+                                 
+```
