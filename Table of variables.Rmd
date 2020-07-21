@@ -3,8 +3,8 @@ title: "Analysis for table of variables"
 author: "Morgan Ruelle and Ryan Kopper"
 date: "7/20/2020"
 output:
-  word_document: default
   html_document: default
+  word_document: default
 editor_options: 
   chunk_output_type: console
 ---
