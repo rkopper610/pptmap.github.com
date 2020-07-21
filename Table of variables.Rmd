@@ -5,17 +5,35 @@ date: "7/20/2020"
 output:
   word_document: default
   html_document: default
+editor_options: 
+  chunk_output_type: console
 ---
+#### Import data - Morgan's file paths
 ```{r}
-# Import data
-require(openxlsx)
-exp_data <- read.xlsx("Field Experiment Data for Analysis 2020_07_20.xlsx",   
-                      sheet="Relationships")
-exp_ind_codes <- read.xlsx("Field Experiment Data for Analysis 2020_07_20.xlsx",
-                      sheet="Independent recode")
-exp_dep_codes <- read.xlsx("Field Experiment Data for Analysis 2020_07_20.xlsx",
-                      sheet="Dependent recode")
+
+# require(openxlsx)
+# exp_data <- read.xlsx("Field Experiment Data for Analysis 2020_07_20.xlsx",   
+#                       sheet="Relationships")
+# exp_ind_codes <- read.xlsx("Field Experiment Data for Analysis 2020_07_20.xlsx",
+#                       sheet="Independent recode")
+# exp_dep_codes <- read.xlsx("Field Experiment Data for Analysis 2020_07_20.xlsx",
+#                       sheet="Dependent recode")
 ```
+
+#### Import data - Ryan's file paths
+```{r}
+
+require(openxlsx)
+
+exp_data <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Relationships")
+
+exp_ind_codes <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Independent recode")
+
+exp_dep_codes <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Dependent recode")
+
+```
+
+
 # Join data
 ```{r}
 require(dplyr)
