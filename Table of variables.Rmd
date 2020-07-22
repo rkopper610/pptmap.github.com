@@ -3,8 +3,8 @@ title: "Analysis for table of variables"
 author: "Morgan Ruelle and Ryan Kopper"
 date: "7/20/2020"
 output:
-  html_document: default
   word_document: default
+  html_document: default
 editor_options: 
   chunk_output_type: console
 ---
@@ -15,7 +15,7 @@ library(tidyverse)
 library(readxl)
 library(readr)
 library(openxlsx)
-library(formattable)
+
 
 ```
 
@@ -33,11 +33,11 @@ library(formattable)
 ```{r include=FALSE}
 #### Import data - Ryan's file paths
 
-exp_data <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Relationships")
+exp_data <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Field Experiment Data for Analysis 2020_07_20.xlsx", sheet = "Relationships")
 
-exp_ind_codes <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Independent recode")
+exp_ind_codes <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Field Experiment Data for Analysis 2020_07_20.xlsx", sheet = "Independent recode")
 
-exp_dep_codes <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Dependent recode")
+exp_dep_codes <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Field Experiment Data for Analysis 2020_07_20.xlsx", sheet = "Dependent recode")
 
 ```
 
@@ -82,11 +82,6 @@ ind_table <- ind_table %>%
 kable(ind_table)
 
 
-library(formattable)
-
-#format_table(ind_table)
-
-formattable(ind_table, align = c("l", rep("r", NCOL(ind_table))))
 ```
 
 ```{r include=FALSE}
@@ -120,11 +115,7 @@ dep_table <- dep_table %>%
 kable(dep_table)
 
 
-library(formattable)
 
-#format_table(dep_table)
-
-formattable(dep_table, align = c("l", rep("r", NCOL(dep_table))))
 ```
 
 ```{r include=FALSE}
@@ -189,10 +180,6 @@ ind_table <- ind_table %>%
 kable(ind_table)
 
 
-#format_table(ind_table)
-
-formattable(ind_table, align = c("l", rep("r", NCOL(ind_table))))
-
 ```
 
 ```{r include=FALSE}
@@ -226,9 +213,5 @@ dep_table <- dep_table %>%
 
 
 kable(dep_table)
-
-#format_table(dep_table)
-
-formattable(dep_table, align = c("l", rep("r", NCOL(dep_table))))
-                                 
+                            
 ```

@@ -35,7 +35,7 @@ df <- df %>%
 Stack by experiemnt and survey. use Facet grid or dodge (countries)
 
 ```{r}
-t <- ggplot() + geom_bar(aes(x = date_cat,
+t <- ggplot() + geom_bar(aes(x = Location,
                         y = count,
                         fill = Type_research),
                     data = df,
@@ -44,9 +44,11 @@ t <- ggplot() + geom_bar(aes(x = date_cat,
 ```
 
 ```{r}
-t + theme_bw() + facet_grid(cols = vars(Location), scales = "free_x")
+#t + theme_bw() + facet_grid(cols = vars(date_cat), scales = "free_x")
 
-#t + theme_bw() + facet_grid(cols = vars(Location))
+t + theme_bw() + facet_grid(cols = vars(date_cat), 
+                            space = "free_x", scales = "free_x") +
+  theme(axis.text.x = element_text(size = 10, angle = 90, vjust = .5 ,  hjust = 1), legend.position = "bottom") + ylab("Number of studies") + scale_fill_discrete(name = "Type of study", labels = c("field experiment", "farmer survey"))  
 ```
 
 
