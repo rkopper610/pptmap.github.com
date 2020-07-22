@@ -19,11 +19,8 @@ library(formattable)
 
 ```
 
-
-
-#### Import data - Morgan's file paths
 ```{r include=FALSE}
-
+#### Import data - Morgan's file paths
 
 # exp_data <- read.xlsx("Field Experiment Data for Analysis 2020_07_20.xlsx",   
 #                       sheet="Relationships")
@@ -33,8 +30,8 @@ library(formattable)
 #                       sheet="Dependent recode")
 ```
 
-#### Import data - Ryan's file paths
 ```{r include=FALSE}
+#### Import data - Ryan's file paths
 
 exp_data <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Relationships")
 
@@ -44,16 +41,18 @@ exp_dep_codes <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - 
 
 ```
 
-
-# Join data
 ```{r include=FALSE}
+# Join data
+
 require(dplyr)
 exp_data <- exp_data %>%
   select(Title,Independent_variable,Dependent_variable) %>% 
   left_join(exp_ind_codes) %>% left_join(exp_dep_codes)
 ```
-# Field experiments: Independent variables
+
 ```{r include=FALSE}
+# Field experiments: Independent variables
+
 # Count number of studies that included each variable (coded)
 require(knitr)
 ind_codes <- exp_data %>% 
@@ -89,8 +88,10 @@ library(formattable)
 
 formattable(ind_table, align = c("l", rep("r", NCOL(ind_table))))
 ```
-# Field experiments: Dependent variables
+
 ```{r include=FALSE}
+# Field experiments: Dependent variables
+
 # Count number of studies that included each variable (coded)
 dep_codes <- exp_data %>% 
   group_by(Dependent_broad_category,Dependent_variable_recode) %>% 
@@ -126,9 +127,9 @@ library(formattable)
 formattable(dep_table, align = c("l", rep("r", NCOL(dep_table))))
 ```
 
-
-# Load Survey data --Morgan's Path
 ```{r include=FALSE}
+# Load Survey data --Morgan's Path
+
 # Import data
 # svy_data <- read.xlsx("Survey Data for Analysis 2020_07_20.xlsx",   
 #                       sheet="Relationships")
@@ -138,8 +139,8 @@ formattable(dep_table, align = c("l", rep("r", NCOL(dep_table))))
 #                       sheet="Dependent recode")
 ```
 
-# Load Survey data --Ryan's Path
 ```{r include=FALSE}
+# Load Survey data --Ryan's Path
 svy_data <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Relationships")
 
 svy_ind_codes <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Independent recode")
@@ -148,15 +149,16 @@ svy_dep_codes <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - 
 
 ```
 
-
-# Join data
 ```{r include=FALSE}
+# Join data
 svy_data <- svy_data %>%
   select(Title,Independent_variable,Dependent_variable) %>% 
   left_join(svy_ind_codes) %>% left_join(svy_dep_codes)
 ```
-# Surveys: Independent variables
+
 ```{r include=FALSE}
+# Surveys: Independent variables
+
 # Count number of studies that included each variable (coded)
 require(knitr)
 ind_codes <- svy_data %>% 
@@ -193,9 +195,9 @@ formattable(ind_table, align = c("l", rep("r", NCOL(ind_table))))
 
 ```
 
-
-# Surveys: Dependent variables
 ```{r include=FALSE}
+# Surveys: Dependent variables
+
 # Count number of studies that included each variable (coded)
 dep_codes <- svy_data %>% 
   group_by(Dependent_broad_category,Dependent_variable_recode) %>% 
