@@ -2,8 +2,10 @@
 title: "Country and date figure"
 author: "Ryan Kopper and Morgan Ruelle"
 date: "7/20/2020"
-output: html_document
-editor_options: 
+output:
+  word_document: default
+  html_document: default
+editor_options:
   chunk_output_type: console
 ---
 ```{r}
@@ -44,11 +46,20 @@ t <- ggplot() + geom_bar(aes(x = Location,
 ```
 
 ```{r}
-#t + theme_bw() + facet_grid(cols = vars(date_cat), scales = "free_x")
-
-t + theme_bw() + facet_grid(cols = vars(date_cat), 
+t2 <- t + theme_bw() + facet_grid(cols = vars(date_cat), 
                             space = "free_x", scales = "free_x") +
-  theme(axis.text.x = element_text(size = 10, angle = 90, vjust = .5 ,  hjust = 1), legend.position = "bottom") + ylab("Number of studies") + scale_fill_discrete(name = "Type of study", labels = c("field experiment", "farmer survey"))  
-```
+  theme(axis.text.x = element_text(size = 10, angle = 90, vjust = .5 ,  hjust = 1), legend.position = "bottom") + ylab("Number of studies") + scale_fill_discrete(name = "Type of study", labels = c("field experiment", "farmer survey")) 
 
+```
+testing out colors
+
+"#999999", "#E69F00", "#56B4E9", "#009E73",
+          "#F0E442", "#0072B2", "#D55E00", "#CC79A7"
+
+color schemes at
+https://www.datanovia.com/en/blog/ggplot-colors-best-tricks-you-will-love/
+```{r}
+t2 + scale_fill_manual(values = c("#0072B2", "#D55E00"))
+
+```
 
