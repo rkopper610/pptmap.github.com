@@ -3,8 +3,8 @@ title: "Country and date figure"
 author: "Ryan Kopper and Morgan Ruelle"
 date: "7/20/2020"
 output:
-  word_document: default
   html_document: default
+  word_document: default
 editor_options:
   chunk_output_type: console
 ---
@@ -23,9 +23,9 @@ library(paletteer)
 ```{r setup, include=FALSE}
 
 
-#df <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Table of journals included.xlsx", sheet = "included")
+df <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Table of journals included.xlsx", sheet = "included")
 
-df <- read_excel("C:/Users/Morgan/OneDrive - Clark University/Ryan Kopper Research/Push Pull Systematic Review/Table of journals included.xlsx", sheet = "included")
+#df <- read_excel("C:/Users/Morgan/OneDrive - Clark University/Ryan Kopper Research/Push Pull Systematic Review/Table of journals included.xlsx", sheet = "included")
 
 ```
 
@@ -38,7 +38,7 @@ df <- df %>%
 ```
 Stack by experiment and survey. use Facet grid or dodge (countries)
 
-```{r}
+```{r, dpi= 300, fig.width = 6}
 ggplot(df, aes(x = Location, y = count, fill = Type_research))+
   geom_bar(stat = "identity")+
   theme_bw()+
