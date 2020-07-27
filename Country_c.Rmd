@@ -31,7 +31,7 @@ df <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper
 
 df <- df %>% 
     mutate(Location = strsplit(Location, ",")) %>% 
-    unnest(Location) %>% mutate(Type_research = strsplit(Type_research, ",")) %>% unnest(Type_research) %>% mutate(date_cat=cut(Date, breaks = c(-Inf, 2004, 2009, 2014, Inf), labels = c("2000-2004","2005-2009","2010-2014","2015-2019"))) %>% group_by(date_cat, `Type_research`, Location) %>% summarise(count = n())
+    unnest(Location) %>% mutate(Type_research = strsplit(Type_research, ",")) %>% unnest(Type_research) %>% mutate(date_cat=cut(Date, breaks = c(-Inf, 2004, 2009, 2014, Inf), labels = c("2000 to 2004","2005 to 2009","2010 to 2014","2015 to 2019"))) %>% group_by(date_cat, `Type_research`, Location) %>% summarise(count = n())
 
 ```
 Stack by experiemnt and survey. use Facet grid or dodge (countries)
@@ -46,10 +46,10 @@ t <- ggplot() + geom_bar(aes(x = Location,
 ```
 
 ```{r}
-t2 <- t + theme_bw() + facet_grid(cols = vars(date_cat), 
-                            space = "free_x", scales = "free_x") +
-  theme(axis.text.x = element_text(size = 10, angle = 90, vjust = .5 ,  hjust = 1), legend.position = "bottom") + ylab("Number of studies") + scale_fill_discrete(name = "Type of study", labels = c("field experiment", "farmer survey")) 
+t2 <- t + theme_bw() + facet_grid(labeller = label_value(multi_line = TRUE), cols = vars(date_cat), space = "free_x", scales = "free_x") +
+  theme(axis.text.x = element_text(size = 10, angle = 90, vjust = .5 ,  hjust = 1), legend.position = "bottom") + ylab("Number of studies") + scale_fill_manual(name = "Type of study", labels = c("field experiment", "farmer survey") , values = c("#0072B2", "#D55E00")) 
 
+t2
 ```
 testing out colors
 
@@ -59,7 +59,6 @@ testing out colors
 color schemes at
 https://www.datanovia.com/en/blog/ggplot-colors-best-tricks-you-will-love/
 ```{r}
-t2 + scale_fill_manual(values = c("#0072B2", "#D55E00"))
 
 ```
 
