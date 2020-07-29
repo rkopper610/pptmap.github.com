@@ -148,7 +148,8 @@ scale_colour_paletteer_c("ggthemes::Classic Area Red-Green", breaks = c(9, 5, 3,
 ```
 
 ## Experiment variable matrix
-```{r , fig.height= 7, fig.width= 10, dpi= 300}
+
+```{r , fig.height= 7, fig.width= 10, dpi= 300, echo=FALSE}
 figure2
 
 ```
