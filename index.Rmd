@@ -3,28 +3,55 @@ title: "index website for PPT figures"
 author: "Ryan Kopper"
 date: "7/29/2020"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
+
+```
+
+```{r}
+library(networkD3)
+library(tidyverse)
+library(readxl)
+library(readr)
+#4 plot
+library(scales)
+library(RColorBrewer)
+library(paletteer)
+
+```
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+
+
+df <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Table of journals included.xlsx", sheet = "included")
+
+#df <- read_excel("C:/Users/Morgan/OneDrive - Clark University/Ryan Kopper Research/Push Pull Systematic Review/Table of journals included.xlsx", sheet = "included")
+
 ```
 
-## R Markdown
+```{r}
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+df <- df %>% 
+    mutate(Location = strsplit(Location, ",")) %>% 
+    unnest(Location) %>% mutate(Type_research = strsplit(Type_research, ",")) %>% unnest(Type_research) %>% mutate(date_cat=cut(Date, breaks = c(-Inf, 2004, 2009, 2014, Inf), labels = c("2000 to 2004","2005 to 2009","2010 to 2014","2015 to 2019"))) %>% group_by(date_cat, `Type_research`, Location) %>% summarise(count = n())
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```
+Stack by experiment and survey. use Facet grid or dodge (countries)
 
-```{r cars}
-summary(cars)
+```{r, dpi= 300, fig.width = 6}
+ggplot(df, aes(x = Location, y = count, fill = Type_research))+
+  geom_bar(stat = "identity")+
+  theme_bw()+
+  facet_grid(cols=vars(date_cat),labeller = label_wrap_gen(width = 10,
+                                                  multi_line = TRUE),
+             space = "free_x", scales = "free_x")+
+  theme(axis.text.x = element_text(size = 10,angle=90,vjust=0.5,hjust=1),
+        legend.position = "bottom")+
+  ylab("Number of studies")+
+  scale_fill_manual(name = "Type of study",
+                    labels = c("field experiment", "farmer survey"),
+                    values = c("#0072B2", "#D55E00"))
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
