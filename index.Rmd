@@ -1,12 +1,13 @@
 ---
 title: "Index website for PPT figures"
-author: "Ryan Kopper & Morgan Ruelle"
-date: "7/29/2020"
-output: html_document
-editor_options: 
-  chunk_output_type: console
+authors: "Ryan Kopper & Morgan Ruelle"
+output:
+  html_document:
+    theme: spacelab
+    toc: true
+    toc_depth: 3
+    toc_float: true
 ---
-
 ```{r, include=FALSE}
 library(networkD3)
 library(tidyverse)
@@ -53,7 +54,7 @@ figure1 = ggplot(df, aes(x = Location, y = count, fill = Type_research))+
                     labels = c("field experiment", "farmer survey"),
                     values = c("#0072B2", "#D55E00"))
 ```
-
+## Country Charts
 ```{r, dpi= 300, fig.width = 6}
 figure1
 ```
@@ -83,14 +84,17 @@ library(sankeyD3)
 
 ```
 
-##### Choose Data
 
-Choose between the next 2 chunks Experiment or Survey data sets 
-comment out the one not using...
+
+```{r, include=FALSE}
+
+##### Choose Data
+# 
+# Choose between the next 2 chunks Experiment or Survey data sets 
+# comment out the one not using...
 
 #### EXPERIMENT
 
-```{r, include=FALSE}
 # Set working directory for Ryan
 #setwd("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/")
 
@@ -141,7 +145,6 @@ summarise(total = sum(count)) %>% arrange(total, by_group = TRUE) %>% pull(Depen
 
 ```
 
-#### Bubble plot
 
 ```{r, include=FALSE}
 
@@ -152,16 +155,16 @@ scale_colour_paletteer_c("ggthemes::Classic Area Red-Green", breaks = c(9, 5, 3,
 
 ```
 
-
+## Experiment Variable matrix
 ```{r , fig.height= 7, fig.width= 10, dpi= 300}
 figure2
 
 ```
 
+## Survey Variable matrix
 
-#### SANKEY DIAGRAMS
 
-
+## SANKEY DIAGRAMS
 ```{r, include=FALSE}
 # create nodes dataframe
 
@@ -274,6 +277,7 @@ figure4 <- sankeyD3::sankeyNetwork(Links = links,
 
 
 ```
+
 
 ```{r, fig.height= 6, fig.width= 8, dpi= 100}
 figure4
