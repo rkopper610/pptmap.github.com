@@ -8,6 +8,9 @@ output:
     toc_depth: 3
     toc_float: true
 ---
+
+
+
 ```{r, include=FALSE}
 library(networkD3)
 library(tidyverse)
@@ -54,8 +57,8 @@ figure1 = ggplot(df, aes(x = Location, y = count, fill = Type_research))+
                     labels = c("field experiment", "farmer survey"),
                     values = c("#0072B2", "#D55E00"))
 ```
-#### Country charts
-```{r, dpi= 300, fig.width = 6}
+## Country charts
+```{r, dpi= 300, fig.width = 6, echo=FALSE}
 figure1
 ```
 
@@ -144,14 +147,14 @@ scale_colour_paletteer_c("ggthemes::Classic Area Red-Green", breaks = c(9, 5, 3,
 
 ```
 
-#### Experiment variable matrix
+## Experiment variable matrix
 ```{r , fig.height= 7, fig.width= 10, dpi= 300}
 figure2
 
 ```
 
 
-#### Experiment Sankey diagram
+## Experiment Sankey diagram
 ```{r, include=FALSE}
 # create nodes dataframe
 
@@ -266,11 +269,11 @@ figure3 <- sankeyD3::sankeyNetwork(Links = links,
 ```
 
 
-```{r, fig.height= 6, fig.width= 8, dpi= 100}
+```{r, fig.height= 6, fig.width= 8, dpi= 100, echo=FALSE}
 figure3
 ```
 
-#### Survey variable matrix
+## Survey variable matrix
 
 
 ```{r, include=FALSE}
@@ -329,7 +332,7 @@ scale_colour_paletteer_c("ggthemes::Classic Area Red-Green", breaks = c(9, 5, 3,
 ```
 
 
-```{r , fig.height= 7, fig.width= 10, dpi= 300}
+```{r , fig.height= 7, fig.width= 10, dpi= 300, echo=FALSE}
 figure4
 
 ```
@@ -337,7 +340,7 @@ figure4
 
 
 
-#### Survey Sankey diagram
+## Survey Sankey diagram
 
 ```{r, include=FALSE}
 # create nodes dataframe
@@ -452,7 +455,7 @@ figure5 <- sankeyD3::sankeyNetwork(Links = links,
 
 ```
 
-```{r, fig.height= 6, fig.width= 8, dpi= 100}
+```{r, fig.height= 6, fig.width= 8, dpi= 100, echo=FALSE}
 figure5
 ```
 
