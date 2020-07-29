@@ -55,7 +55,7 @@ figure1 = ggplot(df, aes(x = Location, y = count, fill = Type_research))+
                     values = c("#0072B2", "#D55E00"))
 ```
 #### Country charts
-```{r, dpi= 300, fig.width = 6, echo=FALSE}
+```{r, dpi= 300, fig.width = 6}
 figure1
 ```
 
