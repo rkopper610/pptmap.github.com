@@ -1,5 +1,5 @@
 ---
-title: "Index website for PPT figures"
+title: "Index Website for PPT Figures"
 authors: "Ryan Kopper & Morgan Ruelle"
 output:
   html_document:
@@ -57,8 +57,10 @@ figure1 = ggplot(df, aes(x = Location, y = count, fill = Type_research))+
                     labels = c("field experiment", "farmer survey"),
                     values = c("#0072B2", "#D55E00"))
 ```
+
+```{r, dpi= 300, fig.width = 6, echo=FALSE, include=FALSE}
 ## Country charts
-```{r, dpi= 300, fig.width = 6, echo=FALSE}
+
 figure1
 ```
 
@@ -147,9 +149,12 @@ scale_colour_paletteer_c("ggthemes::Classic Area Red-Green", breaks = c(9, 5, 3,
 
 ```
 
+
+
+```{r , fig.height= 7, fig.width= 10, dpi= 300, echo=FALSE,include=FALSE}
+
 ## Experiment variable matrix
 
-```{r , fig.height= 7, fig.width= 10, dpi= 300, echo=FALSE}
 figure2
 
 ```
@@ -274,10 +279,12 @@ figure3 <- sankeyD3::sankeyNetwork(Links = links,
 figure3
 ```
 
-## Survey variable matrix
+
 
 
 ```{r, include=FALSE}
+## Survey variable matrix
+
 #Survey paths
 Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Relationships")
 
@@ -333,7 +340,7 @@ scale_colour_paletteer_c("ggthemes::Classic Area Red-Green", breaks = c(9, 5, 3,
 ```
 
 
-```{r , fig.height= 7, fig.width= 10, dpi= 300, echo=FALSE}
+```{r , fig.height= 7, fig.width= 10, dpi= 300, echo=FALSE,include=FALSE}
 figure4
 
 ```
