@@ -61,7 +61,7 @@ figure1 = ggplot(df, aes(x = Location, y = count, fill = Type_research))+
 ```{r, dpi= 300, fig.width = 6, echo=FALSE, include=FALSE}
 ## Country charts
 
-figure1
+#figure1
 ```
 
 
@@ -155,7 +155,7 @@ scale_colour_paletteer_c("ggthemes::Classic Area Red-Green", breaks = c(9, 5, 3,
 
 ## Experiment variable matrix
 
-figure2
+#figure2
 
 ```
 
@@ -341,7 +341,7 @@ scale_colour_paletteer_c("ggthemes::Classic Area Red-Green", breaks = c(9, 5, 3,
 
 
 ```{r , fig.height= 7, fig.width= 10, dpi= 300, echo=FALSE,include=FALSE}
-figure4
+#figure4
 
 ```
 
