@@ -105,6 +105,12 @@ scale_colour_paletteer_c("ggthemes::Classic Area Red-Green", breaks = c(9, 5, 3,
 ```
 
 
+```{r, inciude=FALSE}
+tab <- joined_long %>% mutate(Independent_variable_recode = factor(Independent_variable_recode,levels = rev(indi_order)), Dependent_variable_recode = factor(Dependent_variable_recode,levels = dep_order)) 
+```
+
+
+
 ```{r , fig.height= 7, fig.width= 10, dpi= 300}
 figure2
 
@@ -231,19 +237,15 @@ figure4
 
 
 
-Number of papers Per variable
+Number of significant results for text
 
 ```{r, include=FALSE}
-# group_by(Title, Independent_broad_category) %>% summarize (count=n())
-# 
-# count_ind <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>% select(Title, Independent_variable_recode) %>% distinct() %>% group_by(Independent_variable_recode) %>% summarise(count = n()) 
-# count_dep <- left_join( Relationships, Dependent_recode, by = "Dependent_variable") %>% select(Title, Dependent_variable_recode) %>% distinct() %>% group_by(Dependent_variable_recode) %>% summarise(count = n()) 
-# 
-# count_indBC <- left_join( Relationships, Independent_recode, by = "Independent_variable") %>% select(Title, Independent_broad_category) %>% distinct() %>% group_by(Independent_broad_category) %>% summarise(count = n()) 
-# 
-# count_depBC <- left_join( Relationships, Dependent_recode, by = "Dependent_variable") %>% select(Title, Dependent_broad_category) %>% distinct() %>% group_by(Dependent_broad_category) %>% summarise(count = n()) 
-# 
+sig_results <- left_join( Relationships, Independent_recode,
+                           by = "Independent_variable") %>%
+  left_join(Dependent_recode, by = "Dependent_variable") %>%
+  distinct(Title, Independent_variable_recode,
+           Dependent_variable_recode, Independent_broad_category,
+           Relationship, Direction) %>% group_by(Independent_variable_recode, Dependent_variable_recode, Relationship, Direction) %>% summarise(count = n())
 
 
-#Independent_broad_category
 ```
