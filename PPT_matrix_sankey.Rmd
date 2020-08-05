@@ -134,8 +134,8 @@ distinct_rel <- left_join( Relationships, Independent_recode,
 distinct_rel_sig <- Relationships %>% 
   left_join(Independent_recode, by = "Independent_variable") %>%
   left_join(Dependent_recode, by = "Dependent_variable") %>%
-  select(Independent_variable_recode, Dependent_variable_recode, Relationship) %>% 
-  group_by(Independent_variable_recode, Dependent_variable_recode) %>%
+  select(Title,Independent_variable_recode, Dependent_variable_recode, Relationship) %>% 
+  group_by(Title,Independent_variable_recode, Dependent_variable_recode) %>%
   summarise(sig = sum(Relationship=="significant"),
             not_sig = sum(Relationship=="not significant"),
             mixed = sum(Relationship=="mixed"),
@@ -240,12 +240,22 @@ figure4
 Number of significant results for text
 
 ```{r, include=FALSE}
-sig_results <- left_join( Relationships, Independent_recode,
+
+sig_results <-left_join( Relationships, Independent_recode,
                            by = "Independent_variable") %>%
   left_join(Dependent_recode, by = "Dependent_variable") %>%
-  distinct(Title, Independent_variable_recode,
-           Dependent_variable_recode, Independent_broad_category,
-           Relationship, Direction) %>% group_by(Independent_variable_recode, Dependent_variable_recode, Relationship, Direction) %>% summarise(count = n())
-
+   select(Title, Independent_variable_recode, Dependent_variable_recode,
+          Relationship, Direction) %>% group_by(Title,Independent_variable_recode, Dependent_variable_recode) %>%
+  summarise(pos = sum(Direction == "positive"),
+            neg = sum(Direction == "negative"),
+            not_app = sum(Direction=="NA"),
+            total = n()) %>%  
+  mutate(Direction = if_else(pos == total,"pos",
+                                if_else(neg == total,"neg",
+                                        if_else(not_app == total, "NA", "mixed")))) %>%
+  select(Title, Independent_variable_recode,
+           Dependent_variable_recode, Direction) %>% left_join(distinct_rel_sig) %>% 
+  group_by(Independent_variable_recode,
+           Dependent_variable_recode, significance, Direction) %>% summarise(count = n())
 
 ```
