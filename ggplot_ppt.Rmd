@@ -27,6 +27,14 @@ ETH_dem <- mask(DEM, ETH0)
 
 ```
 
+```{r}
+# tif_dem <- raster(x = "/Users/ryankopper/Desktop/R work/PPTmap/map_files/HYP_HR_SR_W/HYP_HR_SR_W.tif")
+# ETH_dem2 <- mask(tif_dem, ETH0)
+# 
+# par(mar = c(0, 0, 1, 0 ))
+# plot(ETH_dem2) 
+
+```
 
 ```{r}
 #Broken into experi + survey based colors
@@ -126,12 +134,12 @@ plot(ETH_dem, col = socolor, add = TRUE, legend = FALSE,
                       line = 0.5,
                       cex = 1), legend.width=1, legend.shrink=0.75,
     smallplot=c(0.85,0.9, 0.3,0.6))
-plot(pts_eth, col = "blue", pch = 19, add = T)
-plot(pts_eth2, col = "red", pch = 15, add = T)
+plot(pts_eth, col = "springgreen3", pch = 19, add = T)
+plot(pts_eth2, col = "orangered", pch = 15, add = T)
 plot(ETH_Addis, col = "dark grey", add = T)
 plot(ETH1, add = T)
 
-legend(x = "bottomright", pch = 20, col = c("blue", "red"),
+legend(x = "bottomright", pch = 20, col = c("springgreen3", "orangered"),
        legend = c("Exprimental studies", "Survey studies"), bty = "n", pt.cex = 2)
 
 

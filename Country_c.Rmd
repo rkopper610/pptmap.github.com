@@ -49,8 +49,8 @@ ggplot(df, aes(x = Location, y = count, fill = Type_research))+
         legend.position = "bottom")+
   ylab("Number of studies")+
   scale_fill_manual(name = "Type of study",
-                    labels = c("field experiment", "farmer survey"),
-                    values = c("#0072B2", "#D55E00"))
+                    labels = c("Field experiment", "Farmer survey"),
+                    values = c("springgreen3", "orangered"))
 ```
 
 testing out colors
