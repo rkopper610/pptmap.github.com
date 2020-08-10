@@ -132,7 +132,10 @@ ETH_study_sites <- subset(ETH3, NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME
 par(mar = c(0, 0, 1, 0 ))
 plot(E_Af_No_b, col = "grey") 
 
+```
 
+
+```{r}
 #ADD DEM and mask to East Africa
 #DEM
 DEM <- raster("/Users/ryankopper/Desktop/R work/PPTmap/map_files/gt30e020n40_dem/gt30e020n40.dem")

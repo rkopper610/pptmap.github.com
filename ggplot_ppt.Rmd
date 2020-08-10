@@ -180,10 +180,10 @@ library(mapview)
 #URL to find maplayers to be used by mapview
 #http://leaflet-extras.github.io/leaflet-providers/preview/
 
-mp <- mapview(pts_eth, col.regions = "red", color = "red", map.types = c("Stamen.TerrainBackground", "Esri.WorldStreetMap")) 
+mp <- mapview(pts_eth, col.regions = "red", color = "red", map.types = c("Stamen.TerrainBackground", "Esri.WorldStreetMap"))
 
 #mapshot(mp, file = "map.pdf") #saves to a file but need to figure out extend requirements
-
+mp
 ```
 
 
@@ -315,3 +315,21 @@ scalebar(data = NULL, location = "bottomright", dist = NULL,
 
 ```
 
+```{r}
+library(dismo)
+library(ggmap)
+#{https://developers.google.com/maps/documentation/maps-static/get-api-key}
+register_google(key = "") #need to create an API from ggogle cloud eacht time
+
+Just_Ethiopia
+ggmap(get_map(location=c(40.50, 9.0 ), zoom=6, scale=2), type = "terrain")
+
+
+
+
+East_Africa <-
+ggmap(get_map(location=c(38.50, 2.0 ), zoom=5, scale=2), type = "terrain")
+
+
+
+```
