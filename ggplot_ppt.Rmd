@@ -120,53 +120,23 @@ outline <- ggplot() +
 ```
 
 
-```{r, dpi = 300}
+```{r}
 
 #PLOTTING USING RASTER After converting the point files to dots ^
 #must run code above under the ggplot process.
-par(mar = c(0, 0, 1, 0 ))
+png("Eth_ex_sur.png", width = 6, height = 4.5, units = "in", res = 300, pointsize = 12)
+par(mar = c(0, 0, 0, 0 ))
 plot(ETH0)
-#plot(ETH_dem, add = T)
-plot(ETH_dem, col = socolor, add = TRUE, legend = FALSE,
-  label = "masl", legend.args = list(text = "Elevation (m)",
-                      side = 3,
-                      font = 1,
-                      line = 0.5,
-                      cex = 1), legend.width=1, legend.shrink=0.75,
-    smallplot=c(0.85,0.9, 0.3,0.6))
-plot(pts_eth, col = "springgreen3", pch = 19, add = T)
-plot(pts_eth2, col = "orangered", pch = 15, add = T)
+plot(ETH_dem, col = socolor, maxpixels = 1e9, add = TRUE, legend = FALSE)
+plot(pts_eth, bg = "orangered", pch = 21, add = T)
+plot(pts_eth2, bg = "blue3", pch = 21, add = T)
 plot(ETH_Addis, col = "dark grey", add = T)
 plot(ETH1, add = T)
 
-legend(x = "bottomright", pch = 20, col = c("springgreen3", "orangered"),
-       legend = c("Exprimental studies", "Survey studies"), bty = "n", pt.cex = 2)
+legend(x = "bottomright", pch = 19, col  = c("orangered", "blue3"),
+       legend = c("Experimental studies", "Survey studies"), bty = "n", pt.cex = 2)
 
-
-# par(mar = c(0, 0, 1, 0 ))
-# plot(ETH0)
-# #plot(ETH_dem, add = T)
-# plot(ETH_dem, col = socolor, add = TRUE, legend = FALSE)
-#   
-# plot(pts_eth, col = "blue", pch = 20, add = T)
-# plot(pts_eth2, col = "red", pch = 20, add = T)
-# plot(ETH1, add = T)
-# 
-# legend(x = "bottomright", pch = 20, col = c("blue", "red"),
-#        legend = c("Exprimental studies", "Survey studies"), bty = "n", pt.cex = 2)
-
-#legend to add
-
-# plot(ETH_dem, legend.only=TRUE,  text = 'Elevation (m)')
-
-#OR
-
-# plot(ETH_dem, col = socolor, legend.only=TRUE,
-#   label = "masl", legend.args = list(text = "Elevation (m)",
-#                       side = 3,
-#                       font = 1,
-#                       line = 0.5,
-#                       cex = 1), legend.width=1, legend.shrink=0.75)
+dev.off()
 
 
 ```

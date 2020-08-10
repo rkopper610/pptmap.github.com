@@ -147,33 +147,13 @@ msk_DEM <- mask(DEM, E_Af_No_b)
 
 msk_DEM <- projectRaster(msk_DEM, 
                                  crs = crs(E_Af_No_b))
-
-par(mar = c(0, 0, 1, 0 ))
+png("EA_freq.png", width = 3, height = 5, units = "in", res = 300, pointsize = 12)
+par(mar = c(0, 0, 0, 0 ))
 plot(E_Af_No_b, asp=NA) #plot first to set up boundaries
-
-
 col <- terrain.colors(10)
 socolor <-  rev(col) 
-plot(msk_DEM, col = socolor,  add = TRUE,
-  label = "masl", legend.args = list(text = "Elevation (m)", 
-                      side = 3, 
-                      font = 1, 
-                      line = 0.5, 
-                      cex = 1), legend.width=1, legend.shrink=0.75, 
-    smallplot=c(0.8,0.85, 0.3,0.6))
+plot(msk_DEM, maxpixels = 1e9, col = socolor,  add = TRUE, legend = FALSE)
 
-#Legend
-legend(x = "bottomright", pch = 20, col = c("dark green", "blue", "purple", "red"),
-       legend = c("one study", "2-5 studies", "5-10 studies", "10+ studies"), bty = "n", pt.cex = 2)
-
-# 
-# plot(msk_DEM, legend.only = T, col=socolor, alpha = 0.75, add = TRUE, legend.width=1, legend.shrink=0.75, 
-#     smallplot=c(0.85,0.9, 0.7,0.9)); par(mar = par("mar"), label = "masl")
-#-----------------------------------------------------------------------------
-```
-
-
-```{r}
 
 library(rgdal)
 data.shapeken <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/map_files/Water_shp_files/KEN_wat/KEN_water_areas_dcw.shp")
@@ -191,9 +171,7 @@ E_Af_water<- bind(e_tan, t_vic, k_vic, u_vic)
 
 plot(E_Af_water, add = TRUE , col = "light blue")
 plot(E_Af_No_b, add = TRUE)
-```
 
-```{r}
 
 #Frequency mapping------Load packages
 library(dplyr)
@@ -243,7 +221,6 @@ plot(st_geometry(st_centroid(blue)), pch = 20, col = "blue", add = TRUE)
 # points(coordinates(blue),pch = 20, col = "blue")
 
 
-
 #5--10 study Occurance (purple) 
 
 purple <- rbind(st_as_sf(KEN2_5to10) %>% select(NAME_1),
@@ -269,6 +246,13 @@ plot(st_geometry(st_centroid(red )), pch = 20, col = "red ", add = TRUE)
 
 # red <- bind(KEN_10, KEN_10_oth)
 #  points(coordinates(red), pch = 20, col = "red")
+
+#Legend
+legend(x = "bottomright", pch = 20, col = c("dark green", "blue", "purple", "red"),
+       legend = c("one study", "2-5 studies", "5-10 studies", "10+ studies"), bty = "n", pt.cex = 2)
+
+
+dev.off()
 ```
 
 
