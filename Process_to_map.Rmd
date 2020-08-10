@@ -146,7 +146,7 @@ DEM <- merge(DEM, DEM2)
 msk_DEM <- mask(DEM, E_Af_No_b)
 
 
-png("EA_freq.png", width = 3, height = 5, units = "in", res = 300, pointsize = 12)
+png("EA_freq.png", width = 3, height = 5, units = "in", res = 300, pointsize = 10)
 
 par(mar = c(0, 0, 0, 0 ))
 plot(E_Af_No_b, asp=NA) #plot first to set up boundaries
