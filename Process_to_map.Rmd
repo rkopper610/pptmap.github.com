@@ -145,16 +145,16 @@ DEM <- merge(DEM, DEM2)
 
 msk_DEM <- mask(DEM, E_Af_No_b)
 
-msk_DEM <- projectRaster(msk_DEM, 
-                                 crs = crs(E_Af_No_b))
+
 png("EA_freq.png", width = 3, height = 5, units = "in", res = 300, pointsize = 12)
+
 par(mar = c(0, 0, 0, 0 ))
 plot(E_Af_No_b, asp=NA) #plot first to set up boundaries
 col <- terrain.colors(10)
 socolor <-  rev(col) 
 plot(msk_DEM, maxpixels = 1e9, col = socolor,  add = TRUE, legend = FALSE)
 
-
+#add lakes
 library(rgdal)
 data.shapeken <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/map_files/Water_shp_files/KEN_wat/KEN_water_areas_dcw.shp")
 data.shapetz <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/map_files/Water_shp_files/TZA_wat/TZA_water_areas_dcw.shp")
@@ -172,6 +172,7 @@ E_Af_water<- bind(e_tan, t_vic, k_vic, u_vic)
 plot(E_Af_water, add = TRUE , col = "light blue")
 plot(E_Af_No_b, add = TRUE)
 
+#add study points
 
 #Frequency mapping------Load packages
 library(dplyr)
@@ -193,7 +194,7 @@ dgreen <- rbind(st_as_sf(ETH_study_sites) %>% select(NAME_1),
 
 
 
-plot(st_geometry(st_centroid(dgreen)), pch = 20, col = "dark green", add = TRUE)
+plot(st_geometry(st_centroid(dgreen)), pch = 21, bg = "dark green", add = TRUE)
 
 
 
@@ -214,7 +215,7 @@ blue <- rbind(st_as_sf(TZA_2to5) %>% select(NAME_1),
   
 
 
-plot(st_geometry(st_centroid(blue)), pch = 20, col = "blue", add = TRUE)
+plot(st_geometry(st_centroid(blue)), pch = 21, bg = "blue", add = TRUE)
 
 
 # blue <- bind(TZA_3, UGA_sites)
@@ -230,7 +231,7 @@ purple <- rbind(st_as_sf(KEN2_5to10) %>% select(NAME_1),
 
 
 
-plot(st_geometry(st_centroid(purple)), pch = 20, col = "purple ", add = TRUE)
+plot(st_geometry(st_centroid(purple)), pch = 21, bg = "purple ", add = TRUE)
 
 
 # purple <- bind(KEN2_5to10, KEN3_5to10,KEN4_5to10 )
@@ -242,7 +243,7 @@ plot(st_geometry(st_centroid(purple)), pch = 20, col = "purple ", add = TRUE)
 red <- rbind(st_as_sf(KEN_10) %>% select(NAME_1),
               st_as_sf(KEN_10_oth) %>% select(NAME_1))
 
-plot(st_geometry(st_centroid(red )), pch = 20, col = "red ", add = TRUE)
+plot(st_geometry(st_centroid(red )), pch = 21, bg = "red ", add = TRUE)
 
 # red <- bind(KEN_10, KEN_10_oth)
 #  points(coordinates(red), pch = 20, col = "red")
