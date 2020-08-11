@@ -145,15 +145,6 @@ DEM <- merge(DEM, DEM2)
 
 msk_DEM <- mask(DEM, E_Af_No_b)
 
-
-png("EA_freq.png", width = 3, height = 5, units = "in", res = 300, pointsize = 10)
-
-par(mar = c(0, 0, 0, 0 ))
-plot(E_Af_No_b, asp=NA) #plot first to set up boundaries
-col <- terrain.colors(10)
-socolor <-  rev(col) 
-plot(msk_DEM, maxpixels = 1e9, col = socolor,  add = TRUE, legend = FALSE)
-
 #add lakes
 library(rgdal)
 data.shapeken <- readOGR(dsn = "/Users/ryankopper/Desktop/R work/PPTmap/map_files/Water_shp_files/KEN_wat/KEN_water_areas_dcw.shp")
@@ -167,6 +158,17 @@ t_vic <-   subset(data.shapetz, NAME == "LAKE VICTORIA")
 e_tan <-   subset(data.shapeeth, NAME == "TANA HAYK")
 
 E_Af_water<- bind(e_tan, t_vic, k_vic, u_vic)
+```
+
+```{r}
+#RUN ENTIRE CHUNK TO ADD DEM TO MAPS WITH WATER AND FREQUENCY POINTS
+png("EA_freq.png", width = 3, height = 4, units = "in", res = 300, pointsize = 8)
+
+par(mar = c(0, 0, 0, 0 ))
+plot(E_Af_No_b, asp=NA) #plot first to set up boundaries
+col <- terrain.colors(10)
+socolor <-  rev(col) 
+plot(msk_DEM, maxpixels = 1e9, col = socolor,  add = TRUE, legend = FALSE)
 
 
 plot(E_Af_water, add = TRUE , col = "light blue")
@@ -186,7 +188,10 @@ library(sf)
 #                  st_as_sf(TZA_study_sites) %>% select(NAME_1))
 
 #update 5/13/20
-dgreen <- rbind(st_as_sf(ETH_study_sites) %>% select(NAME_1),
+
+#WHITE = #FFFFFF
+
+white <- rbind(st_as_sf(ETH_study_sites) %>% select(NAME_1),
                  st_as_sf(TZA_study_sites) %>% select(NAME_1),
                 st_as_sf(UGA_sites) %>% select(NAME_1),
                 st_as_sf(KEN2_oneS) %>% select(NAME_1))
@@ -194,7 +199,7 @@ dgreen <- rbind(st_as_sf(ETH_study_sites) %>% select(NAME_1),
 
 
 
-plot(st_geometry(st_centroid(dgreen)), pch = 21, bg = "dark green", add = TRUE)
+plot(st_geometry(st_centroid(white)), pch = 21, bg = "#CCCCCC", add = TRUE, alpha = .75)
 
 
 
@@ -207,7 +212,9 @@ plot(st_geometry(st_centroid(dgreen)), pch = 21, bg = "dark green", add = TRUE)
 #               st_as_sf(UGA_sites) %>% select(NAME_1))
 
 #Updated 5/13/20
-blue <- rbind(st_as_sf(TZA_2to5) %>% select(NAME_1),
+
+#GREY = #999999
+grey <- rbind(st_as_sf(TZA_2to5) %>% select(NAME_1),
               st_as_sf(KEN_2to5) %>% select(NAME_1),
               st_as_sf(KEN2_2to5) %>% select(NAME_1),
               st_as_sf(KEN3_2to5) %>% select(NAME_1),
@@ -215,7 +222,7 @@ blue <- rbind(st_as_sf(TZA_2to5) %>% select(NAME_1),
   
 
 
-plot(st_geometry(st_centroid(blue)), pch = 21, bg = "blue", add = TRUE)
+plot(st_geometry(st_centroid(grey)), pch = 21, bg = "#666666", add = TRUE, alpha = .75)
 
 
 # blue <- bind(TZA_3, UGA_sites)
@@ -224,32 +231,32 @@ plot(st_geometry(st_centroid(blue)), pch = 21, bg = "blue", add = TRUE)
 
 #5--10 study Occurance (purple) 
 
-purple <- rbind(st_as_sf(KEN2_5to10) %>% select(NAME_1),
+Mblue <- rbind(st_as_sf(KEN2_5to10) %>% select(NAME_1),
               st_as_sf(KEN4_5to10) %>% select(NAME_1),
              st_as_sf(UGA_5to10) %>% select(NAME_1))
 
 
 
 
-plot(st_geometry(st_centroid(purple)), pch = 21, bg = "purple ", add = TRUE)
+plot(st_geometry(st_centroid(Mblue)), pch = 21, bg = "#669999", add = TRUE, alpha = .75)
 
 
 # purple <- bind(KEN2_5to10, KEN3_5to10,KEN4_5to10 )
 # points(coordinates(purple), pch = 20, col = "purple")
 
 
-#10 + study Occurance (red)
+#10 + study Occurance (blue)
 
-red <- rbind(st_as_sf(KEN_10) %>% select(NAME_1),
+blue <- rbind(st_as_sf(KEN_10) %>% select(NAME_1),
               st_as_sf(KEN_10_oth) %>% select(NAME_1))
 
-plot(st_geometry(st_centroid(red )), pch = 21, bg = "red ", add = TRUE)
+plot(st_geometry(st_centroid(blue)), pch = 21, bg = "blue", add = TRUE, alpha = .75)
 
 # red <- bind(KEN_10, KEN_10_oth)
 #  points(coordinates(red), pch = 20, col = "red")
 
-#Legend
-legend(x = "bottomright", pch = 20, col = c("dark green", "blue", "purple", "red"),
+#Legend #FFFFFF #999999
+legend(x = "bottomright", pch = 20 ,  col = c("#CCCCCC","#666666", "#669999" ,"blue"),
        legend = c("one study", "2-5 studies", "5-10 studies", "10+ studies"), bty = "n", pt.cex = 2)
 
 

@@ -4,8 +4,8 @@ title: Experiment & survey studies variable analysis to produce visuals (Matrix 
 author: "Ryan Kopper and Morgan Ruelle"
 date: "6/26/2020"
 output:
-  html_document: default
   word_document: default
+  html_document: default
   pdf_document: default
 editor_options:
   chunk_output_type: console
@@ -55,25 +55,25 @@ comment out the one not using...
 
 #Experiment paths
 
-# Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Field Experiment Data for Analysis 2020_07_20.xlsx", sheet = "Relationships")
-# 
-# 
-# Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Field Experiment Data for Analysis 2020_07_20.xlsx", sheet = "Independent recode")
-# 
-# 
-# Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Field Experiment Data for Analysis 2020_07_20.xlsx", sheet = "Dependent recode")
+Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Field Experiment Data for Analysis 2020_07_20.xlsx", sheet = "Relationships")
+
+
+Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Field Experiment Data for Analysis 2020_07_20.xlsx", sheet = "Independent recode")
+
+
+Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Field Experiment Data for Analysis 2020_07_20.xlsx", sheet = "Dependent recode")
 
 ```
 
 ```{r, inciude=FALSE}
 #Survey paths
 
-Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Relationships")
-
-Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Independent recode")
-
-Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Dependent recode")
-
+# Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Relationships")
+# 
+# Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Independent recode")
+# 
+# Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Dependent recode")
+# 
 
 ```
 
