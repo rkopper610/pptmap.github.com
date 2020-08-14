@@ -46,6 +46,9 @@ ETH_sur_sites<-subset(ETH3, NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Ta
 
 ETH_Addis <-subset(ETH, NAME_1 == "Addis Abeba") 
 
+
+
+
 #--------------------------------------------------------------------------
 #OLD SITE SELECTIONS
 

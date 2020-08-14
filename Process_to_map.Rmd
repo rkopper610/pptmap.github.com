@@ -109,8 +109,10 @@ TZA_2to5 <- subset(TZA, NAME_2 == "Tarime") #3studies/Blue
 #list of ETH studies when qual study is removed.---We will use this---
 # ETH_study_sites <- subset(ETH3, NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie" | NAME_3 == "Awasa", NAME_3 == "Sibu Sire") 
 
-ETH_study_sites <- subset(ETH3, NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Awasa" | NAME_3 == "Boset" | NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie") 
+ETH_study_sites <- subset(ETH3, NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"|  NAME_3 == "Awasa" | NAME_3 == "Boset" | NAME_3 == "Habro" | NAME_3 == "Sibu Sire"| NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie") 
 
+
+#NAME_3 =="Mieso" | removed 8/12/20
 
 #Not used----
 #| NAME_3 == "Bako Tibe" | NAME_3 == "Jimma Arjo" | NAME_3 == "Yayu" | ARE PART OF
@@ -162,7 +164,7 @@ E_Af_water<- bind(e_tan, t_vic, k_vic, u_vic)
 
 ```{r}
 #RUN ENTIRE CHUNK TO ADD DEM TO MAPS WITH WATER AND FREQUENCY POINTS
-png("EA_freq.png", width = 3, height = 4, units = "in", res = 300, pointsize = 8)
+png("EA_freq.png", width = 3, height = 4, units = "in", res = 300, pointsize = 7)
 
 par(mar = c(0, 0, 0, 0 ))
 plot(E_Af_No_b, asp=NA) #plot first to set up boundaries
@@ -264,7 +266,6 @@ dev.off()
 ```
 
 
-
 #Interactive map with Mapview -
 ```{r}
 
@@ -276,77 +277,6 @@ mapview(E_Af_No_b, col.regions = "grey", color = "black", alpha = "0.9" , map.ty
 
 # # Save a pdf of the map
 # mapshot(viewmap, file = "map.pdf")
-
-```
-
-```{r, dpi=300}
-
-#ETHIOPIA map and study sites --------------------------------------------------
-library(raster)
-
-par(mar = c(0, 0, 1, 0 ))
-plot(ETH0)
-
-ETH_dem <- mask(DEM, ETH0)
-col <- terrain.colors(10)
-socolor <-  rev(col) 
-plot(ETH_dem, col = socolor,  alpha = 0.70, add = TRUE,
-     label = "masl", legend.args = list(text = "Elevation (m)", 
-                      side = 3, 
-                      font = 2, 
-                      line = 0.5, 
-                      cex = 1))
-
-#All ETHIOPIA SITES NO MATTER THE COUNT
-# ETH_study_sites<-subset(ETH3,NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"| NAME_3 =="Mieso" | NAME_3 == "Bako Tibe" | NAME_3 == "Jimma Arjo" | NAME_3 == "Boset"| NAME_3 == "Yayu" | NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie") 
-
-#list of ETH studies when qual study is removed.---We will use this---
-ETH_ex_sites<-subset(ETH3, NAME_3 == "Sibu Sire"| NAME_3 =="Adama" | NAME_3 =="Wondo-Genet" | NAME_3 == "Awasa Zuria"|  NAME_3 == "Awasa") 
-
-
-ETH_sur_sites<-subset(ETH3, NAME_3 == "Boset"| NAME_3 == "Habro" | NAME_3 == "Tahtay Maychew" | NAME_3 == "Thehulederie") 
-
-
-library(dplyr)
-library(sf)
-just_ETHex <- st_as_sf(ETH_ex_sites) %>% select(NAME_1)
-just_ETHsur <- st_as_sf(ETH_sur_sites) %>% select(NAME_1)
-
-plot(st_geometry(st_centroid(just_ETHex)), pch = 20, col = "black", add = TRUE)
-plot(st_geometry(st_centroid(just_ETHsur)), pch = 18, col = "red", add = TRUE)
-
-legend(x = "bottomright", pch = 20, col = c("black", "red"),
-       legend = c("Experimental studies", "Survey studies"), bty = "n", pt.cex = 2)
-
-```
-
-```{r}
-# Changing resolution
-#test_with_aggregate <- disaggregate(ETH_dem, fact= 4)
-#plot(test_with_aggregate, col = col,  alpha = 0.60, add = TRUE)
-
-#Hillshading---works but is causing fatal error---------------------------------
-
-# slope <- terrain(ETH_dem, opt='slope')
-# aspect <- terrain(ETH_dem, opt='aspect')
-# hill <- hillShade(slope, aspect, 40, 270)
-# plot(hill, col=grey(0:100/100), legend=FALSE, main='Elevation')
-# plot(ETH_dem, col=rainbow(25, alpha=0.35), add=TRUE)
-
-
-#-------------------------------------------------------------------------------
-#SIDE BY SIDE MAPS---
-# par(mfrow = c(1,2))
-# plot(ETH0)
-# 
-# ETH_dem <- mask(DEM, ETH0)
-# col <- terrain.colors(6)
-# plot(ETH_dem, col = socolor,  alpha = 0.70, add = TRUE)
-# 
-# just_ETH <- st_as_sf(ETH_study_sites)  
-#               
-# plot(st_geometry(st_centroid(just_ETH)), pch = 20, col = "black", add = TRUE)
-
 
 ```
 
