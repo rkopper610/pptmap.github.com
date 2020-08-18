@@ -38,19 +38,23 @@ df <- df %>%
 ```
 Stack by experiment and survey. use Facet grid or dodge (countries)
 
-```{r, dpi= 300, fig.width = 6}
+```{r, dpi= 300, fig.width = 6.2}
+png("Country_Chart.png", width = 6.2, height = 4, units = "in", res = 300, pointsize = 7)
+
 ggplot(df, aes(x = Location, y = count, fill = Type_research))+
   geom_bar(stat = "identity")+
-  theme_bw()+
+  theme_test()+
   facet_grid(cols=vars(date_cat),labeller = label_wrap_gen(width = 10,
                                                   multi_line = TRUE),
              space = "free_x", scales = "free_x")+
-  theme(axis.text.x = element_text(size = 10,angle=90,vjust=0.5,hjust=1),
+  theme(strip.background =element_rect(fill="white"), axis.text.x = element_text(size = 10,angle=90,vjust=0.5,hjust=1),
         legend.position = "bottom")+
   ylab("Number of studies")+
   scale_fill_manual(name = "Type of study",
                     labels = c("Field experiment", "Farmer survey"),
                     values = c("orangered", "blue3"))
+
+dev.off()
 ```
 
 testing out colors

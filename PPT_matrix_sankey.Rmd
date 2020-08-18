@@ -54,7 +54,7 @@ comment out the one not using...
 ```{r, inciude=FALSE}
 
 #Experiment paths
-
+# 
 # Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Field Experiment Data for Analysis 2020_07_20.xlsx", sheet = "Relationships")
 # 
 # 
@@ -111,8 +111,12 @@ tab <- joined_long %>% mutate(Independent_variable_recode = factor(Independent_v
 
 
 ```{r , fig.height= 7, fig.width= 10, dpi= 300}
+
+#png("Matrix_experi.png", width = 6.5, height = 7, units = "in", res = 300, pointsize = 7)
+
 figure2
 
+#dev.off()
 ```
 
 
@@ -231,22 +235,31 @@ figure4 <- sankeyD3::sankeyNetwork(Links = links,
 ```
 
 ```{r, fig.height= 6, fig.width= 8, dpi= 100}
+png("Sankey_survey.png", width = 3, height = 4, units = "in", res = 300, pointsize = 7)
+
 figure4
+
+dev.off()
+
 ```
 # saving a sankey as a png?
 # https://hafen.github.io/rbokeh/articles/rbokeh.html
-library(rbokeh)
-sn <- sankeyNetwork(Links = Energy$links, Nodes = Energy$nodes, Source = "source",
-          Target = "target", Value = "value", NodeID = "name",
-          units = "TWh", fontSize = 12, nodeWidth = 30)
-widget2png(sn, "sankey.png")
+
+```{r}
+# library(rbokeh)
+# sn <- sankeyNetwork(Links = Energy$links, Nodes = Energy$nodes, Source = "source",
+#           Target = "target", Value = "value", NodeID = "name",
+#           units = "TWh", fontSize = 12, nodeWidth = 30)
+# widget2png(sn, "sankey.png")
 
 
 #  OR capture webshot
 
-webshot::webshot("file.html")
+#webshot::webshot("file.html")
 
-https://stackoverflow.com/questions/35056733/how-to-capture-html-output-as-png-in-r
+#https://stackoverflow.com/questions/35056733/how-to-capture-html-output-as-png-in-r
+```
+
 
 #---------------------------------------------
 
