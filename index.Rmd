@@ -8,7 +8,7 @@ output:
     toc_depth: 3
     toc_float: true
 ---
-![](/img/key.png)
+![] (img/key.png){width=400px}
 
 
 ```{r, include=FALSE}
