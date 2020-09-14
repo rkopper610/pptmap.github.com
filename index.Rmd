@@ -8,7 +8,7 @@ output:
     toc_depth: 3
     toc_float: true
 ---
-![Key]("/Users/ryankopper/Desktop/R work/pptmap.github.com/key.png")
+![](/img/key.png)
 
 
 ```{r, include=FALSE}
