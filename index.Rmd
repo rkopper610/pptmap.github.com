@@ -1,5 +1,5 @@
 ---
-title: "Index Website for PPT Figures"
+title: "Significance of Relationships in PPT Research"
 authors: "Ryan Kopper & Morgan Ruelle"
 output:
   html_document:
@@ -160,7 +160,7 @@ scale_fill_distiller(type = "seq", palette = "Greens", direction = 1, breaks = c
 ```
 
 
-## Experiment Sankey diagram
+## Field Experiments
 
 
 ```{r, inciude=FALSE, echo=FALSE, message=FALSE}
@@ -285,7 +285,7 @@ figure3 <- sankeyD3::sankeyNetwork(Links = links,
                         orderByPath = F,
                         showNodeValues = FALSE,
                         nodePadding = 10,
-                        nodeWidth = 30,
+                        nodeWidth = 15,
                         align="center",
                         linkOpacity = 0.4,
                         curvature = 0.3,
@@ -369,7 +369,7 @@ scale_fill_distiller(type = "seq", palette = "Greens", direction = 1, breaks = c
 
 
 
-## Survey Sankey Diagrams
+## Farmer Surveys
 
 
 ```{r, inciude=FALSE, echo=FALSE, message=FALSE}
@@ -479,7 +479,7 @@ figure5 <- sankeyD3::sankeyNetwork(Links = links,
                         orderByPath = F,
                         showNodeValues = FALSE,
                         nodePadding = 10,
-                        nodeWidth = 30,
+                        nodeWidth = 15,
                         align="center",
                         linkOpacity = 0.5,
                         curvature = 0.4,
