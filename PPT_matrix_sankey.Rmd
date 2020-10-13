@@ -4,8 +4,8 @@ title: Experiment & survey studies variable analysis to produce visuals (Matrix 
 author: "Ryan Kopper and Morgan Ruelle"
 date: "6/26/2020"
 output:
-  word_document: default
   html_document: default
+  word_document: default
   pdf_document: default
 editor_options:
   chunk_output_type: console
@@ -223,9 +223,9 @@ figure4 <- sankeyD3::sankeyNetwork(Links = links,
                         orderByPath = F,
                         showNodeValues = FALSE,
                         nodePadding = 10,
-                        nodeWidth = 30,
+                        nodeWidth = 15,
                         align="center",
-                        linkOpacity = 0.4,
+                        linkOpacity = 0.5,
                         curvature = 0.4,
                         dragY = TRUE,
                         title = NULL,
@@ -235,13 +235,18 @@ figure4 <- sankeyD3::sankeyNetwork(Links = links,
 ```
 
 ```{r, fig.height= 6, fig.width= 8, dpi= 100}
-png("Sankey_survey.png", width = 3, height = 4, units = "in", res = 300, pointsize = 7)
+tiff(filename = "/Users/ryankopper/Desktop/R work/pptmap.github.com/PPT_matrix_sankey.tiff",
+     width = 3, height = 4, res = 300, pointsize = 7,
+     bg = "white")
+
 
 figure4
 
 dev.off()
 
 ```
+
+
 # saving a sankey as a png?
 # https://hafen.github.io/rbokeh/articles/rbokeh.html
 
