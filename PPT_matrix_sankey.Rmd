@@ -246,6 +246,18 @@ dev.off()
 
 ```
 
+```{r}
+
+```
+
+
+```{r}
+tiff("/Users/ryankopper/Desktop/R work/pptmap.github.com/sankey.tiff")
+figure4
+
+dev.off() # to complete the writing process and return output to your monitor
+```
+
 
 # saving a sankey as a png?
 # https://hafen.github.io/rbokeh/articles/rbokeh.html
