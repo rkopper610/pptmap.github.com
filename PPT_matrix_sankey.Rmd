@@ -54,25 +54,25 @@ comment out the one not using...
 ```{r, inciude=FALSE}
 
 #Experiment paths
-# 
-# Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Field Experiment Data for Analysis 2020_07_20.xlsx", sheet = "Relationships")
-# 
-# 
-# Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Field Experiment Data for Analysis 2020_07_20.xlsx", sheet = "Independent recode")
-# 
-# 
-# Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Field Experiment Data for Analysis 2020_07_20.xlsx", sheet = "Dependent recode")
+
+Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Field Experiment Data for Analysis 2020_07_20.xlsx", sheet = "Relationships")
+
+
+Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Field Experiment Data for Analysis 2020_07_20.xlsx", sheet = "Independent recode")
+
+
+Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Field Experiment Data for Analysis 2020_07_20.xlsx", sheet = "Dependent recode")
 
 ```
 
 ```{r, inciude=FALSE}
 #Survey paths
 
-Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Relationships")
-
-Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Independent recode")
-
-Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Dependent recode")
+# Relationships <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Relationships")
+# 
+# Independent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Independent recode")
+# 
+# Dependent_recode <- read_excel("/Users/ryankopper/Clark University/Morgan Ruelle - Ryan Kopper Research/Push Pull Systematic Review/Survey Data for Analysis 2020_07_20.xlsx", sheet = "Dependent recode")
 
 
 ```
@@ -235,10 +235,11 @@ figure4 <- sankeyD3::sankeyNetwork(Links = links,
 ```
 
 ```{r, fig.height= 6, fig.width= 8, dpi= 100}
-tiff(filename = "/Users/ryankopper/Desktop/R work/pptmap.github.com/PPT_matrix_sankey.tiff",
+#tiff(filename = "/Users/ryankopper/Desktop/R work/pptmap.github.com/PPT_matrix_sankey.tiff", width = 3, height = 4, res = 300, pointsize = 7, bg = "white")
+
+png(filename = "/Users/ryankopper/Desktop/R work/pptmap.github.com/sankey.png",
      width = 3, height = 4, res = 300, pointsize = 7,
      bg = "white")
-
 
 figure4
 
